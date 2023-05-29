@@ -1,9 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:background="#01061E"
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ตั้งนาฬิกาเครื่อง"
+            android:textSize="40dp"
+            android:textStyle="bold"
+            android:textColor="#DDC9FD"
+            android:textAlignment="center"
+            android:layout_marginVertical="20dp"
+            />
+
+    </LinearLayout>
 
     <LinearLayout
         android:gravity="center"
@@ -17,7 +36,7 @@
             android:layout_height="wrap_content"
             android:text=""
             android:textAlignment="center"
-            android:textSize="50dp"
+            android:textSize="30dp"
             android:textColor="#FFFF"
             android:background="#260447"
             android:inputType="datetime"
@@ -29,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=":"
-            android:textSize="50dp"
+            android:textSize="30dp"
             android:textColor="#FFFF"
             android:background="#260447"
             android:textAlignment="center"/>
@@ -41,7 +60,7 @@
             android:layout_height="wrap_content"
             android:text=""
             android:textAlignment="center"
-            android:textSize="50dp"
+            android:textSize="30dp"
             android:textColor="#FFFF"
             android:background="#260447"
             android:inputType="datetime"
@@ -53,7 +72,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=":"
-            android:textSize="50dp"
+            android:textSize="30dp"
             android:textColor="#FFFF"
             android:background="#260447"
             android:textAlignment="center"/>
@@ -65,7 +84,7 @@
             android:layout_height="wrap_content"
             android:text=""
             android:textAlignment="center"
-            android:textSize="50dp"
+            android:textSize="30dp"
             android:textColor="#FFFF"
             android:background="#260447"
             android:inputType="datetime"
@@ -79,6 +98,7 @@
 
 
     <LinearLayout
+        android:layout_marginTop="10dp"
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -88,15 +108,14 @@
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="วันที่"
-            android:textSize="50dp"
+            android:textSize="30dp"
             android:textColor="#FFFF"
             android:background="#260447"
             android:textAlignment="textStart"/>
 
         <EditText
-            android:layout_weight="2"
             android:id="@+id/stb_etDayOfMonth"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="match_parent"
             android:textAlignment="center"
             android:textSize="35dp"
@@ -108,11 +127,10 @@
 
         <TextView
             android:id="@+id/stb_tvDayOfMonth"
-
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:text=""
-            android:textSize="35dp"
+            android:textSize="30dp"
             android:textColor="#FFFF"
             android:background="#260447"
             android:textAlignment="center"
@@ -128,23 +146,26 @@
         android:layout_height="80dp">
         <Spinner
             android:id="@+id/stb_spinDayOfWeek"
-            android:layout_width="150dp"
-            android:layout_height="match_parent"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
             android:background="#A30C0C"
+            android:textAlignment="center"
 
             />
         <Spinner
             android:id="@+id/stb_spinMonth"
-            android:layout_width="150dp"
-            android:layout_height="match_parent"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
             android:background="#007AFD"
+            android:textAlignment="center"
             />
 
         <Spinner
             android:id="@+id/stb_spinYear"
-            android:layout_width="150dp"
-            android:layout_height="match_parent"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
             android:background="#11A30C"
+            android:textAlignment="center"
             />
 
 
@@ -154,11 +175,10 @@
     <Button
         android:id="@+id/stb_btnOk"
         android:layout_gravity="center"
-        android:padding="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
         android:text="ตกลง"
-        android:textSize="50dp"
+        android:textSize="20dp"
         android:textColor="#FFFF"
         android:background="@drawable/btn_style4"
         android:inputType="datetime"

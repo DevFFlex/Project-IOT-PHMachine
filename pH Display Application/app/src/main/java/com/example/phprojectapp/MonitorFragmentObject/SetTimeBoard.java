@@ -2,6 +2,7 @@ package com.example.phprojectapp.MonitorFragmentObject;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,6 +16,9 @@ import com.example.phprojectapp.ClassEx.TimeBoardObject;
 import com.example.phprojectapp.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class SetTimeBoard extends AlertDialog.Builder {
 
@@ -28,7 +32,7 @@ public class SetTimeBoard extends AlertDialog.Builder {
     Button stb_btnOk;
 
     String dayofweekString[] = {
-            "อาทิตย์","อังคาร","พุธ","พฤหัสบดี","ศุกร์","เสาร์","จันทร์",
+            "อาทิตย์","จันทร์","อังคาร","พุธ","พฤหัสบดี","ศุกร์","เสาร์",
     };
 
     String monthString[] = {
@@ -100,8 +104,20 @@ public class SetTimeBoard extends AlertDialog.Builder {
             }
         });
 
+        Calendar calendar = Calendar.getInstance();
+        TimeZone timeZone = TimeZone.getTimeZone("Asia/Bangkok");
+        calendar.setTimeZone(timeZone);
 
+        et_hour.setText(String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)));
+        et_minute.setText(String.valueOf(calendar.get(Calendar.MINUTE)));
+        et_second.setText(String.valueOf(calendar.get(Calendar.SECOND)));
+        et_dayofmonth.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
 
+        int dayofweek_select = (calendar.get(Calendar.DAY_OF_WEEK) == 6) ? 0 : calendar.get(Calendar.DAY_OF_WEEK) - 1;
+        spin_dayofweek.setSelection(dayofweek_select);
+
+        spin_month.setSelection(calendar.get(Calendar.MONTH));
+        spin_year.setSelection(3);
 
 
         setView(stb_view);
@@ -124,9 +140,7 @@ public class SetTimeBoard extends AlertDialog.Builder {
     private ArrayAdapter<String> arrayFormat(String data[]){
         ArrayList<String> itemList = new ArrayList<>();
 
-        for (String item:data) {
-            itemList.add(item);
-        }
+        for (String item:data) itemList.add(item);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, itemList);
 
@@ -141,8 +155,7 @@ public class SetTimeBoard extends AlertDialog.Builder {
         timeBoardObject.setSecond(Integer.valueOf(et_second.getText().toString()));
 
         timeBoardObject.setDayofmonth(Integer.valueOf(et_dayofmonth.getText().toString()));
-        System.out.println(timeBoardObject.getDateTimeFormat());
-        System.out.println(timeBoardObject.isEmptyAll());
+
         if(timeBoardObject.isEmptyAll())return;
 
         listener.dialogSetTimeBoard_onClick_OK(timeBoardObject);
