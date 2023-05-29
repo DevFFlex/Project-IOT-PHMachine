@@ -71,8 +71,6 @@ void PHSensor::loop() {
   }
 }
 
-
-
 float PHSensor::getPH(){
   return ph;
 }
