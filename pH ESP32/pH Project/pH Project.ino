@@ -153,8 +153,11 @@ void loop() {
 
 
   if (t1.isExpired()) {
-    hardwareIO->lcdOutput->printL(1,"S2 = " + ardunoComunity->text, 1);
-    hardwareIO->lcdOutput->printL(1,"TimeList = " + String(varObject->getTimeListSize()), 2);
+    varObject->setMixTankpH(hardwareIO->pHSensor->getPH());
+    comunity->sendMixTankPH();
+    hardwareIO->lcdOutput->printL(1, "PH = " + String(hardwareIO->pHSensor->getPH()), 0);
+    // hardwareIO->lcdOutput->printL(1,"S2 = " + ardunoComunity->text, 1);
+    // hardwareIO->lcdOutput->printL(1,"TimeList = " + String(varObject->getTimeListSize()), 2);
     hardwareIO->lcdOutput->printL(1,hardwareIO->rtc->getTimeToString(), 3);
   }
 

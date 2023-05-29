@@ -84,7 +84,7 @@ void RTC::readDS3231time(byte *second, byte *minute, byte *hour, byte *dayOfWeek
 }
 
 
-void RTC::setTime(byte second, byte minute, byte hour, byte dayOfWeek, byte dayOfMonth, byte month, byte year) {
+void RTC::setTime(byte hour,byte minute,byte second, byte dayOfWeek, byte dayOfMonth, byte month, byte year) {
   // sets time and date data to DS3231
   Serial.println("Wire.beginTransmission(DS3231_I2C_ADDRESS);");
 

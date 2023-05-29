@@ -26,8 +26,7 @@ public:
   void recvTimelist(String value);
 
 
-  //------------ Client Request --------------
-  void onMessage(String message);
+
 
 
   //------------ help function ----------------
@@ -146,44 +145,3 @@ byte* Comunity::timeboardFromCToSFormatToByte(String queryStringFromClient) {
 }
 
 
-
-void Comunity::onMessage(String message) {
-
-  String databox1[2];
-  split(databox1, message, ":", 2);
-  String header = databox1[0];
-  String commands = databox1[1];
-
-  String databox2[2];
-  split(databox2, commands, "=", 2);
-  String command = databox2[0];
-  String value = databox2[1];
-
-  Serial.print("str_trim = " + message + "       ");
-  Serial.print("header = " + header + "   commands = " + commands + "       ");
-  Serial.println("command = " + command + "   value = " + value);
-
-
-  if (header == "SET") {
-
-    if (command == "TIME_BOARD") {
-      recvTimelist(value);
-    }
-
-    if (command == "INPUT_PH") {
-      recvInputPH(value);
-    }
-
-    if (command == "TIME_LIST") {
-      varObject->setTimeList(value);
-    }
-
-
-  } else if (header == "GET") {
-
-    if (commands == "INPUT_PH") sendInputPH();
-    if (commands == "MIXTANK_PH") sendMixTankPH();
-    if (commands == "USETANK_PH") sendUseTankPH();
-    if (commands == "TIME_LIST") sendTimeList();
-  }
-}
