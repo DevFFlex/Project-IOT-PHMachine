@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/stb__hour"
+            android:paddingHorizontal="10dp"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textAlignment="center"
+            android:textSize="50dp"
+            android:textColor="#FFFF"
+            android:background="#260447"
+            android:inputType="datetime"
+            android:maxLength="2"
+
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=":"
+            android:textSize="50dp"
+            android:textColor="#FFFF"
+            android:background="#260447"
+            android:textAlignment="center"/>
+
+        <EditText
+            android:id="@+id/stb__minute"
+            android:paddingHorizontal="10dp"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textAlignment="center"
+            android:textSize="50dp"
+            android:textColor="#FFFF"
+            android:background="#260447"
+            android:inputType="datetime"
+            android:maxLength="2"
+
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=":"
+            android:textSize="50dp"
+            android:textColor="#FFFF"
+            android:background="#260447"
+            android:textAlignment="center"/>
+
+        <EditText
+            android:id="@+id/stb__second"
+            android:paddingHorizontal="10dp"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textAlignment="center"
+            android:textSize="50dp"
+            android:textColor="#FFFF"
+            android:background="#260447"
+            android:inputType="datetime"
+            android:maxLength="2"
+
+            />
+
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:paddingLeft="20dp"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="วันที่"
+            android:textSize="50dp"
+            android:textColor="#FFFF"
+            android:background="#260447"
+            android:textAlignment="textStart"/>
+
+        <EditText
+            android:layout_weight="2"
+            android:id="@+id/stb_etDayOfMonth"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:textSize="35dp"
+            android:textColor="#FFFF"
+            android:background="#041347"
+            android:inputType="datetime"
+            android:maxLength="2"
+            />
+
+        <TextView
+            android:id="@+id/stb_tvDayOfMonth"
+
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:text=""
+            android:textSize="35dp"
+            android:textColor="#FFFF"
+            android:background="#260447"
+            android:textAlignment="center"
+            android:gravity="center"/>
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="80dp">
+        <Spinner
+            android:id="@+id/stb_spinDayOfWeek"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:background="#A30C0C"
+
+            />
+        <Spinner
+            android:id="@+id/stb_spinMonth"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:background="#007AFD"
+            />
+
+        <Spinner
+            android:id="@+id/stb_spinYear"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:background="#11A30C"
+            />
+
+
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/stb_btnOk"
+        android:layout_gravity="center"
+        android:padding="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ตกลง"
+        android:textSize="50dp"
+        android:textColor="#FFFF"
+        android:background="@drawable/btn_style4"
+        android:inputType="datetime"
+        />
+
+
+</LinearLayout>

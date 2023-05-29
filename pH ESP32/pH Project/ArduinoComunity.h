@@ -3,10 +3,6 @@
 #define RXp2 16
 #define TXp2 17
 
-// HardwareSerial SerialTwo(2);  // ใช้พอร์ตซีเรียลที่ 2 บน ESP32
-
-
-
 
 class ArduinoComunity{
   public:
