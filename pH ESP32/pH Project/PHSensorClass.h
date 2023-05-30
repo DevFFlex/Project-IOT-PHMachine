@@ -10,13 +10,15 @@ private:
   float c_offset;
   float m_slope;
 
+  void display();
+
 public:
 
   PHSensor()
     : t_delayRead(1000) {
-      ph = 0;
-      c_offset = 21.34;
-      m_slope = -5.70;
+    ph = 0;
+    c_offset = 21.34;
+    m_slope = -5.70;
   }
 
   void setup();
@@ -59,28 +61,33 @@ void PHSensor::loop() {
     for (int i = 2; i < 8; i++)  //take the average value of 6 center sample
       avgValue += buf[i];
     float phValue = (float)(phRead * (3.3 / 4096));  //convert the analog into millivolt
-    phValue = m_slope * phValue + c_offset;  
-    ph = phValue;                //convert the millivolt into pH value
-    Serial.print("pH :");
-    Serial.print(phValue, 2);
-    Serial.print(",");
-    Serial.print("      c_offset = ");
-    Serial.print(c_offset);
-    Serial.print("      m_slope = ");
-    Serial.println(m_slope);
+    phValue = m_slope * phValue + c_offset;
+    ph = phValue;  //convert the millivolt into pH value
+
+    // display();
   }
 }
 
-float PHSensor::getPH(){
+void PHSensor::display() {
+  Serial.print("pH :");
+  Serial.print(ph, 2);
+  Serial.print(",");
+  Serial.print("      c_offset = ");
+  Serial.print(c_offset);
+  Serial.print("      m_slope = ");
+  Serial.println(m_slope);
+}
+
+float PHSensor::getPH() {
   return ph;
 }
 
 
-void PHSensor::setOffset(float offsetIn){
+void PHSensor::setOffset(float offsetIn) {
   c_offset = offsetIn;
 }
 
 
-void PHSensor::setSlope(float slopeIn){
+void PHSensor::setSlope(float slopeIn) {
   m_slope = slopeIn;
 }

@@ -5,6 +5,7 @@
 #include "Pump_Class.h"
 #include "PCF_Class.h"
 #include "PHSensorClass.h"
+#include "WaterSensor_Class.h"
 
 
 class HardwareIO {
@@ -14,6 +15,7 @@ public:
   RTC *rtc;
   POUT *relay;
   PHSensor *pHSensor;
+  WaterSensor *waterSensor;
 
   HardwareIO() {
     lcdOutput = new LcdOutput();
@@ -21,10 +23,10 @@ public:
     rtc = new RTC();
     relay = new POUT();
     pHSensor = new PHSensor();
+    waterSensor = new WaterSensor();
   }
 
   void setup();
-
 
   void loop();
 
@@ -35,19 +37,26 @@ public:
     delete keypadInput;
     delete rtc;
     delete pHSensor;
+    delete waterSensor;
   }
 };
 
 
-void HardwareIO::setup(){
+void HardwareIO::setup() {
   lcdOutput->setup();
-    keypadInput->setup();
-    rtc->setup();
-    relay->setup();
-    pHSensor->setup();
+  keypadInput->setup();
+  rtc->setup();
+  relay->setup();
+  pHSensor->setup();
+  waterSensor->setup();
 }
 
 
-void HardwareIO::loop(){
-
+void HardwareIO::loop() {
+  lcdOutput->loop();
+  keypadInput->loop();
+  rtc->loop();
+  relay->loop();
+  pHSensor->loop();
+  waterSensor->loop();
 }
