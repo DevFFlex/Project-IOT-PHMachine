@@ -1,6 +1,19 @@
+#include "WString.h"
 #include <Wire.h>
 
-void split(String *databox,String text, String symbol,int size) {
+class StringManage{
+  private:
+  public:
+
+  StringManage(){
+
+  }
+  
+  void split(String *databox,String text, String symbol,int size);
+  String intToText(int integer,int zeroforward);
+};
+
+void StringManage::split(String *databox,String text, String symbol,int size) {
 
   char charArrayText[text.length() + 1];
   text.toCharArray(charArrayText, text.length() + 1);
@@ -18,8 +31,7 @@ void split(String *databox,String text, String symbol,int size) {
   }
 }
 
-
-String intToText(int integer,int zeroforward){
+String StringManage::intToText(int integer,int zeroforward){
   String zero = "";
   if(zeroforward <= 0 || integer < 0 || integer > 9)return String(integer);
 
@@ -27,25 +39,8 @@ String intToText(int integer,int zeroforward){
   return zero + String(integer);
 }
 
-class LED {
-private:
-  int pin;
 
-public:
-
-  LED(int pinIn) {
-    pin = pinIn;
-  }
-
-  void on() {
-    digitalWrite(pin, HIGH);
-  }
-
-
-  void off() {
-    digitalWrite(pin, LOW);
-  }
-};
+//-------------------------------------------------------------------------
 
 
 
