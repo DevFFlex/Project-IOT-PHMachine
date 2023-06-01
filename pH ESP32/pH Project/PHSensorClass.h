@@ -4,7 +4,7 @@
 class PHSensor {
 private:
   unsigned long int avgValue;
-  float ph,volt;
+  float ph,volt,analogPH;
   Timer t_delayRead;
 
   float c_offset;
@@ -18,8 +18,9 @@ public:
     : t_delayRead(1000) {
     ph = 0;
     volt = 0;
+    analogPH = 0;
     c_offset = 21.34;
-    m_slope = -1.0;
+    m_slope = -15.60; // ph = slope * volt + offset
   }
 
   void setup();
@@ -27,6 +28,10 @@ public:
 
   float getPH();
   float getVolt();
+
+  float getMSlope();
+  float getCOffset();
+  float getAnalogPH();
 
   void setOffset(float offsetIn);
   void setSlope(float slopeIn);
@@ -46,7 +51,7 @@ void PHSensor::loop() {
       buf[i] = analogRead(SensorPin);
     }
 
-    // float phRead = analogRead(SensorPin);
+    analogPH = analogRead(SensorPin);
 
 
     for (int i = 0; i < 9; i++)  //sort the analog from small to large
@@ -62,7 +67,7 @@ void PHSensor::loop() {
     avgValue = 0;
     for (int i = 2; i < 8; i++)  //take the average value of 6 center sample
       avgValue += buf[i];
-    volt = (float)(avgValue * (3.3 / 4096)) / 6;  //convert the analog into millivolt
+    volt = (float)(analogPH * (3.3 / 4096));  //convert the analog into millivolt
     ph = m_slope * volt + c_offset;
 
     // display();
@@ -86,6 +91,19 @@ float PHSensor::getPH() {
 
 float PHSensor::getVolt(){
   return volt;
+}
+
+float PHSensor::getCOffset(){
+  return m_slope;
+}
+
+
+float PHSensor::getMSlope(){
+  return c_offset;
+}
+
+float PHSensor::getAnalogPH(){
+  return analogPH;
 }
 
 
