@@ -6,6 +6,7 @@ private:
   ServerPH* serverPH;
   VarObject* varObject;
   HardwareIO* hardwareIO;
+  StringManage stringManage;
 public:
   Comunity(ServerPH* serverPHIn, VarObject* varObjectIn, HardwareIO* hardwareIOIn) {
     serverPH = serverPHIn;
@@ -123,7 +124,7 @@ String Comunity::formatS2CTimelist(Timerlist* timerlist) {
 String* Comunity::timeboardFromCToSFormatToString(String queryStringFromClient) {
   byte numsize = 7;
   String* item = new String[numsize];
-  split(item, queryStringFromClient, ",", 7);
+  stringManage.split(item, queryStringFromClient, ",", 7);
   return item;
 }
 
@@ -131,7 +132,7 @@ String* Comunity::timeboardFromCToSFormatToString(String queryStringFromClient) 
 byte* Comunity::timeboardFromCToSFormatToByte(String queryStringFromClient) {
   byte numsize = 7;
   String* item = new String[numsize];
-  split(item, queryStringFromClient, ",", 7);
+  stringManage.split(item, queryStringFromClient, ",", 7);
 
   byte itemByte[numsize];
   int itemInt[numsize];

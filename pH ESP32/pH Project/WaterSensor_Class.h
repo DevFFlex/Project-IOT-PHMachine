@@ -4,16 +4,20 @@
 
 class WaterSensor {
 private:
-  int value;
+  float value;
+  Timer timer1;
 
 
 public:
-  WaterSensor() {
+  WaterSensor()
+    : timer1(1000) {
     value = 0;
   }
 
   void setup();
   void loop();
+
+  float getValue();
 };
 
 
@@ -24,13 +28,18 @@ void WaterSensor::setup() {
 
 
 void WaterSensor::loop() {
-  // digitalWrite(POWER_PIN, HIGH);   // turn the sensor ON
-  // delay(10);                       // wait 10 milliseconds
-  // value = analogRead(SIGNAL_PIN);  // read the analog value from sensor
-  // digitalWrite(POWER_PIN, LOW);    // turn the sensor OFF
 
-  // Serial.print("The water sensor value: ");
-  // Serial.println(value);
+  if (timer1.isExpired()) {
+    digitalWrite(POWER_PIN, HIGH);   // turn the sensor ON
+    value = analogRead(SIGNAL_PIN);  // read the analog value from sensor
+    digitalWrite(POWER_PIN, LOW);    // turn the sensor OFF
 
-  // delay(1000);
+    // Serial.print("The water sensor value: ");
+    // Serial.println(value);
+  }
+}
+
+
+float WaterSensor::getValue() {
+  return value;
 }

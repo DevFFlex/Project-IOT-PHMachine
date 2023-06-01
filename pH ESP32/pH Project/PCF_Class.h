@@ -53,7 +53,7 @@ public:
 };
 
 void POUT::setup() {
-  for (int i = 0;i<8;i++)on(pinlist[i]);
+  for (int i = 0;i<8;i++)off(pinlist[i]);
 }
 
 void POUT::loop() {
@@ -61,18 +61,20 @@ void POUT::loop() {
 
 
 void POUT::on(byte pin) {
-  PCF.digitalWrite(pinlist[pin], HIGH);
-  status[pin] = true;
+  status[pin] = false;
+  PCF.digitalWrite(pinlist[pin], status[pin]);
 }
 
 
 void POUT::off(byte pin) {
-  PCF.digitalWrite(pinlist[pin], LOW);
-  status[pin] = false;
+  status[pin] = true;
+  PCF.digitalWrite(pinlist[pin], status[pin]);
+  
 }
 
 void POUT::toggle(byte pin) {
-  PCF.digitalWrite(pinlist[pin], (status) ? HIGH : LOW);
+  
   status[pin] = !status[pin];
+  PCF.digitalWrite(pinlist[pin],status[pin]);
   Serial.println("pin " + String(pin) + "  status = " + String(status[pin]));
 }

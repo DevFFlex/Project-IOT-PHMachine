@@ -96,6 +96,8 @@ private:
   float input_ph;
   float mixTank_pH;
   float useTank_ph;
+  
+  StringManage stringManage;
 
 public:
 
@@ -129,11 +131,11 @@ public:
 
 void VarObject::setTimeList(String queryStirng) {
   String datalayer1[4];
-  split(datalayer1, queryStirng, "|", 4);
+  stringManage.split(datalayer1, queryStirng, "|", 4);
 
   for (int i = 0; i < 4; i++) {
     String datalayer2[5];
-    split(datalayer2, datalayer1[i], ",", 5);
+    stringManage.split(datalayer2, datalayer1[i], ",", 5);
 
     timerlist[i].setHour(datalayer2[0].toInt());
     timerlist[i].setMinute(datalayer2[1].toInt());
@@ -172,7 +174,7 @@ float VarObject::getUseTankPH() {
 String VarObject::getTimeListToString() {
   String dataout = "";
   for (int i = 0; i < 4; i++) {
-    dataout += intToText(timerlist[i].getHour(), 2) + ":" + intToText(timerlist[i].getMinute(), 2) + ":" + intToText(timerlist[i].getSecond(), 2);
+    dataout += stringManage.intToText(timerlist[i].getHour(), 2) + ":" + stringManage.intToText(timerlist[i].getMinute(), 2) + ":" + stringManage.intToText(timerlist[i].getSecond(), 2);
     dataout += "      ph=" + String(timerlist[i].getPH());
     dataout += "      statusActive=" + String(timerlist[i].getStatus());
     dataout += "      statusDelete=" + String(timerlist[i].getDelete());
