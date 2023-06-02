@@ -4,11 +4,12 @@
 class PHSensor {
 private:
   unsigned long int avgValue;
-  float ph,volt,analogPH;
+  float ph, volt, analogPH;
   Timer t_delayRead;
 
-  float c_offset;
-  float m_slope;
+  float calibration_value;
+  unsigned long int avgval;
+  int buffer_arr[10], temp;
 
   void display();
 
@@ -19,8 +20,7 @@ public:
     ph = 0;
     volt = 0;
     analogPH = 0;
-    c_offset = 21.34;
-    m_slope = -15.60; // ph = slope * volt + offset
+    calibration_value = 21.34;
   }
 
   void setup();
@@ -29,12 +29,7 @@ public:
   float getPH();
   float getVolt();
 
-  float getMSlope();
-  float getCOffset();
   float getAnalogPH();
-
-  void setOffset(float offsetIn);
-  void setSlope(float slopeIn);
 };
 
 
@@ -45,6 +40,7 @@ void PHSensor::setup() {
 void PHSensor::loop() {
 
   if (t_delayRead.isExpired()) {
+    /*
     int buf[10];                  //buffer for read analog
     for (int i = 0; i < 10; i++)  //Get 10 sample value from the sensor for smooth the value
     {
@@ -71,17 +67,44 @@ void PHSensor::loop() {
     ph = m_slope * volt + c_offset;
 
     // display();
+    */
+
+    int maxAnalogValue = 14;
+    int minAnalogValue = 0;
+    for (int i = 0; i < 10; i++) {
+      buffer_arr[i] = analogRead(SensorPin);
+      delay(30);
+    }
+    for (int i = 0; i < 9; i++) {
+      for (int j = i + 1; j < 10; j++) {
+        if (buffer_arr[i] > buffer_arr[j]) {
+          temp = buffer_arr[i];
+          buffer_arr[i] = buffer_arr[j];
+          buffer_arr[j] = temp;
+        }
+      }
+    }
+
+    analogPH = 0;
+    for (int i = 2; i < 8; i++)
+      analogPH += buffer_arr[i];
+    volt = (float)analogPH * 3.3 / 4096 / 6;
+    ph = -5.70 * volt + calibration_value;
+    // int ssph = ph_act;
+
+    // if (ssph > maxAnalogValue) {
+    //   ssph = maxAnalogValue;
+    // }
+
+    // if (ssph < minAnalogValue) {
+    //   ssph = minAnalogValue;
+    // }
   }
 }
 
 void PHSensor::display() {
   Serial.print("pH :");
   Serial.print(ph, 2);
-  Serial.print(",");
-  Serial.print("      c_offset = ");
-  Serial.print(c_offset);
-  Serial.print("      m_slope = ");
-  Serial.println(m_slope);
 }
 
 float PHSensor::getPH() {
@@ -89,29 +112,11 @@ float PHSensor::getPH() {
 }
 
 
-float PHSensor::getVolt(){
+float PHSensor::getVolt() {
   return volt;
 }
 
-float PHSensor::getCOffset(){
-  return m_slope;
-}
 
-
-float PHSensor::getMSlope(){
-  return c_offset;
-}
-
-float PHSensor::getAnalogPH(){
-  return analogPH;
-}
-
-
-void PHSensor::setOffset(float offsetIn) {
-  c_offset = offsetIn;
-}
-
-
-void PHSensor::setSlope(float slopeIn) {
-  m_slope = slopeIn;
+float PHSensor::getAnalogPH() {
+  return analogPH / 6;
 }
