@@ -1,0 +1,23 @@
+#define pHSensorPIN NULL
+float pHSensorRead(){
+  float C = 25.85; //Constant of straight line (Y = mx + C)
+  float m = -6.80; // Slope of straight line (Y = mx + C)
+
+  float phAvg = 0,phTot = 0;
+  float V = 5.0; // Volt
+
+  for(int x=0; x<20 ; x++){
+    phTot += analogRead(pHSensorPIN);
+    delay(10);
+  }
+
+  phAvg = phTot / 20;
+  
+  float phVoltage =  phAvg * (V / 1023.0);
+  
+  float pHValue = phVoltage * m+C;
+
+
+  return pHValue;
+
+}

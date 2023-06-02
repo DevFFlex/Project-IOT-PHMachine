@@ -1,14 +1,12 @@
-
-#include "ExClass.h"
-#include "F_Timer.h"
-#include "controllerFunction.h"
-
-#include "server.h"
 #include "VarObject.h"
-#include "HardwareIO.h"
-
+#include "ServerClass.h"
 #include "Comunity.h"
+
+#include "HelpClass.h"
 #include "ArduinoComunity.h"
+#include "TimerClass.h"
+
+#include "HardwareIO.h"
 
 
 
@@ -16,9 +14,8 @@
 int step = 1;
 
 //------------- Class ------------------------
-
-ServerPH *serverPH = new ServerPH();
 VarObject *varObject = new VarObject();
+ServerPH *serverPH = new ServerPH();
 HardwareIO *hardwareIO = new HardwareIO();
 
 Comunity *comunity = new Comunity(serverPH, varObject, hardwareIO);
