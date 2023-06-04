@@ -8,10 +8,16 @@ private:
   Timer t_delayRead;
 
   float calibration_value;
+  int phval = 0;
   unsigned long int avgval;
   int buffer_arr[10], temp;
+  float ph_act;
 
   void display();
+
+
+
+
 
 public:
 
@@ -28,6 +34,7 @@ public:
 
   float getPH();
   float getVolt();
+  void setPH(float phIn);
 
   float getAnalogPH();
 };
@@ -40,37 +47,7 @@ void PHSensor::setup() {
 void PHSensor::loop() {
 
   if (t_delayRead.isExpired()) {
-    /*
-    int buf[10];                  //buffer for read analog
-    for (int i = 0; i < 10; i++)  //Get 10 sample value from the sensor for smooth the value
-    {
-      buf[i] = analogRead(SensorPin);
-    }
 
-    analogPH = analogRead(SensorPin);
-
-
-    for (int i = 0; i < 9; i++)  //sort the analog from small to large
-    {
-      for (int j = i + 1; j < 10; j++) {
-        if (buf[i] > buf[j]) {
-          int temp = buf[i];
-          buf[i] = buf[j];
-          buf[j] = temp;
-        }
-      }
-    }
-    avgValue = 0;
-    for (int i = 2; i < 8; i++)  //take the average value of 6 center sample
-      avgValue += buf[i];
-    volt = (float)(analogPH * (3.3 / 4096));  //convert the analog into millivolt
-    ph = m_slope * volt + c_offset;
-
-    // display();
-    */
-
-    int maxAnalogValue = 14;
-    int minAnalogValue = 0;
     for (int i = 0; i < 10; i++) {
       buffer_arr[i] = analogRead(SensorPin);
       delay(30);
@@ -84,21 +61,14 @@ void PHSensor::loop() {
         }
       }
     }
-
-    analogPH = 0;
+    avgval = 0;
     for (int i = 2; i < 8; i++)
-      analogPH += buffer_arr[i];
-    volt = (float)analogPH * 3.3 / 4096 / 6;
-    ph = -5.70 * volt + calibration_value;
-    // int ssph = ph_act;
+      avgval += buffer_arr[i];
+    float volt = (float)avgval * 5.0 / 4096 / 6;
+    ph_act = -5.70 * volt + calibration_value;
+    Serial.println("ph = " + String(ph_act));
 
-    // if (ssph > maxAnalogValue) {
-    //   ssph = maxAnalogValue;
-    // }
-
-    // if (ssph < minAnalogValue) {
-    //   ssph = minAnalogValue;
-    // }
+    ph = ph_act;
   }
 }
 
@@ -109,6 +79,10 @@ void PHSensor::display() {
 
 float PHSensor::getPH() {
   return ph;
+}
+
+void PHSensor::setPH(float phIn) {
+  ph = phIn;
 }
 
 

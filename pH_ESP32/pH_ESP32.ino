@@ -1,12 +1,15 @@
-#include "VarObject.h"
-#include "ServerClass.h"
-#include "Comunity.h"
+
 
 #include "HelpClass.h"
-#include "ArduinoComunity.h"
 #include "TimerClass.h"
 
+#include "VarObject.h"
+#include "ServerClass.h"
+
 #include "HardwareIO.h"
+#include "Comunity.h"
+
+#include "ArduinoComunity.h"
 
 
 
@@ -20,8 +23,8 @@ HardwareIO *hardwareIO = new HardwareIO();
 
 Comunity *comunity = new Comunity(serverPH, varObject, hardwareIO);
 
-ArduinoComunity *ardunoComunity = new ArduinoComunity();
-StringManage stringManage;
+StringManage *stringManage = new StringManage();
+ArduinoComunity *ardunoComunity = new ArduinoComunity(hardwareIO,stringManage);
 
 Timer changeMixtankTimer(1000);
 Timer t1(1000);
@@ -51,12 +54,12 @@ void onEnterkey(String text) {
 void onClientMessage(String str_trim) {
 
   String databox1[2];
-  stringManage.split(databox1, str_trim, ":", 2);
+  stringManage->split(databox1, str_trim, ":", 2);
   String header = databox1[0];
   String commands = databox1[1];
 
   String databox2[2];
-  stringManage.split(databox2, commands, "=", 2);
+  stringManage->split(databox2, commands, "=", 2);
   String command = databox2[0];
   String value = databox2[1];
 
@@ -148,8 +151,8 @@ void loop() {
     varObject->setMixTankpH(hardwareIO->pHSensor->getPH());
     comunity->sendMixTankPH();
     hardwareIO->lcdOutput->printL(1, "PH = " + String(hardwareIO->pHSensor->getPH()) + " m", 0);
-    hardwareIO->lcdOutput->printL(1, "Volt = " + String(hardwareIO->pHSensor->getVolt()), 1);
-    hardwareIO->lcdOutput->printL(1, "AnalogPH = " + String(hardwareIO->pHSensor->getAnalogPH()), 2);
+    // hardwareIO->lcdOutput->printL(1, "Volt = " + String(hardwareIO->pHSensor->getVolt()), 1);
+    // hardwareIO->lcdOutput->printL(1, "AnalogPH = " + String(hardwareIO->pHSensor->getAnalogPH()), 2);
     hardwareIO->lcdOutput->printL(1, hardwareIO->rtc->getTimeToString(), 3);
 
     // hardwareIO->relay->toggle(2);
@@ -160,11 +163,11 @@ void loop() {
     case 1:
       if (hardwareIO->waterSensor->getValue() < 600) {
         hardwareIO->relay->on(5);
-        Serial.println("peris on");
+        // Serial.println("peris on");
         
       } else {
         hardwareIO->relay->off(5);
-        Serial.println("peris off");
+        // Serial.println("peris off");
         step = 2;
         timerPushWater.reset();
       }
