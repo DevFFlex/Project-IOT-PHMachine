@@ -31,7 +31,6 @@ public:
 
 
   ~HardwareIO() {
-    Serial.println("hello WOrld");
     delete lcdOutput;
     delete keypadInput;
     delete rtc;

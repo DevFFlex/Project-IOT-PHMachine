@@ -6,13 +6,21 @@ private:
   ServerPH* serverPH;
   VarObject* varObject;
   HardwareIO* hardwareIO;
-  StringManage stringManage;
+  StringManage* stringManage;
+
 public:
-  Comunity(ServerPH* serverPHIn, VarObject* varObjectIn, HardwareIO* hardwareIOIn) {
-    serverPH = serverPHIn;
+  Comunity(VarObject* varObjectIn, HardwareIO* hardwareIOIn,StringManage* stringManageIn) {
+    serverPH = new ServerPH();
     varObject = varObjectIn;
     hardwareIO = hardwareIOIn;
+    stringManage = stringManageIn;
   }
+
+  ~Comunity(){
+    delete serverPH;
+  }
+
+  void onClientMessage(String message);
 
   //------------ send to client function ------------------
   void sendInputPH();
@@ -25,19 +33,72 @@ public:
   //------------ get value from client and set variable server function ----------------
   void recvInputPH(String value);
   void recvTimelist(String value);
+  void recvTimerAutoWork(String value);
 
-
+  void setup();
+  void loop();
 
 
 
   //------------ help function ----------------
 
-  String formatS2CTimelist(Timerlist* timerlist);
+  String formatS2CTimelist(TimerAutoWork* timerautowork);
   String* timeboardFromCToSFormatToString(String queryStringFromClient);
   byte* timeboardFromCToSFormatToByte(String queryStringFromClient);
   String formatS2CrtcTime();
 };
 
+
+void Comunity::setup(){
+  serverPH->setup();
+  serverPH->setOnMessageListener(std::bind(&Comunity::onClientMessage,this, std::placeholders::_1));
+}
+
+void Comunity::loop(){
+  serverPH->loop();
+}
+
+void Comunity::onClientMessage(String str_trim) {
+
+  String databox1[2];
+  stringManage->split(databox1, str_trim, ":", 2);
+  String header = databox1[0];
+  String commands = databox1[1];
+
+  String databox2[2];
+  stringManage->split(databox2, commands, "=", 2);
+  String command = databox2[0];
+  String value = databox2[1];
+
+  Serial.print("str_trim = " + str_trim + "       ");
+  Serial.print("header = " + header + "   commands = " + commands + "       ");
+  Serial.println("command = " + command + "   value = " + value);
+
+
+  if (header == "SET") {
+
+    if (command == "TIME_BOARD") recvTimelist(value);
+    if (command == "INPUT_PH") recvInputPH(value);
+    if (command == "TIME_LIST") recvTimerAutoWork(value);
+
+
+  } else if (header == "GET") {
+
+    if (commands == "INPUT_PH") sendInputPH();
+    if (commands == "MIXTANK_PH") sendMixTankPH();
+    if (commands == "USETANK_PH") sendUseTankPH();
+    if (commands == "TIME_LIST") sendTimeList();
+  }
+
+  Serial.println("-------------------Timelist----------------------");
+  Serial.println(varObject->getTimeListToString());
+
+  Serial.println("-------------------Timerlist----------------------");
+  for (int i = 0; i < 4; i++) {
+    Serial.println(varObject->timerautowork[i].toString());
+  }
+
+}
 
 void Comunity::sendOutputText(String output_text) {
   serverPH->send("SET:OUTPUT=" + output_text);
@@ -58,7 +119,7 @@ void Comunity::sendUseTankPH() {
 
 void Comunity::sendTimeList() {
 
-  serverPH->send("SET:TIME_LIST=" + formatS2CTimelist(varObject->timerlist));
+  serverPH->send("SET:TIME_LIST=" + formatS2CTimelist(varObject->timerautowork));
 }
 
 
@@ -88,6 +149,25 @@ void Comunity::recvTimelist(String value) {
   hardwareIO->rtc->setTime(hour, minute, second, dayofweek, dayofmonth, month, year);
 }
 
+
+void Comunity::recvTimerAutoWork(String value){
+  String datalayer1[4];
+  stringManage->split(datalayer1, value, "|", 4);
+
+  for (int i = 0; i < 4; i++) {
+    String datalayer2[5];
+    stringManage->split(datalayer2, datalayer1[i], ",", 5);
+
+    varObject->timerautowork[i].setHour(datalayer2[0].toInt());
+    varObject->timerautowork[i].setMinute(datalayer2[1].toInt());
+    varObject->timerautowork[i].setSecond(datalayer2[2].toInt());
+    varObject->timerautowork[i].setStatus((datalayer2[3] == "true") ? true : false);
+    varObject->timerautowork[i].setPH(datalayer2[4].toFloat());
+    varObject->timerautowork[i].setDelete((datalayer2[0].toInt() == -1) ? true : false);
+  }
+
+}
+
 String Comunity::formatS2CrtcTime() {
   String dout = "";
   dout += String(hardwareIO->rtc->getHour()) + ",";
@@ -104,7 +184,7 @@ String Comunity::formatS2CrtcTime() {
 
 
 
-String Comunity::formatS2CTimelist(Timerlist* timerlist) {
+String Comunity::formatS2CTimelist(TimerAutoWork* timerlist) {
   String format = "";
   for (int i = 0; i < 4; i++) {
     format += String(timerlist[i].getHour()) + ",";
@@ -124,7 +204,7 @@ String Comunity::formatS2CTimelist(Timerlist* timerlist) {
 String* Comunity::timeboardFromCToSFormatToString(String queryStringFromClient) {
   byte numsize = 7;
   String* item = new String[numsize];
-  stringManage.split(item, queryStringFromClient, ",", 7);
+  stringManage->split(item, queryStringFromClient, ",", 7);
   return item;
 }
 
@@ -132,7 +212,7 @@ String* Comunity::timeboardFromCToSFormatToString(String queryStringFromClient) 
 byte* Comunity::timeboardFromCToSFormatToByte(String queryStringFromClient) {
   byte numsize = 7;
   String* item = new String[numsize];
-  stringManage.split(item, queryStringFromClient, ",", 7);
+  stringManage->split(item, queryStringFromClient, ",", 7);
 
   byte itemByte[numsize];
   int itemInt[numsize];

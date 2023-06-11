@@ -7,9 +7,11 @@
 #include "ServerClass.h"
 
 #include "HardwareIO.h"
-#include "Comunity.h"
 
+#include "Comunity.h"
 #include "ArduinoComunity.h"
+
+#include "UserInterface.h"
 
 
 
@@ -17,84 +19,20 @@
 int step = 1;
 
 //------------- Class ------------------------
+StringManage *stringManage = new StringManage();
 VarObject *varObject = new VarObject();
-ServerPH *serverPH = new ServerPH();
+
 HardwareIO *hardwareIO = new HardwareIO();
 
-Comunity *comunity = new Comunity(serverPH, varObject, hardwareIO);
-
-StringManage *stringManage = new StringManage();
+Comunity *comunity = new Comunity(varObject, hardwareIO,stringManage);
 ArduinoComunity *ardunoComunity = new ArduinoComunity(hardwareIO,stringManage);
 
-Timer changeMixtankTimer(1000);
+UserInterface *ui = new UserInterface(varObject,comunity,hardwareIO);
+
 Timer t1(1000);
-Timer timerActiveRelay(5000);
-Timer timerPushWater(30000);
 
 ScanI2C scanI2C;
 
-//-------------------------- IO ---------------------------
-void onKeypass(char c, String textNow) {
-  if (c == 'C') {
-    hardwareIO->keypadInput->clearTextNow();
-    hardwareIO->lcdOutput->printL(1, "INPUT : ", 1);
-    return;
-  }
-
-  hardwareIO->lcdOutput->printL(1, "INPUT : " + textNow, 1);
-}
-
-void onEnterkey(String text) {
-  hardwareIO->lcdOutput->printL(1, "Val = " + text, 2);
-  serverPH->send("S_RESP_MTPH=" + String(text));
-  varObject->setInputPH(text.toFloat());
-}
-
-
-void onClientMessage(String str_trim) {
-
-  String databox1[2];
-  stringManage->split(databox1, str_trim, ":", 2);
-  String header = databox1[0];
-  String commands = databox1[1];
-
-  String databox2[2];
-  stringManage->split(databox2, commands, "=", 2);
-  String command = databox2[0];
-  String value = databox2[1];
-
-  Serial.print("str_trim = " + str_trim + "       ");
-  Serial.print("header = " + header + "   commands = " + commands + "       ");
-  Serial.println("command = " + command + "   value = " + value);
-
-
-  if (header == "SET") {
-
-    if (command == "TIME_BOARD") comunity->recvTimelist(value);
-    if (command == "INPUT_PH") comunity->recvInputPH(value);
-    if (command == "TIME_LIST") varObject->setTimeList(value);
-
-
-  } else if (header == "GET") {
-
-    if (commands == "INPUT_PH") comunity->sendInputPH();
-    if (commands == "MIXTANK_PH") comunity->sendMixTankPH();
-    if (commands == "USETANK_PH") comunity->sendUseTankPH();
-    if (commands == "TIME_LIST") comunity->sendTimeList();
-  }
-
-  showall();
-}
-
-void showall() {
-  Serial.println("-------------------Timelist----------------------");
-  Serial.println(varObject->getTimeListToString());
-
-  Serial.println("-------------------Timerlist----------------------");
-  for (int i = 0; i < 4; i++) {
-    Serial.println(varObject->timerlist[i].toString());
-  }
-}
 
 
 void InputSerial() {
@@ -122,106 +60,44 @@ void setup() {
   Serial.begin(115200);
   // Serial.setTimeout(50);
 
-  serverPH->setup();
-  serverPH->setOnMessageListener(onClientMessage);
-
+  comunity->setup();
   hardwareIO->setup();
-
-  hardwareIO->keypadInput->setOnKeypressListener(onKeypass);
-  hardwareIO->keypadInput->setOnKeyEnterListener(onEnterkey);
-
-  hardwareIO->pHSensor->setup();
-
-
-
   // scanI2C.setup();
   ardunoComunity->setup();
 }
 
 void loop() {
+  comunity->loop();
+  hardwareIO->loop();
   ardunoComunity->loop();
+  ui->loop();
 
   InputSerial();
-  serverPH->loop();
-
-  hardwareIO->loop();
 
 
   if (t1.isExpired()) {
     varObject->setMixTankpH(hardwareIO->pHSensor->getPH());
     comunity->sendMixTankPH();
-    hardwareIO->lcdOutput->printL(1, "PH = " + String(hardwareIO->pHSensor->getPH()) + " m", 0);
+    hardwareIO->lcdOutput->printL("PH = " + String(hardwareIO->pHSensor->getPH()) + " m", 0);
     // hardwareIO->lcdOutput->printL(1, "Volt = " + String(hardwareIO->pHSensor->getVolt()), 1);
     // hardwareIO->lcdOutput->printL(1, "AnalogPH = " + String(hardwareIO->pHSensor->getAnalogPH()), 2);
-    hardwareIO->lcdOutput->printL(1, hardwareIO->rtc->getTimeToString(), 3);
+    hardwareIO->lcdOutput->printL(hardwareIO->rtc->getTimeToString(), 3);
 
-    // hardwareIO->relay->toggle(2);
   }
 
-
-  switch (step) {
-    case 1:
-      if (hardwareIO->waterSensor->getValue() < 600) {
-        hardwareIO->relay->on(5);
-        // Serial.println("peris on");
-        
-      } else {
-        hardwareIO->relay->off(5);
-        // Serial.println("peris off");
-        step = 2;
-        timerPushWater.reset();
-      }
-      break;
-
-    case 2:
-      if (timerPushWater.isExpired()){
-        step = 1;
-        hardwareIO->relay->off(3);
-      }else{
-        hardwareIO->relay->on(3);
-      }
-      break;
-  }
-
-  timerOpenRelayLoop();
 }
 
 
+//---------------------------------------------------------------------------------------------
 
 
-
-bool timelist_compare_rtctime(int index) {
-  byte active_hour = varObject->timerlist[index].getHour();
-  byte active_minute = varObject->timerlist[index].getMinute();
-  byte active_second = varObject->timerlist[index].getSecond();
+bool timerAutoWork_Compare_Rtctime(int index) {
+  byte active_hour = varObject->timerautowork[index].getHour();
+  byte active_minute = varObject->timerautowork[index].getMinute();
+  byte active_second = varObject->timerautowork[index].getSecond();
 
   if (active_hour == -1) return false;
 
   return (hardwareIO->rtc->getHour() == active_hour && hardwareIO->rtc->getMinute() == active_minute && hardwareIO->rtc->getSecond() == active_second);
 }
 
-void timerOpenRelayLoop() {
-
-  static bool active_finish = false;
-  static int offdelay = 30000;
-
-  if ((timelist_compare_rtctime(0) || timelist_compare_rtctime(1) || timelist_compare_rtctime(2) || timelist_compare_rtctime(3)) && !active_finish) {
-
-    hardwareIO->relay->on(0);
-    active_finish = true;
-    timerActiveRelay.reset();
-    timerActiveRelay.setInterval(offdelay);
-    Serial.println("is Time");
-  }
-
-  if (active_finish) {
-
-    if (timerActiveRelay.isExpired()) {
-      hardwareIO->relay->off(0);
-      Serial.println("Active = false");
-      active_finish = false;
-    }
-  }
-}
-
-//---------------------------------------------------------------------------------------------

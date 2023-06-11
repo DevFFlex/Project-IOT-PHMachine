@@ -1,4 +1,4 @@
-class Timerlist {
+class TimerAutoWork {
 private:
   int hour;
   int minute;
@@ -8,7 +8,7 @@ private:
   bool delete_;
 
 public:
-  Timerlist() {
+  TimerAutoWork() {
     hour = -1;
     minute = -1;
     second = -1;
@@ -102,7 +102,7 @@ private:
 
 public:
 
-  Timerlist *timerlist = new Timerlist[4];
+  TimerAutoWork *timerautowork = new TimerAutoWork[4];
 
   VarObject() {
     input_ph = 0;
@@ -138,12 +138,12 @@ void VarObject::setTimeList(String queryStirng) {
     String datalayer2[5];
     stringManage.split(datalayer2, datalayer1[i], ",", 5);
 
-    timerlist[i].setHour(datalayer2[0].toInt());
-    timerlist[i].setMinute(datalayer2[1].toInt());
-    timerlist[i].setSecond(datalayer2[2].toInt());
-    timerlist[i].setStatus((datalayer2[3] == "true") ? true : false);
-    timerlist[i].setPH(datalayer2[4].toFloat());
-    timerlist[i].setDelete((datalayer2[0].toInt() == -1) ? true : false);
+    timerautowork[i].setHour(datalayer2[0].toInt());
+    timerautowork[i].setMinute(datalayer2[1].toInt());
+    timerautowork[i].setSecond(datalayer2[2].toInt());
+    timerautowork[i].setStatus((datalayer2[3] == "true") ? true : false);
+    timerautowork[i].setPH(datalayer2[4].toFloat());
+    timerautowork[i].setDelete((datalayer2[0].toInt() == -1) ? true : false);
   }
 }
 
@@ -175,10 +175,10 @@ float VarObject::getUseTankPH() {
 String VarObject::getTimeListToString() {
   String dataout = "";
   for (int i = 0; i < 4; i++) {
-    dataout += stringManage.intToText(timerlist[i].getHour(), 2) + ":" + stringManage.intToText(timerlist[i].getMinute(), 2) + ":" + stringManage.intToText(timerlist[i].getSecond(), 2);
-    dataout += "      ph=" + String(timerlist[i].getPH());
-    dataout += "      statusActive=" + String(timerlist[i].getStatus());
-    dataout += "      statusDelete=" + String(timerlist[i].getDelete());
+    dataout += stringManage.intToText(timerautowork[i].getHour(), 2) + ":" + stringManage.intToText(timerautowork[i].getMinute(), 2) + ":" + stringManage.intToText(timerautowork[i].getSecond(), 2);
+    dataout += "      ph=" + String(timerautowork[i].getPH());
+    dataout += "      statusActive=" + String(timerautowork[i].getStatus());
+    dataout += "      statusDelete=" + String(timerautowork[i].getDelete());
     dataout += "\n";
   }
 
@@ -187,7 +187,6 @@ String VarObject::getTimeListToString() {
 
 int VarObject::getTimeListSize(){
   int count = 0;
-  for (int i = 0;i<4;i++)if(timerlist[i].getHour() != -1)count++;
-
+  for (int i = 0;i<4;i++)if(timerautowork[i].getHour() != -1)count++;
   return count;
 }

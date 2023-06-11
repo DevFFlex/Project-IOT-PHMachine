@@ -1,5 +1,5 @@
 
-#define SensorPin 34  //pH meter Analog output to Arduino Analog Input 0   //deviation compensate
+#define SensorPin 34
 
 class PHSensor {
 private:

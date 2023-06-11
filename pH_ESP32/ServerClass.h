@@ -1,4 +1,5 @@
 #include <WiFi.h>
+#include <functional>
 
 class ServerPH {
 private:
@@ -10,7 +11,7 @@ private:
   bool first_client = true;
   bool openWifiStatus = false;
 
-  void (*onMessageListener)(String) = NULL;
+  std::function<void(String)> onMessageCallback;
 
 
 public:
@@ -23,7 +24,10 @@ public:
   void loop();
 
   void send(String send_str);
-  void setOnMessageListener(void (*function)(String));
+
+  void setOnMessageListener(std::function<void(String)> callback) {
+        onMessageCallback = callback;
+  }
 
   bool isClient();
 };
@@ -63,13 +67,12 @@ void ServerPH::loop() {
             else data += String(ccc);
           }
           // Serial.println(data);
-
           // String data = client.readString();
 
           data.trim();
 
-          if (onMessageListener != NULL && data != "") {
-            onMessageListener(data);
+          if (onMessageCallback != NULL && data != "") {
+            onMessageCallback(data);
           }
         }
 
@@ -98,7 +101,4 @@ void ServerPH::send(String send_str) {
 }
 bool ServerPH::isClient() {
   return (client) ? true : false;
-}
-void ServerPH::setOnMessageListener(void (*function)(String)) {
-  onMessageListener = function;
 }

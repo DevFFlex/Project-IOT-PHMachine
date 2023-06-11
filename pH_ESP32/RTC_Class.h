@@ -11,7 +11,6 @@ private:
 
   void updateTime();
   void readDS3231time(byte *second, byte *minute, byte *hour, byte *dayOfWeek, byte *dayOfMonth, byte *month, byte *year);
-  // void setDS3231time(byte second, byte minute, byte hour, byte dayOfWeek, byte dayOfMonth, byte month, byte year);
 
 public:
 
@@ -85,11 +84,9 @@ void RTC::readDS3231time(byte *second, byte *minute, byte *hour, byte *dayOfWeek
 
 
 void RTC::setTime(byte hour,byte minute,byte second, byte dayOfWeek, byte dayOfMonth, byte month, byte year) {
-  // sets time and date data to DS3231
-  Serial.println("Wire.beginTransmission(DS3231_I2C_ADDRESS);");
 
   Wire.beginTransmission(DS3231_I2C_ADDRESS);
-  Wire.write(0);                     // set next input to start at the seconds register
+  Wire.write(0);                     
   Wire.write(decToBcd(second));      // set seconds
   Wire.write(decToBcd(minute));      // set minutes
   Wire.write(decToBcd(hour));        // set hours
@@ -99,7 +96,6 @@ void RTC::setTime(byte hour,byte minute,byte second, byte dayOfWeek, byte dayOfM
   Wire.write(decToBcd(year));        // set year (0 to 99)
   Wire.endTransmission();
 
-  Serial.println("Wire.endTransmission()");
 }
 
 String RTC::getTimeToString() {
@@ -143,7 +139,6 @@ String RTC::getTimeToString() {
 
   timeformat_str += hour_str + ":" + minute_str + ":" + second_str + " ";
   timeformat_str += dayofmonth_str + "/" + month_str + "/" + year_str + " ";
-  // timeformat_str += dayofweek_str + "";
 
 
   return timeformat_str;

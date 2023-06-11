@@ -38,8 +38,8 @@ void ArduinoComunity::loop(){
 
     stringManage->split(item,data,"=",2);
 
-    hardwareIO->lcdOutput->printL(1, "Serial = " + data, 2);
-    hardwareIO->lcdOutput->printL(1, "item[0] = " + item[0], 1);
+    hardwareIO->lcdOutput->printL("Serial = " + data, 2);
+    hardwareIO->lcdOutput->printL("item[0] = " + item[0], 1);
 
     // Serial.println(data_split[0]);
   }

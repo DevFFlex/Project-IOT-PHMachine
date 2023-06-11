@@ -1,3 +1,4 @@
+#include <functional>
 #include <Keypad_I2C.h>
 #include <Keypad.h>
 #include <Wire.h>
@@ -25,14 +26,17 @@ private:
   void (*onEnterListener)(String) = NULL;
   void (*onKeypessListener)(char, String) = NULL;
 
+  std::function<void(char,String)> onKeypressCallback;
+  std::function<void(String)> onEnterCallback;
+
 public:
 
   KeypadInput()
     : keypad(makeKeymap(keys), rowPins, colPins, KEYPAD_ROWS, KEYPAD_COLS, I2CADDR, KEYPAD_PCF8574) {
   }
 
-  void setOnKeyEnterListener(void (*function)(String));
-  void setOnKeypressListener(void (*function)(char, String));
+  void setOnKeyEnterListener(std::function<void(String)> callback);
+  void setOnKeypressListener(std::function<void(char,String)> callback);
 
   void setup();
   void loop();
@@ -52,9 +56,9 @@ void KeypadInput::loop() {
 
     char key_char = key;
     if (key == 'D') {
-      onEnterListener(text_buffer);
+      if (onEnterCallback != NULL)onEnterCallback(text_buffer);
       text_buffer = "";
-      onKeypessListener(key, text_buffer);
+      if (onKeypressCallback != NULL)onKeypressCallback(key,text_buffer);
       return;
     } else if (key == '*') key_char = '.';
 
@@ -62,7 +66,7 @@ void KeypadInput::loop() {
 
     text_buffer += String(key_char);
 
-    onKeypessListener(key, text_buffer);
+    if (onKeypressCallback != NULL)onKeypressCallback(key,text_buffer);
   }
 }
 
@@ -70,9 +74,9 @@ void KeypadInput::clearTextNow() {
   text_buffer = "";
 }
 
-void KeypadInput::setOnKeyEnterListener(void (*function)(String)) {
-  onEnterListener = function;
+void KeypadInput::setOnKeyEnterListener(std::function<void(String)> callback) {
+  onEnterCallback = callback;
 }
-void KeypadInput::setOnKeypressListener(void (*function)(char, String)) {
-  onKeypessListener = function;
+void KeypadInput::setOnKeypressListener(std::function<void(char,String)> callback) {
+  onKeypressCallback = callback;
 }
