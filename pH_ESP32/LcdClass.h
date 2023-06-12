@@ -47,18 +47,6 @@ void LcdOutput::setup() {
 }
 
 void LcdOutput::loop() {
-  switch (page) {
-    case 0:
-      printL("", 0);
-      printL("", 1);
-      printL("", 2);
-      printL("", 3);
-      break;
-    case 1:
-      break;
-    case 2:
-      break;
-  }
 }
 
 void LcdOutput::setPage(byte pageIn) {

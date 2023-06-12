@@ -12,6 +12,7 @@ private:
   unsigned long int avgval;
   int buffer_arr[10], temp;
   float ph_act;
+  String ph_str = "";
 
   void display();
 
@@ -34,6 +35,7 @@ public:
 
   float getPH();
   float getVolt();
+  String getPHString();
   void setPH(float phIn);
 
   float getAnalogPH();
@@ -66,15 +68,23 @@ void PHSensor::loop() {
       avgval += buffer_arr[i];
     float volt = (float)avgval * 5.0 / 4096 / 6;
     ph_act = -5.70 * volt + calibration_value;
-    Serial.println("ph = " + String(ph_act));
+    // Serial.println("ph = " + String(ph_act));
 
-    ph = ph_act;
+    if (ph > 8)ph_str = "Base";
+    else if (ph >= 6) ph_str = "Middle";
+    else if (ph > 0 && ph < 6) ph_str = "Acid";
+
+    // ph = ph_act;
   }
 }
 
 void PHSensor::display() {
   Serial.print("pH :");
   Serial.print(ph, 2);
+}
+
+String PHSensor::getPHString(){
+  return ph_str;
 }
 
 float PHSensor::getPH() {
