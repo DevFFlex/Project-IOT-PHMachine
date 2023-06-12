@@ -46,11 +46,8 @@ void ArduinoComunity::loop() {
 
 
   if (data_buffer != "") {
-
-  
     data_buffer.trim();
-
-
+    
     String *item = new String[2];
 
     stringManage->split(item, data_buffer, "=", 2);
@@ -60,35 +57,9 @@ void ArduinoComunity::loop() {
     ph_last = item[1].toFloat();
 
     Serial.println("ph_old = " + String(ph_old) + "    ph_last = " + String(ph_last));
-    if (ph_old != 0 && ph_last != 0 && abs(ph_last - ph_old) < 1) {
 
-      hardwareIO->pHSensor->setPH(ph_last);
-    }
+    if (ph_old != 0 && ph_last != 0 && abs(ph_last - ph_old) < 1) hardwareIO->pHSensor->setPH(ph_last);
 
     data_buffer = "";
   }
-
-
-
-  /*
-  if(Serial2.available()){
-    String data = Serial2.readString();
-    Serial.println(data);
-    // String data = "";
-    // while(Serial2.available()){
-    //   char c = Serial2.read();
-    //   data += String(c);
-    // }
-    hardwareIO->lcdOutput->printL("Serial = " + data, 2);
-
-    // String* item = new String[2];
-
-    // stringManage->split(item,data,"=",2);
-
-    // hardwareIO->lcdOutput->printL("item[0] = " + item[0], 1);
-
-    // Serial.println(data_split[0]);
-  }*/
-
-  // Serial.println();
 }

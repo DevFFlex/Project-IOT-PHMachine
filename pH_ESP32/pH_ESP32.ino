@@ -49,13 +49,18 @@ void InputSerial() {
       }
 
       if (data.indexOf("off") != -1) {
-        data.replace("on", "");
+        data.replace("off", "");
         hardwareIO->relay->off(data.toInt());
       }
 
       if (data.indexOf("toggle") != -1) {
         data.replace("toggle", "");
         hardwareIO->relay->toggle(data.toInt());
+      }
+
+      if (data.indexOf("send_") != -1){
+        data.replace("send_","");
+        comunity->sendOther(data);
       }
     }
   }
@@ -87,8 +92,7 @@ void loop() {
     varObject->setMixTankpH(hardwareIO->pHSensor->getPH());
     comunity->sendMixTankPH();
     hardwareIO->lcdOutput->printL("PH = " + String(hardwareIO->pHSensor->getPH()) + " | " + hardwareIO->pHSensor->getPHString(), 0);
-    // hardwareIO->lcdOutput->printL(1, "Volt = " + String(hardwareIO->pHSensor->getVolt()), 1);
-    // hardwareIO->lcdOutput->printL(1, "AnalogPH = " + String(hardwareIO->pHSensor->getAnalogPH()), 2);
+
     hardwareIO->lcdOutput->printL(hardwareIO->rtc->getTimeToString(), 3);
 
   }

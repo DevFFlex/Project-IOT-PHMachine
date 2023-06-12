@@ -65,14 +65,13 @@ public class ClientClass{
                             "Flow"
                     };
 
-                    sendToServer(namelist[random_obj.nextInt(namelist.length)]);
+                    sendToServer("SET:CLIENT_NAME=" + namelist[random_obj.nextInt(namelist.length)]);
 
                     isConnect = true;
 
                     if(isConnect){
-
+//                        checkServer();
                         recv();
-//                        recv_ph_mixtank();
                     }
 
                     System.out.println("isConnected ggggg");
@@ -80,6 +79,12 @@ public class ClientClass{
                 } catch (IOException e) { e.printStackTrace(); }
             }
         }).start();
+    }
+
+    public void disconnect() throws IOException {
+        socket.close();
+        socket = null;
+        isConnect = false;
     }
 
     private void recv(){
@@ -90,7 +95,6 @@ public class ClientClass{
             public char c = ' ';
 
             private char endKeyword = '$';
-            private int count = 0;
             @Override
             public void run() {
 
@@ -99,7 +103,6 @@ public class ClientClass{
 
                     try {
                         char c = (char) input.read();
-//                        System.out.println("count = " + String.valueOf(count++) + "\tsocket = " + String.valueOf(c));
 
                         if (c == endKeyword){
                             if (message != "")listener.onMessage(message);
@@ -107,12 +110,10 @@ public class ClientClass{
                         }else{
                             message += String.valueOf(c);
                         }
-
-
-
                         Thread.sleep(10);
                     } catch (IOException | InterruptedException e) {
-                        e.printStackTrace();
+                        isConnect = false;
+                        System.out.println("recv error----------------------------");
                     }
                 }
 
@@ -121,17 +122,16 @@ public class ClientClass{
         }).start();
     }
 
-
-    private void recv_ph_mixtank(){
+    private void checkServer(){
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true){
 
-                    sendToServer("C_GET_MTPH=GET");
+                    sendToServer("CHECK:SERVER=NULL");
 
                     try {
-                        Thread.sleep(200);
+                        Thread.sleep(2000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -147,8 +147,13 @@ public class ClientClass{
 
             @Override
             public void run() {
-                output.write(message);
-                output.flush();
+                try{
+                    output.write(message);
+                    output.flush();
+                }catch (Exception e){
+                    isConnect = false;
+                    System.out.println("send error----------------------------");
+                }
             }
         }).start();
     }
