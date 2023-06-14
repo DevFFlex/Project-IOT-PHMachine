@@ -46,9 +46,9 @@ public:
   void setup();
   void loop();
 
-  void on(byte pin);
-  void off(byte pin);
-  void toggle(byte pin);
+  void on(int pin);
+  void off(int pin);
+  void toggle(int pin);
 };
 
 void POUT::setup() {
@@ -59,19 +59,19 @@ void POUT::loop() {
 }
 
 
-void POUT::on(byte pin) {
+void POUT::on(int pin) {
   status[pin] = false;
   PCF.digitalWrite(pinlist[pin], status[pin]);
 }
 
 
-void POUT::off(byte pin) {
+void POUT::off(int pin) {
   status[pin] = true;
   PCF.digitalWrite(pinlist[pin], status[pin]);
   
 }
 
-void POUT::toggle(byte pin) {
+void POUT::toggle(int pin) {
   
   status[pin] = !status[pin];
   PCF.digitalWrite(pinlist[pin],status[pin]);

@@ -30,7 +30,15 @@
                     android:background="@drawable/btn_style4"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:text="c"/>
+                    android:textColor="#FFFF"
+                    android:text="con"/>
+                <Button
+                    android:id="@+id/mainpage_btnDisonnect"
+                    android:background="@drawable/btn_style3"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:textColor="#FFFF"
+                    android:text="Dis"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -77,6 +85,13 @@
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/mainpage_btn3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Admin"
+                />
 
             <Button
                 android:id="@+id/mainpage_btn1"

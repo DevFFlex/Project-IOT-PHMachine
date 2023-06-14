@@ -26,26 +26,26 @@ public:
   void sendInputPH();
   void sendMixTankPH();
   void sendUseTankPH();
-  void sendTimeList();
+  void sendTimeAutoWork();
   void sendOutputText(String output_text);
   void sendRTCTime();
+  void sendOther(String data_str);
+
+  String queryStringTimeAutoWork();
+  String queryStringRTCTime();
 
   //------------ get value from client and set variable server function ----------------
   void recvInputPH(String value);
-  void recvTimelist(String value);
+  void recvTimeBoard(String value);
   void recvTimerAutoWork(String value);
+  void recvToggleRelay(String value);
 
   void setup();
   void loop();
 
 
+  // byte* timeboardFromCToSFormatToByte(String queryStringFromClient);
 
-  //------------ help function ----------------
-
-  String formatS2CTimelist(TimerAutoWork* timerautowork);
-  String* timeboardFromCToSFormatToString(String queryStringFromClient);
-  byte* timeboardFromCToSFormatToByte(String queryStringFromClient);
-  String formatS2CrtcTime();
 };
 
 
@@ -70,16 +70,32 @@ void Comunity::onClientMessage(String str_trim) {
   String command = databox2[0];
   String value = databox2[1];
 
-  Serial.print("str_trim = " + str_trim + "       ");
-  Serial.print("header = " + header + "   commands = " + commands + "       ");
-  Serial.println("command = " + command + "   value = " + value);
+  // Serial.print("str_trim = " + str_trim + "       ");
+  Serial.println("-------------------------------------");
+  Serial.println("header = " + header);
+  Serial.println("command = " + command);
+  Serial.println("value = " + value);
 
 
   if (header == "SET") {
 
-    if (command == "TIME_BOARD") recvTimelist(value);
-    if (command == "INPUT_PH") recvInputPH(value);
-    if (command == "TIME_LIST") recvTimerAutoWork(value);
+    if (command == "TIME_BOARD") {
+      recvTimeBoard(value);
+      // sendRTCTime();
+    }
+
+    if (command == "INPUT_PH") {
+      recvInputPH(value);
+      sendInputPH();
+    }
+
+    if (command == "TIME_LIST") {
+      recvTimerAutoWork(value);
+    }
+
+    if (command == "TOGGLE_RELAY"){
+      recvToggleRelay(value);
+    }
 
 
   } else if (header == "GET") {
@@ -87,17 +103,9 @@ void Comunity::onClientMessage(String str_trim) {
     if (commands == "INPUT_PH") sendInputPH();
     if (commands == "MIXTANK_PH") sendMixTankPH();
     if (commands == "USETANK_PH") sendUseTankPH();
-    if (commands == "TIME_LIST") sendTimeList();
+    if (commands == "TIME_LIST") sendTimeAutoWork();
+    if (commands == "RTC_TIME") sendRTCTime();
   }
-
-  Serial.println("-------------------Timelist----------------------");
-  Serial.println(varObject->getTimeListToString());
-
-  Serial.println("-------------------Timerlist----------------------");
-  for (int i = 0; i < 4; i++) {
-    Serial.println(varObject->timerautowork[i].toString());
-  }
-
 }
 
 void Comunity::sendOutputText(String output_text) {
@@ -117,14 +125,17 @@ void Comunity::sendUseTankPH() {
   serverPH->send("SET:USETANK_PH=" + String(varObject->getUseTankPH()));
 }
 
-void Comunity::sendTimeList() {
+void Comunity::sendTimeAutoWork() {
 
-  serverPH->send("SET:TIME_LIST=" + formatS2CTimelist(varObject->timerautowork));
+  serverPH->send("SET:TIME_LIST=" + queryStringTimeAutoWork());
 }
 
-
 void Comunity::sendRTCTime() {
-  serverPH->send("SET:RTC_TIME=" + formatS2CrtcTime());
+  serverPH->send("SET:RTC_TIME=" + queryStringRTCTime());
+}
+
+void Comunity::sendOther(String data_str){
+  serverPH->send(data_str);
 }
 
 
@@ -136,14 +147,19 @@ void Comunity::recvInputPH(String value) {
   sendOutputText("Ok,Server recv value " + String(value.toFloat()) + " from Client");
 }
 
-void Comunity::recvTimelist(String value) {
-  byte hour = byte(timeboardFromCToSFormatToString(value)[0].toInt());
-  byte minute = byte(timeboardFromCToSFormatToString(value)[1].toInt());
-  byte second = byte(timeboardFromCToSFormatToString(value)[2].toInt());
-  byte dayofweek = byte(timeboardFromCToSFormatToString(value)[3].toInt());
-  byte dayofmonth = byte(timeboardFromCToSFormatToString(value)[4].toInt());
-  byte month = byte(timeboardFromCToSFormatToString(value)[5].toInt());
-  byte year = byte(timeboardFromCToSFormatToString(value)[6].toInt());
+void Comunity::recvTimeBoard(String queryStringFromClient) {
+  byte numsize = 7;
+  String* item = new String[numsize];
+  stringManage->split(item, queryStringFromClient, ",", 7);
+
+
+  byte hour = byte(item[0].toInt());
+  byte minute = byte(item[1].toInt());
+  byte second = byte(item[2].toInt());
+  byte dayofweek = byte(item[3].toInt());
+  byte dayofmonth = byte(item[4].toInt());
+  byte month = byte(item[5].toInt());
+  byte year = byte(item[6].toInt());
 
 
   hardwareIO->rtc->setTime(hour, minute, second, dayofweek, dayofmonth, month, year);
@@ -168,7 +184,11 @@ void Comunity::recvTimerAutoWork(String value){
 
 }
 
-String Comunity::formatS2CrtcTime() {
+void Comunity::recvToggleRelay(String value){
+  hardwareIO->relay->toggle(value.toInt());
+}
+
+String Comunity::queryStringRTCTime() {
   String dout = "";
   dout += String(hardwareIO->rtc->getHour()) + ",";
   dout += String(hardwareIO->rtc->getMinute()) + ",";
@@ -184,15 +204,16 @@ String Comunity::formatS2CrtcTime() {
 
 
 
-String Comunity::formatS2CTimelist(TimerAutoWork* timerlist) {
+String Comunity::queryStringTimeAutoWork() {
+  
   String format = "";
   for (int i = 0; i < 4; i++) {
-    format += String(timerlist[i].getHour()) + ",";
-    format += String(timerlist[i].getMinute()) + ",";
-    format += String(timerlist[i].getSecond()) + ",";
-    format += (timerlist[i].getStatus()) ? "true," : "false,";
-    format += String(timerlist[i].getPH()) + ",";
-    format += (timerlist[i].getDelete()) ? "true" : "false";
+    format += String(varObject->timerautowork[i].getHour()) + ",";
+    format += String(varObject->timerautowork[i].getMinute()) + ",";
+    format += String(varObject->timerautowork[i].getSecond()) + ",";
+    format += (varObject->timerautowork[i].getStatus()) ? "true," : "false,";
+    format += String(varObject->timerautowork[i].getPH()) + ",";
+    format += (varObject->timerautowork[i].getDelete()) ? "true" : "false";
     if (i != 3) format += "#";
   }
 
@@ -201,28 +222,20 @@ String Comunity::formatS2CTimelist(TimerAutoWork* timerlist) {
 
 
 
-String* Comunity::timeboardFromCToSFormatToString(String queryStringFromClient) {
-  byte numsize = 7;
-  String* item = new String[numsize];
-  stringManage->split(item, queryStringFromClient, ",", 7);
-  return item;
-}
+// byte* Comunity::timeboardFromCToSFormatToByte(String queryStringFromClient) {
+//   byte numsize = 7;
+//   String* item = new String[numsize];
+//   stringManage->split(item, queryStringFromClient, ",", 7);
 
+//   byte itemByte[numsize];
+//   int itemInt[numsize];
 
-byte* Comunity::timeboardFromCToSFormatToByte(String queryStringFromClient) {
-  byte numsize = 7;
-  String* item = new String[numsize];
-  stringManage->split(item, queryStringFromClient, ",", 7);
+//   for (int i = 0; i < numsize; i++) {
+//     itemInt[i] = item[i].toInt();
+//     itemByte[i] = byte(itemInt[i]);
+//   }
 
-  byte itemByte[numsize];
-  int itemInt[numsize];
-
-  for (int i = 0; i < numsize; i++) {
-    itemInt[i] = item[i].toInt();
-    itemByte[i] = byte(itemInt[i]);
-  }
-
-  return itemByte;
-}
+//   return itemByte;
+// }
 
 

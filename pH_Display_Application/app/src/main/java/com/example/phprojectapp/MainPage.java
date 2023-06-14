@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -38,12 +39,13 @@ public class MainPage extends AppCompatActivity {
     final String SERVER_IP = "192.168.4.1"; //192.168.4.1
     final int SERVER_PORT = 80; //80
 
-    Button btn_connectServer,btn1,btn2;
+    Button btn_connectServer,btn_disonnectServer,btn1,btn2,btn3;
     TextView mainpage_tvStatusConnected;
     FrameLayout fragment_container;
 
     private MonitorFragment monitorFragment;
     private SettingsFragment settingsFragment;
+    private AdminFragment adminFragment;
 
 
     @Override
@@ -73,17 +75,27 @@ public class MainPage extends AppCompatActivity {
 
         settingsFragment = new SettingsFragment();
 
+        adminFragment = new AdminFragment();
+        adminFragment.setComunity(comunity);
+        adminFragment.setVariable(varriable);
+        adminFragment.setClientClass(clientClass);
+
+
+
 
 //        btn_connectServer = findViewById(R.id.btn_connect2server);
         mainpage_tvStatusConnected = findViewById(R.id.mainpage_tvStatusConnected);
 
         btn1 = findViewById(R.id.mainpage_btn1);
         btn2 = findViewById(R.id.mainpage_btn2);
+        btn3 = findViewById(R.id.mainpage_btn3);
         btn_connectServer = findViewById(R.id.mainpage_btnConnect);
+        btn_disonnectServer = findViewById(R.id.mainpage_btnDisonnect);
         fragment_container = findViewById(R.id.fragment_container);
 
         //animation
-        animationOption.startAnim(btn1,R.anim.fadein_slide_right);
+        animationOption.startAnim(btn3,R.anim.fadein_slide_right);
+        animationOption.startAnim(btn1,R.anim.fadein_slide_center);
         animationOption.startAnim(btn2,R.anim.fadein_slide_left);
 
         //start fragment
@@ -110,6 +122,14 @@ public class MainPage extends AppCompatActivity {
             }
         });
 
+        btn3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, adminFragment).commit();
+                YoYo.with(Techniques.FadeIn).duration(1000).playOn(findViewById(R.id.fragment_container));
+            }
+        });
+
 
 
 
@@ -121,6 +141,19 @@ public class MainPage extends AppCompatActivity {
 
                 extension.printAlert("ip : " + ip + "\tport : " + port);
                 clientClass.connect(ip,Integer.valueOf(port));
+            }
+        });
+
+        btn_disonnectServer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    clientClass.disconnect();
+                    Log.d("Complete","dissconnect");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Log.e("Error","can not dissconnect");
+                }
             }
         });
 
@@ -172,10 +205,12 @@ public class MainPage extends AppCompatActivity {
             mainpage_tvStatusConnected.setText("ยังไม่ได้เชื่อมต่อ");
             mainpage_tvStatusConnected.setTextColor(Color.rgb(255,0,0));
             btn_connectServer.setVisibility(View.VISIBLE);
+            btn_disonnectServer.setVisibility(View.GONE);
         } else {
             mainpage_tvStatusConnected.setText("เชื่อมต่อเเล้ว");
             mainpage_tvStatusConnected.setTextColor(Color.rgb(0,255,0));
             btn_connectServer.setVisibility(View.GONE);
+            btn_disonnectServer.setVisibility(View.VISIBLE);
         }
 
 

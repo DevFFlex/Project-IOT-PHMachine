@@ -45,6 +45,14 @@ public class Comunity implements ClientOnEventListener {
             clientClass.sendToServer("SET:TIME_LIST=" + value_str);
     }
 
+    public void setToggleRelay(int index){
+        if(clientClass.getConnected()){
+            if (index < 0 || index > 6)return;
+            clientClass.sendToServer("SET:TOGGLE_RELAY=" + String.valueOf(index));
+        }
+
+    }
+
     public void getTimeList(){
         if(clientClass.getConnected())
             clientClass.sendToServer("GET:TIME_LIST");
@@ -60,7 +68,6 @@ public class Comunity implements ClientOnEventListener {
         out += String.valueOf(timeBoardObject.getDayofmonth()) + ",";
         out += String.valueOf(timeBoardObject.getMonth()) + ",";
         out += String.valueOf(timeBoardObject.getYear() % 2000);
-
 
         return out;
 
@@ -79,8 +86,7 @@ public class Comunity implements ClientOnEventListener {
 
             if (commands.equals("S_KICK")){
                 try {
-                    clientClass.getSocket().close();
-                    clientClass.setConnect(false);
+                    clientClass.disconnect();
                 } catch (IOException e) { }
             }
 
@@ -94,8 +100,6 @@ public class Comunity implements ClientOnEventListener {
             String output = "message = " + message + "\n";
             output += "command = " + command + "\n";
             output += "value = " + value + "\n";
-
-//            System.out.println(output);
 
             if (command.equals("OUTPUT")){
                 variable.setOutout_text(value);

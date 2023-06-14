@@ -1,19 +1,22 @@
 #include <TimerOne.h>
+#include <SoftwareSerial.h>
+
+SoftwareSerial esp32(10, 11); 
 
 
-float calibration_value = 21.34 - 0.7;
+float calibration_value = 21.34 + 7 - 0.7;
 int phval = 0;
 unsigned long int avgval;
 int buffer_arr[10], temp;
 
 float ph_act;
 
-float delayReadPH = 1000000 * 1;
+float delayReadPH = 1000000 * 0.5;
 
 void onreadph() {
   for (int i = 0; i < 10; i++) {
     buffer_arr[i] = analogRead(A0);
-    Serial.println(buffer_arr[i]);
+    // Serial.println(buffer_arr[i]);
     delay(30);
   }
   for (int i = 0; i < 9; i++) {
@@ -31,13 +34,24 @@ void onreadph() {
   float volt = (float)avgval * 5.0 / 1024 / 6;
   ph_act = -5.70 * volt + calibration_value;
 
-  Serial.println("SENSOR_SET_PH=" + String(ph_act));
+  // Serial.println("SENSOR_SET_PH=" + String(ph_act));
+  // const char *data_str = "SENSOR_SET_PH=";
+  String data_str = "SE_PH=" + String(ph_act) + "\n";
+  int str_len = data_str.length() + 1;   
+  char char_array[str_len];
+  data_str.toCharArray(char_array, str_len);
+  const char *dataoutput = "Hello World";
+  esp32.write(char_array);
+
+  static int cccc = 0;
+  Serial.println("send " + String(data_str));
 }
 
 void setup() {
   Serial.begin(9600);
   Timer1.initialize(delayReadPH);  // 1 วินาที = 1000000 ไมครอน
   Timer1.attachInterrupt(onreadph);
+  esp32.begin(57600);
 }
 void loop() {
 
