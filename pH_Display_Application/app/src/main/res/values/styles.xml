@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style
+        name="MyPreferenceStyle"
+        parent="@style/PreferenceThemeOverlay.v14.Material">
+
+        <item name="android:textAppearance">@style/MyPreferenceStyle</item>
+
+    </style>
+
+    <style
+        name="MyPreferenceTextAppearance"
+        parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:textColor">#FFFFFF</item>
+
+    </style>
+
+    <style name="MyAlertDialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/my_enter_animation</item>
+        <item name="android:windowExitAnimation">@anim/my_exit_animation</item>
+    </style>
+
+
+</resources>

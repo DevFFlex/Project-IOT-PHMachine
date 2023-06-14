@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:background="@drawable/bg_input_time"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TimePicker
+        android:background="#76E1D1"
+        android:id="@+id/inputtime_tpk"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:timePickerMode="clock"
+        android:format24Hour="true"/>
+
+    <LinearLayout
+
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_marginHorizontal="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_gravity=""
+            android:layout_width="150dp"
+            android:layout_height="15dp"
+            android:src="#00FFD9"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ค่า pH   "
+            android:textSize="30dp"
+            android:textStyle="bold"
+            android:textColor="@color/fg_default"/>
+
+        <EditText
+            android:id="@+id/inputtime_etPH"
+            android:inputType="numberDecimal"
+            android:textAlignment="center"
+            android:textColor="@color/fg_default"
+            android:textColorHint="#A1FF09"
+            android:padding="20dp"
+            android:background="@drawable/bg_dialog_phinput"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="20dp"
+            android:hint="0 - 14"
+            android:textStyle="bold"
+
+            />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_marginHorizontal="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="150dp"
+            android:layout_height="15dp"
+            android:translationX="20dp"
+            android:src="#04F8BF"/>
+
+        <ImageView
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="150dp"
+            android:layout_height="15dp"
+            android:src="#12FFAC"/>
+
+    </LinearLayout>
+
+
+
+    <Button
+        android:id="@+id/inputtime_btnOk"
+        android:layout_marginVertical="30dp"
+        android:layout_marginHorizontal="30dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ตกลง"
+        android:textColor="#FFFF"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:background="@drawable/btn_style1"/>
+
+</LinearLayout>

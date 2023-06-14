@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:padding="2dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:background="#080E32"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="เวลา"
+                    android:textSize="15dp"
+                    android:textColor="#FFFF"
+                    android:paddingHorizontal="10dp"
+                    android:textStyle="bold"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/listtimeitem_tvTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="00:00:00"
+                        android:textSize="20dp"
+                        android:textColor="#53D0E6"
+                        android:textStyle="bold"
+                        android:paddingHorizontal="20dp" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"
+                        android:background="#0B17F3"/>
+
+                </LinearLayout>
+
+
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="pH"
+                    android:textSize="15dp"
+                    android:textColor="#FFFF"
+                    android:paddingHorizontal="10dp"
+                    android:textStyle="bold"
+                    />
+
+                <TextView
+                    android:id="@+id/listtimeitem_tvPH"
+                    android:layout_margin="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="12.5"
+                    android:textSize="20dp"
+                    android:textColor="#FFFF"
+                    android:paddingHorizontal="20dp"
+                    android:background="#AE0392DF"
+                    android:textStyle="bold"/>
+
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_margin="10dp"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <Switch
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center"
+                android:id="@+id/listtimeitem_switch"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="ปิด"
+                android:textSize="20dp"
+                android:paddingHorizontal="10dp"
+                android:background="#A2CCF8"/>
+
+            <Button
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center"
+                android:id="@+id/listtimeitem_btnDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:text="ลบ"
+                android:textSize="20dp"
+                android:textColor="#FFFF"
+                android:paddingHorizontal="20dp"
+                android:background="@drawable/bg_btn_ms4"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
