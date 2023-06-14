@@ -15,6 +15,7 @@ public:
   POUT *relay;
   PHSensor *pHSensor;
   WaterSensor *waterSensor;
+  SDCard *sdcard;
 
   HardwareIO() {
     lcdOutput = new LcdOutput();
@@ -23,6 +24,7 @@ public:
     relay = new POUT();
     pHSensor = new PHSensor();
     waterSensor = new WaterSensor();
+    sdcard = new SDCard();
   }
 
   void setup();
@@ -36,6 +38,7 @@ public:
     delete rtc;
     delete pHSensor;
     delete waterSensor;
+    delete sdcard;
   }
 };
 
@@ -47,6 +50,7 @@ void HardwareIO::setup() {
   relay->setup();
   pHSensor->setup();
   waterSensor->setup();
+  sdcard->setup();
 }
 
 
@@ -57,4 +61,5 @@ void HardwareIO::loop() {
   relay->loop();
   pHSensor->loop();
   waterSensor->loop();
+  sdcard->loop)_;
 }
