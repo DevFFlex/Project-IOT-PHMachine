@@ -28,6 +28,7 @@ android {
     buildFeatures {
         viewBinding true
     }
+    namespace 'com.example.phprojectapp'
 }
 def core_version = "1.6.0"
 dependencies {
