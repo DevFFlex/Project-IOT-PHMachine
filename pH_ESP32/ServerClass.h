@@ -1,3 +1,4 @@
+#include "HardwareSerial.h"
 #include "WiFiClient.h"
 #include "WiFiServer.h"
 #include <WiFi.h>
@@ -141,8 +142,8 @@ private:
   ClientList *clients;
 
 
-  const char *ssid = "FFlex";
-  const char *password = "123456789";
+  String *SSID,*PASS;
+
   bool openWifiStatus = false;
 
   std::function<void(String)> onMessageCallback;
@@ -150,7 +151,9 @@ private:
 
 public:
 
-  ServerPH() {
+  ServerPH(String *_SSID,String *_PASS) {
+    SSID = _SSID;
+    PASS = _PASS;
     server = new WiFiServer(80);
     clients = new ClientList(server);
   }
@@ -173,7 +176,8 @@ public:
 
 
 void ServerPH::setup() {
-  WiFi.softAP(ssid, password);
+  Serial.println("hospot : " + *SSID + "   " + *PASS);
+  WiFi.softAP(SSID->c_str(), PASS->c_str());
 
   IPAddress IP = WiFi.softAPIP();
 
@@ -187,60 +191,7 @@ void ServerPH::setup() {
 void ServerPH::loop() {
   clients->loop();
   clients->checkAvailable(onMessageCallback);
-
-  /*
-  if (openWifiStatus) {
-    if (!isClient()) client = server.available();
-    else {
-
-      if (first_client) {
-        first_client = false;
-        Serial.println("new client ip = " + client.localIP().toString());
-      }
-
-      if (isClient()) {
-
-        if (client.available()) {
-          String data = "";
-          while (true) {
-            char ccc = client.read();
-            if (ccc == '$') break;
-            else data += String(ccc);
-          }
-          // Serial.println(data);
-          // String data = client.readString();
-
-          data.trim();
-
-          if (onMessageCallback != NULL && data != "") {
-            onMessageCallback(data);
-          }
-        }
-
-
-      } else {
-        client.stop();
-        Serial.println("client disconnected");
-        first_client = true;
-        client = NULL;
-      }
-    }
-  }
-  */
 }
 void ServerPH::send(String send_str) {
-
   clients->send(send_str);
-
-  // if (isClient()) {
-  //   if (client.connected()) {
-  //     String dataStr = send_str + "$";
-  //     byte buffer_size = dataStr.length() + 1;
-  //     char buffer[buffer_size];
-
-  //     dataStr.toCharArray(buffer, buffer_size);
-  //     client.write(buffer);
-  //     client.flush();
-  //   }
-  // }
 }

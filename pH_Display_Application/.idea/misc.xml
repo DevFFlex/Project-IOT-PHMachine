@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
@@ -75,7 +76,9 @@
         <entry key="..\:/Users/FFlex/Desktop/GitProject/Project-IOT-PHMachine/pH Display Application/app/src/main/res/layout/mainpage.xml" value="0.33" />
         <entry key="..\:/Users/FFlex/Desktop/GitProject/Project-IOT-PHMachine/pH Display Application/app/src/main/res/layout/settimeboard.xml" value="0.25" />
         <entry key="..\:/Users/FFlex/Desktop/GitProject/Project-IOT-PHMachine/pH_Display_Application/app/src/main/res/layout/fragment_admin.xml" value="0.33" />
+        <entry key="..\:/Users/FFlex/Desktop/GitProject/Project-IOT-PHMachine/pH_Display_Application/app/src/main/res/layout/fragment_monitor.xml" value="0.35648148148148145" />
         <entry key="..\:/Users/FFlex/Desktop/GitProject/Project-IOT-PHMachine/pH_Display_Application/app/src/main/res/layout/mainpage.xml" value="0.3625" />
+        <entry key="..\:/Users/FFlex/Desktop/GitProject/Project-IOT-PHMachine/pH_Display_Application/app/src/main/res/mipmap-anydpi-v26/ic_launcher_ph_meter.xml" value="0.2155" />
       </map>
     </option>
   </component>

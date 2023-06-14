@@ -1,23 +1,24 @@
-// #include "HardwareIO.h"
+#include "Server.h"
 
-class Comunity {
+class Comunity : public ServerPH {
 
 private:
-  ServerPH* serverPH;
   VarObject* varObject;
   HardwareIO* hardwareIO;
   StringManage* stringManage;
 
+  String SSID_AP = "PH-Project-Controller";
+  String PASS_AP = "12345678";
+
 public:
-  Comunity(VarObject* varObjectIn, HardwareIO* hardwareIOIn,StringManage* stringManageIn) {
-    serverPH = new ServerPH();
+  Comunity(VarObject* varObjectIn, HardwareIO* hardwareIOIn,StringManage* stringManageIn) : ServerPH(&SSID_AP,&PASS_AP) {
     varObject = varObjectIn;
     hardwareIO = hardwareIOIn;
     stringManage = stringManageIn;
   }
 
   ~Comunity(){
-    delete serverPH;
+    
   }
 
   void onClientMessage(String message);
@@ -43,19 +44,16 @@ public:
   void setup();
   void loop();
 
-
-  // byte* timeboardFromCToSFormatToByte(String queryStringFromClient);
-
 };
 
 
 void Comunity::setup(){
-  serverPH->setup();
-  serverPH->setOnMessageListener(std::bind(&Comunity::onClientMessage,this, std::placeholders::_1));
+  ServerPH::setup();
+  ServerPH::setOnMessageListener(std::bind(&Comunity::onClientMessage,this, std::placeholders::_1));
 }
 
 void Comunity::loop(){
-  serverPH->loop();
+  ServerPH::loop();
 }
 
 void Comunity::onClientMessage(String str_trim) {
@@ -109,33 +107,32 @@ void Comunity::onClientMessage(String str_trim) {
 }
 
 void Comunity::sendOutputText(String output_text) {
-  serverPH->send("SET:OUTPUT=" + output_text);
+  ServerPH::send("SET:OUTPUT=" + output_text);
 }
 
 
 void Comunity::sendInputPH() {
-  serverPH->send("SET:INPUT_PH=" + String(varObject->getInputPH()));
+  ServerPH::send("SET:INPUT_PH=" + String(varObject->getInputPH()));
 }
 
 void Comunity::sendMixTankPH() {
-  serverPH->send("SET:MIXTANK_PH=" + String(varObject->getMixTankpH()));
+  ServerPH::send("SET:MIXTANK_PH=" + String(varObject->getMixTankpH()));
 }
 
 void Comunity::sendUseTankPH() {
-  serverPH->send("SET:USETANK_PH=" + String(varObject->getUseTankPH()));
+  ServerPH::send("SET:USETANK_PH=" + String(varObject->getUseTankPH()));
 }
 
 void Comunity::sendTimeAutoWork() {
-
-  serverPH->send("SET:TIME_LIST=" + queryStringTimeAutoWork());
+  ServerPH::send("SET:TIME_LIST=" + queryStringTimeAutoWork());
 }
 
 void Comunity::sendRTCTime() {
-  serverPH->send("SET:RTC_TIME=" + queryStringRTCTime());
+  ServerPH::send("SET:RTC_TIME=" + queryStringRTCTime());
 }
 
 void Comunity::sendOther(String data_str){
-  serverPH->send(data_str);
+  ServerPH::send(data_str);
 }
 
 

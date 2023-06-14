@@ -1,5 +1,3 @@
-#include "SD_Class.h"
-
 #include "HelpClass.h"
 #include "TimerClass.h"
 
@@ -12,6 +10,8 @@
 #include "ArduinoComunity.h"
 
 #include "UserInterface.h"
+
+#include "Database.h"
 
 
 
@@ -28,6 +28,10 @@ Comunity *comunity = new Comunity(varObject, hardwareIO,stringManage);
 ArduinoComunity *ardunoComunity = new ArduinoComunity(hardwareIO,stringManage);
 
 UserInterface *ui = new UserInterface(varObject,comunity,hardwareIO);
+
+Database *db = new Database();
+
+
 
 Timer t1(1000);
 
@@ -88,12 +92,13 @@ void loop() {
 
 
   if (t1.isExpired()) {
-  
+    
     varObject->setMixTankpH(hardwareIO->pHSensor->getPH());
     comunity->sendMixTankPH();
     hardwareIO->lcdOutput->printL("PH = " + String(hardwareIO->pHSensor->getPH()) + " | " + hardwareIO->pHSensor->getPHString(), 0);
 
     hardwareIO->lcdOutput->printL(hardwareIO->rtc->getTimeToString(), 3);
+    // hardwareIO->sdcard->listDir(SD,"/",0);
 
   }
 

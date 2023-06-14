@@ -5,6 +5,7 @@
 #include "PCF_Class.h"
 #include "PHSensorClass.h"
 #include "WaterSensor_Class.h"
+#include "SD_Class.h"
 
 
 class HardwareIO {
@@ -61,5 +62,5 @@ void HardwareIO::loop() {
   relay->loop();
   pHSensor->loop();
   waterSensor->loop();
-  sdcard->loop)_;
+  // sdcard->loop)_;
 }
