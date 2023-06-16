@@ -46,9 +46,14 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.5.3'
     implementation 'androidx.navigation:navigation-ui:2.5.3'
     implementation 'androidx.preference:preference:1.1.1'
+    implementation fileTree(dir: 'C:\\Users\\FFlex\\Downloads\\MPAndroidChart-master', include: ['*.aar', '*.jar'], exclude: [])
 //    implementation 'androidx.annotation:annotation-jvm:1.6.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
 
 }
+
+

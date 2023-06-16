@@ -1,40 +1,38 @@
 package com.example.phprojectapp.ClassEx;
 
-import com.example.phprojectapp.MainPage;
-
 import java.io.BufferedReader;
-import java.io.Console;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.Random;
 
 
-public class ClientClass{
+interface ClientEventListener{
+    void onMessage(String header,String command,String value);
+}
+
+public class Client{
     private PrintWriter output;
     private BufferedReader input;
 
-    private ClientOnEventListener listener;
-    public void setClientOnEventListener(ClientOnEventListener listener) {
+    private ClientEventListener listener;
+    public void setListener(ClientEventListener listener) {
         this.listener = listener;
     }
 
     private Socket socket;
-    private Random random_obj;
+    public String USERNAME = "PEOPLE";
 
     private boolean isConnect = false;
     public boolean getConnected(){
         return this.isConnect;
     }
 
-    public ClientClass(){
-        random_obj = new Random();
+    public Client(){
+
     }
-
-
-    public void connect(String SERVER_IP,int SERVER_PORT){
+    public void connect(String SERVER_IP,int SERVER_PORT,String name){
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -43,19 +41,8 @@ public class ClientClass{
                     output = new PrintWriter(socket.getOutputStream());
                     input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-                    String[] namelist = {
-                            "Name1",
-                            "Money",
-                            "Day",
-                            "Account",
-                            "Data",
-                            "AI",
-                            "Socket",
-                            "Flow"
-                    };
-
-                    sendToServer("SET:CLIENT_NAME=" + namelist[random_obj.nextInt(namelist.length)]);
-
+                    sendToServer("SET:CLIENT_NAME=" + name);
+                    USERNAME = name;
                     isConnect = true;
 
                     if(isConnect){
@@ -87,22 +74,37 @@ public class ClientClass{
             @Override
             public void run() {
 
-                while (isConnect) {
+                while (true) {
 
+                    if (isConnect){
+                        try {
+                            char c = (char) input.read();
 
-                    try {
-                        char c = (char) input.read();
+                            if (c == endKeyword){
+                                if (message != ""){
+                                    if (!message.contains(":"))return;
 
-                        if (c == endKeyword){
-                            if (message != "")listener.onMessage(message);
-                            message = "";
-                        }else{
-                            message += String.valueOf(c);
+                                    String[] data = message.split(":");
+                                    String header = data[0].trim();
+                                    String commands = data[1];
+
+                                    if(!commands.contains("="))return;
+                                    String[] data2 = commands.split("=");
+                                    String command = data2[0];
+                                    String value = data[1];
+
+                                    listener.onMessage(header,command,value);
+                                }
+                                message = "";
+                            }else{
+                                message += String.valueOf(c);
+                            }
+                            Thread.sleep(10);
+                        } catch (IOException | InterruptedException e) {
+//                            isConnect = false;
+                            e.printStackTrace();
+                            System.out.println("recv error----------------------------");
                         }
-                        Thread.sleep(10);
-                    } catch (IOException | InterruptedException e) {
-                        isConnect = false;
-                        System.out.println("recv error----------------------------");
                     }
                 }
 

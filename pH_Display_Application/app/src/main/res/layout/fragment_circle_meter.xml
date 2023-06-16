@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MonitorFragmentObject.CircleMeter">
+
+    <com.example.phprojectapp.MonitorFragmentObject.CircleView
+        android:id="@+id/monitor_CircleView"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </com.example.phprojectapp.MonitorFragmentObject.CircleView>
+
+    <!-- Present pH Label -->
+    <LinearLayout
+        android:id="@+id/pHMeterLayour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/monitor_tvPH"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="0.0"
+            android:textAlignment="center"
+            android:textSize="100dp"
+            android:textColor="@color/fg_default"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/monitor_imgUnderBar"
+        android:layout_width="150dp"
+        android:layout_height="10dp"
+        android:layout_gravity="bottom|center"
+        android:background="#FF1E00" />
+
+</FrameLayout>

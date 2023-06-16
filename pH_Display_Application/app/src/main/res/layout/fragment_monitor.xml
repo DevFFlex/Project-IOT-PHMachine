@@ -15,9 +15,7 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
-
+            android:layout_height="match_parent">
             <!--    Main Layout-->
             <LinearLayout
                 android:layout_weight="2"
@@ -28,47 +26,53 @@
 
                 <!--    display meter   -->
                 <FrameLayout
+                    android:background="@color/bg_simulate"
+                    android:id="@+id/fragMeter"
                     android:layout_width="match_parent"
-                    android:layout_height="400dp">
+                    android:layout_height="500sp">
 
-                    <com.example.phprojectapp.MonitorFragmentObject.CircleView
-                        android:id="@+id/monitor_CircleView"
-                        android:layout_gravity="center"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                    </com.example.phprojectapp.MonitorFragmentObject.CircleView>
-
-                    <!-- Present pH Label -->
                     <LinearLayout
-                        android:id="@+id/pHMeterLayour"
+                        android:id="@+id/monitor_ll_rtctime"
+                        android:background="#030125"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:orientation="vertical">
-
+                        android:layout_height="wrap_content">
 
                         <TextView
-                            android:id="@+id/monitor_tvPH"
+                            android:id="@+id/monitor_tvTimeBoard"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="0.0"
+                            android:text="00:00:00"
+                            android:textSize="40sp"
                             android:textAlignment="center"
-                            android:textSize="100dp"
-                            android:textColor="@color/fg_default"
-                            android:textStyle="bold" />
+                            android:textColor="#FFFF"
+                            />
 
 
                     </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/monitor_imgUnderBar"
-                        android:layout_width="150dp"
-                        android:layout_height="10dp"
-                        android:layout_gravity="bottom|center"
-                        android:background="#FF1E00" />
-
                 </FrameLayout>
+                <LinearLayout
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <Button
+                        android:id="@+id/monitor_btnMeterBack"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="&lt;"
+                        android:textSize="20sp"
+                        android:textStyle="bold"/>
+
+                    <Button
+                        android:id="@+id/monitor_btnMeterNext"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=">"
+                        android:textSize="20sp"
+                        android:textStyle="bold"/>
+
+                </LinearLayout>
 
                 <!--    input and data display-->
                 <LinearLayout
@@ -162,7 +166,7 @@
                     android:id="@+id/test_lo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/bg_simulate">
+                    android:background="@drawable/bg_layout1">
 
                     <TextView
                         android:id="@+id/monitor_tvOutputDebug"
@@ -173,26 +177,8 @@
                         android:textColor="@color/fg_default" />
                 </LinearLayout>
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:background="#030125"
-                android:layout_width="match_parent"
-                android:layout_height="100dp">
-
-                <TextView
-                    android:id="@+id/monitor_tvTimeBoard"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="00:00:00"
-                    android:textSize="60dp"
-                    android:textAlignment="center"
-                    android:textColor="#FFFF"
-                    />
-
 
             </LinearLayout>
-
 
         </LinearLayout>
 

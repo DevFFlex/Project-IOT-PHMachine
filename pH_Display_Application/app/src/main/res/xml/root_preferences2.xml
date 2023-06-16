@@ -16,8 +16,13 @@
             app:title="Port"
             app:useSimpleSummaryProvider="true" />
 
+        <EditTextPreference
+            app:key="username"
+            app:title="Username"
+            app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
+
 
 
 </PreferenceScreen>

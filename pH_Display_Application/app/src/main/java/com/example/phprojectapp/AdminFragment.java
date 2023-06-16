@@ -9,33 +9,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.example.phprojectapp.ClassEx.ClientClass;
-import com.example.phprojectapp.ClassEx.Comunity;
 import com.example.phprojectapp.ClassEx.Variable;
 
 
 public class AdminFragment extends Fragment {
-
-    private ClientClass clientClass;
-    public void setClientClass(ClientClass clientClass) {
-        this.clientClass = clientClass;
-    }
-
-    private Comunity comunity;
-    public void setComunity(Comunity comunity) {
-        this.comunity = comunity;
-    }
-
-    private Variable variable;
-    public void setVariable(Variable variable) {
-        this.variable = variable;
-    }
-
+    private Variable var;
     private Button btn_relay1,btn_relay2,btn_relay3,btn_relay4,btn_relay5,btn_relay6;
 
 
-    public AdminFragment() {
-        // Required empty public constructor
+    public AdminFragment(Variable variable) {
+        this.var = variable;
     }
 
 
@@ -69,7 +52,7 @@ public class AdminFragment extends Fragment {
     }
 
     private void toggleRelay(int index){
-        comunity.setToggleRelay(index);
+        var.comunity.setToggleRelay(index);
     }
 
     public void onToggleRelay1(View v){

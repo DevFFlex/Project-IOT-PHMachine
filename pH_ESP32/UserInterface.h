@@ -16,7 +16,9 @@ public:
     hardwareIO->keypadInput->setOnKeyEnterListener(std::bind(&UserInterface::onEnter,this,std::placeholders::_1));
   }
 
-  void loop(){}
+  void loop(){
+
+  }
 
 
   void onEnter(String text);
@@ -25,9 +27,8 @@ public:
 };
 
 void UserInterface::onEnter(String text_buffer){
-
+  
 }
-
 
 void UserInterface::onKeypress(char key,String text_buffer){
   if (key == 'C') {

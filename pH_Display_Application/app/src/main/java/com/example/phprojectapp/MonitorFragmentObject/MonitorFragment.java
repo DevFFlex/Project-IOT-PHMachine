@@ -1,17 +1,23 @@
 package com.example.phprojectapp.MonitorFragmentObject;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.example.phprojectapp.AnimationOption;
 import com.example.phprojectapp.ClassEx.Comunity;
 import com.example.phprojectapp.ClassEx.Extension;
@@ -27,47 +33,35 @@ public class MonitorFragment extends Fragment {
 
 //    private PH_Meter_Animation ph_meter_animation;
     private TextView monitor_tvPH, monitor_tvOutputDebug, monitor_tvPHNeeded,monitor_tvTimeBoard;
-    private Button monitor_btnChangePH, monitor_btnSetTime,monitor_btnTest;
+    private Button monitor_btnChangePH, monitor_btnSetTime,monitor_btnMeterBack,monitor_btnMeterNext;
     private ImageView monitor_imgUnderBar;
+    private LinearLayout monitor_layout_rtctime;
 
     CircleView monitor_CircleView;
 
     View monitorFragmentView;
 
-    private Comunity comunity;
-    public void setComunity(Comunity comunity) {
-        this.comunity = comunity;
-    }
-
-    private Variable variable;
-    public void setVariable(Variable variable) {
-        this.variable = variable;
-    }
-
-    private AnimationOption animationOption;
-    public void setAnimationOption(AnimationOption animationOption) {
-        this.animationOption = animationOption;
-    }
-
-    private SoundEffect soundEffect;
-    public void setSoundEffect(SoundEffect soundEffect) {
-        this.soundEffect = soundEffect;
-    }
-
-    private Extension extension;
-    public void setExtension(Extension extension) {
-        this.extension = extension;
-    }
+    CircleMeter circleMeterFragment;
+    GraphMeter graphMeter;
+    ArrayList<Fragment> meterfraglist = new ArrayList<Fragment>();
+    private int meterfrag_cursor = 0;
 
 
-    public MonitorFragment() {
+    private Variable var;
+
+    public MonitorFragment(Variable var) {
+        this.var = var;;
+        circleMeterFragment = new CircleMeter();
+        graphMeter = new GraphMeter();
+
+        meterfraglist.add(circleMeterFragment);
+        meterfraglist.add(graphMeter);
 
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         Handler handler = new Handler();
         handler.post(new Runnable() {
@@ -83,11 +77,11 @@ public class MonitorFragment extends Fragment {
 
 
     private void updateUI(){
-        if (variable != null){
-            monitor_tvPHNeeded.setText(String.valueOf(variable.inputPH));
-            monitor_tvPH.setText(String.valueOf(variable.mixtankPH));
-            monitor_CircleView.getCircleAnimation().setCurrentPH(variable.mixtankPH);
-            monitor_tvOutputDebug.setText(variable.outout_text);
+        if (var != null){
+            monitor_tvPHNeeded.setText(String.valueOf(var.inputPH));
+//            monitor_tvPH.setText(String.valueOf(variable.mixtankPH));
+//            monitor_CircleView.getCircleAnimation().setCurrentPH(variable.mixtankPH);
+            monitor_tvOutputDebug.setText(var.outout_text);
         }
     }
 
@@ -104,6 +98,10 @@ public class MonitorFragment extends Fragment {
 
         monitor_btnChangePH = monitorFragmentView.findViewById(R.id.monitor_btnChangePH);
         monitor_btnSetTime = monitorFragmentView.findViewById(R.id.monitor_btnSetTime);
+        monitor_btnMeterBack = monitorFragmentView.findViewById(R.id.monitor_btnMeterBack);
+        monitor_btnMeterNext = monitorFragmentView.findViewById(R.id.monitor_btnMeterNext);
+
+        monitor_layout_rtctime = monitorFragmentView.findViewById(R.id.monitor_ll_rtctime);
 
 
         monitor_tvPH = monitorFragmentView.findViewById(R.id.monitor_tvPH);
@@ -111,52 +109,61 @@ public class MonitorFragment extends Fragment {
         monitor_tvPHNeeded = monitorFragmentView.findViewById(R.id.monitor_tvPHNeeded);
         monitor_tvTimeBoard = monitorFragmentView.findViewById(R.id.monitor_tvTimeBoard);
 
-
         monitor_btnChangePH.setOnClickListener(this::onClickSetPH);
         monitor_btnSetTime.setOnClickListener(this::onClickSetTime);
-
         monitor_tvTimeBoard.setOnClickListener(this::onClickTimeBoard);
+        monitor_btnMeterBack.setOnClickListener(this::onClickMeterBack);
+        monitor_btnMeterNext.setOnClickListener(this::onClickMeterNext);
 
-        animationOption.startShuffleSlideIn(new ArrayList<View>(Arrays.asList(monitor_btnChangePH,monitor_btnSetTime)));
-        animationOption.startAnim(monitor_tvPH,R.anim.zoomin);
-        animationOption.startAnimation(monitor_imgUnderBar,R.animator.animator_set1);
+//        animationOption.startShuffleSlideIn(new ArrayList<View>(Arrays.asList(monitor_btnChangePH,monitor_btnSetTime)));
+//        animationOption.startAnim(monitor_tvPH,R.anim.zoomin);
+//        animationOption.startAnimation(monitor_imgUnderBar,R.animator.animator_set1);
 
 //        animationOption.startAnim(monitor_layoutPHmeter,R.anim.fadein);
+
+        getChildFragmentManager().beginTransaction().replace(R.id.fragMeter, circleMeterFragment).commit();
 
         return monitorFragmentView;
     }
 
+    private void func_updateMeterPage(){
+        if (meterfraglist.get(meterfrag_cursor).getClass() != CircleMeter.class)monitor_layout_rtctime.setVisibility(View.GONE);
+        else monitor_layout_rtctime.setVisibility(View.VISIBLE);
+
+        getChildFragmentManager().beginTransaction().replace(R.id.fragMeter, meterfraglist.get(meterfrag_cursor)).commit();
+    }
+
     private void onClickSetPH(View v){
-        soundEffect.play_glitch();
-        animationOption.startAnim(monitor_btnChangePH,R.anim.btnclick_animation);
-        SetPHDialog setPHDialog = new SetPHDialog(getContext(),animationOption);
+        var.soundEffect.play_glitch();
+        var.animationOption.startAnim(monitor_btnChangePH,R.anim.btnclick_animation);
+        SetPHDialog setPHDialog = new SetPHDialog(getContext(),var.animationOption);
         setPHDialog.setSetPHDialogEvent(new SetPHDialogEvent() {
             @Override
             public void onClickOk(float value) {
-                extension.printAlert(String.valueOf(monitor_CircleView.getCircleAnimation().degreeList.get(0)));
-                variable.inputPH = value;
+                var.extension.printAlert(String.valueOf(monitor_CircleView.getCircleAnimation().degreeList.get(0)));
+                var.inputPH = value;
 
-                comunity.setInputPH(value);
+                var.comunity.setInputPH(value);
             }
         });
     }
 
     private void onClickSetTime(View v){
-        soundEffect.play_glitch();
-        animationOption.startAnim(monitor_btnSetTime,R.anim.btnclick_animation);
+        var.soundEffect.play_glitch();
+        var.animationOption.startAnim(monitor_btnSetTime,R.anim.btnclick_animation);
 
-        comunity.getTimeList();
+        var.comunity.getTimeAutoWork();
+        var.extension.printAlert("on get time auto work");
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-               SetTimeDialog std = new SetTimeDialog(getContext(),variable);
+               SetTimeDialog std = new SetTimeDialog(getContext(),var);
                std.setSetTimeDialogEvent(new SetTimeDialogEvent() {
                    @Override
                    public void onClickSave(String output) {
-                       System.out.println(output);
-                       comunity.setTimeList(output);
+                       var.comunity.setTimeAutoWork(output);
                    }
                });
             }
@@ -168,10 +175,21 @@ public class MonitorFragment extends Fragment {
         setTimeBoard.setSetTimeBoardEvent(new SetTimeBoardEvent() {
             @Override
             public void onClickOk(TimeBoardObject timeBoardObject) {
-                String queryString = comunity.timeBoardObjectToQueryString(timeBoardObject);
-                comunity.setTimeBoard(queryString);
+                String queryString = var.comunity.timeBoardObjectToQueryString(timeBoardObject);
+                var.comunity.setTimeBoard(queryString);
             }
         });
+    }
+
+    private void onClickMeterBack(View v){
+        meterfrag_cursor--;
+        if(meterfrag_cursor < 0)meterfrag_cursor = meterfraglist.size() - 1;
+        func_updateMeterPage();
+    }
+    private void onClickMeterNext(View v){
+        meterfrag_cursor++;
+        if(meterfrag_cursor > meterfraglist.size() - 1)meterfrag_cursor = 0;
+        func_updateMeterPage();
     }
 
 

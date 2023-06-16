@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    android:background="@color/background"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ChatFragment">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ScrollView
+            android:background="@drawable/bg_layout1"
+            android:layout_width="match_parent"
+            android:layout_height="500sp">
+
+            <TextView
+                android:id="@+id/chat_tv"
+                android:padding="20sp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text=""
+                android:textColor="@color/white" />
+
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/chat_et"
+                android:textAlignment="center"
+                android:layout_weight="1"
+                android:background="@drawable/et_style1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="@color/white"
+                android:textSize="40sp"/>
+
+            <Button
+                android:id="@+id/chat_sendbtn"
+                android:background="@drawable/bg_layout3"
+                android:layout_width="100sp"
+                android:layout_height="match_parent"
+                android:textColor="@color/white"
+                android:text="SEND"/>
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+
+</FrameLayout>

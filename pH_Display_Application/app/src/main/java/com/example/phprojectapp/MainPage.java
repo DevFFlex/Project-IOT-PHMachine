@@ -23,21 +23,16 @@ import com.example.phprojectapp.MonitorFragmentObject.MonitorFragment;
 
 public class MainPage extends AppCompatActivity {
 
-    private SoundEffect soundEffect;
-    private Extension extension;
-    private AnimationOption animationOption;
     private SharedPreferences preferences;
-    private Variable varriable;
+    private Variable var;
 
-    private Comunity comunity;
-
-    Button btn_connectServer,btn_disonnectServer,btn1,btn2,btn3;
+    Button btn_connectServer,btn_disonnectServer,btn1,btn2,btn3,btn4;
     TextView mainpage_tvStatusConnected;
-    FrameLayout fragment_container;
 
     private MonitorFragment monitorFragment;
     private SettingsFragment settingsFragment;
     private AdminFragment adminFragment;
+    private ChatFragment chatFragment;
 
 
     @Override
@@ -46,41 +41,27 @@ public class MainPage extends AppCompatActivity {
         setContentView(R.layout.mainpage);
 
 
-        varriable = new Variable();
+        var = new Variable(this);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        animationOption = new AnimationOption(this);
-        soundEffect = new SoundEffect(this);
-        extension = new Extension(this);
 
-        comunity = new Comunity(varriable);
-
-        monitorFragment = new MonitorFragment();
-        monitorFragment.setVariable(varriable);
-        monitorFragment.setAnimationOption(animationOption);
-        monitorFragment.setSoundEffect(soundEffect);
-        monitorFragment.setExtension(extension);
-        monitorFragment.setComunity(comunity);
-
+        monitorFragment = new MonitorFragment(var);
         settingsFragment = new SettingsFragment();
-
-        adminFragment = new AdminFragment();
-        adminFragment.setComunity(comunity);
-        adminFragment.setVariable(varriable);
-
+        adminFragment = new AdminFragment(var);
+        chatFragment = new ChatFragment(var);
 
         mainpage_tvStatusConnected = findViewById(R.id.mainpage_tvStatusConnected);
 
         btn1 = findViewById(R.id.mainpage_btn1);
         btn2 = findViewById(R.id.mainpage_btn2);
         btn3 = findViewById(R.id.mainpage_btn3);
+        btn4 = findViewById(R.id.mainpage_btn4);
         btn_connectServer = findViewById(R.id.mainpage_btnConnect);
         btn_disonnectServer = findViewById(R.id.mainpage_btnDisonnect);
-        fragment_container = findViewById(R.id.fragment_container);
 
         //animation
-        animationOption.startAnim(btn3,R.anim.fadein_slide_right);
-        animationOption.startAnim(btn1,R.anim.fadein_slide_center);
-        animationOption.startAnim(btn2,R.anim.fadein_slide_left);
+        var.animationOption.startAnim(btn3,R.anim.fadein_slide_right);
+        var.animationOption.startAnim(btn1,R.anim.fadein_slide_center);
+        var.animationOption.startAnim(btn2,R.anim.fadein_slide_left);
 
         //start fragment
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, monitorFragment).commit();
@@ -90,6 +71,7 @@ public class MainPage extends AppCompatActivity {
         btn1.setOnClickListener(this::onClickMenu_1);
         btn2.setOnClickListener(this::onClickMenu_2);
         btn3.setOnClickListener(this::onClickMenu_3);
+        btn4.setOnClickListener(this::onClickMenu_4);
 
         btn_connectServer.setOnClickListener(this::onClickConnect);
         btn_disonnectServer.setOnClickListener(this::onClickDisconnect);
@@ -109,7 +91,7 @@ public class MainPage extends AppCompatActivity {
     public void updateUI() {
 //        String ipValue = preferences.getString("ip", "0.0.0.0");
 
-        if (!comunity.getConnected()) {
+        if (!var.comunity.getConnected()) {
             mainpage_tvStatusConnected.setText("ยังไม่ได้เชื่อมต่อ");
             mainpage_tvStatusConnected.setTextColor(Color.rgb(255,0,0));
             btn_connectServer.setVisibility(View.VISIBLE);
@@ -143,18 +125,24 @@ public class MainPage extends AppCompatActivity {
         YoYo.with(Techniques.FadeIn).duration(1000).playOn(findViewById(R.id.fragment_container));
     }
 
+    public void onClickMenu_4(View v){
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, chatFragment).commit();
+        YoYo.with(Techniques.FadeIn).duration(1000).playOn(findViewById(R.id.fragment_container));
+    }
+
 
     public void onClickConnect(View v){
-        String ip = preferences.getString("ip",comunity.SERVER_IP);
-        String port = preferences.getString("port",String.valueOf(comunity.SERVER_PORT));
+        String ip = preferences.getString("ip",var.comunity.SERVER_IP);
+        String port = preferences.getString("port",String.valueOf(var.comunity.SERVER_PORT));
+        String name = preferences.getString("username",var.comunity.USERNAME);
 
-        extension.printAlert("ip : " + ip + "\tport : " + port);
-        comunity.connect(ip,Integer.valueOf(port));
+        var.extension.printAlert("ip : " + ip + "\tport : " + port);
+        var.comunity.connect(ip,Integer.valueOf(port),name);
     }
 
     public void onClickDisconnect(View v){
         try {
-            comunity.disconnect();
+            var.comunity.disconnect();
             Log.d("Complete","dissconnect");
         } catch (IOException e) {
             e.printStackTrace();

@@ -6,6 +6,7 @@
 #include "PHSensorClass.h"
 #include "WaterSensor_Class.h"
 #include "SD_Class.h"
+#include "Buzzer.h"
 
 
 class HardwareIO {
@@ -17,6 +18,7 @@ public:
   PHSensor *pHSensor;
   WaterSensor *waterSensor;
   SDCard *sdcard;
+  Buzzer *buzzer;
 
   HardwareIO() {
     lcdOutput = new LcdOutput();
@@ -26,6 +28,7 @@ public:
     pHSensor = new PHSensor();
     waterSensor = new WaterSensor();
     sdcard = new SDCard();
+    buzzer = new Buzzer();
   }
 
   void setup();
@@ -40,6 +43,7 @@ public:
     delete pHSensor;
     delete waterSensor;
     delete sdcard;
+    delete buzzer;
   }
 };
 
@@ -52,6 +56,8 @@ void HardwareIO::setup() {
   pHSensor->setup();
   waterSensor->setup();
   sdcard->setup();
+  buzzer->setup();
+  
 }
 
 
@@ -63,4 +69,5 @@ void HardwareIO::loop() {
   pHSensor->loop();
   waterSensor->loop();
   // sdcard->loop)_;
+  buzzer->loop();
 }

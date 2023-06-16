@@ -1,6 +1,8 @@
 #include <TimerOne.h>
 #include <SoftwareSerial.h>
 
+#define RELAY_PIN 9
+
 SoftwareSerial esp32(10, 11); 
 
 
@@ -52,6 +54,12 @@ void setup() {
   Timer1.initialize(delayReadPH);  // 1 วินาที = 1000000 ไมครอน
   Timer1.attachInterrupt(onreadph);
   esp32.begin(57600);
+
+  pinMode(RELAY_PIN, OUTPUT);
+
+  delay(3000);
+  digitalWrite(RELAY_PIN, HIGH);
+
 }
 void loop() {
 

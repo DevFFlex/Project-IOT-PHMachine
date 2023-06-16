@@ -66,6 +66,11 @@ void InputSerial() {
         data.replace("send_","");
         comunity->sendOther(data);
       }
+
+      if (data.indexOf("buzzer") != -1){
+        data.replace("buzzer","");
+        hardwareIO->buzzer->freq = data.toInt();
+      }
     }
   }
 }
@@ -94,7 +99,11 @@ void loop() {
   if (t1.isExpired()) {
     
     varObject->setMixTankpH(hardwareIO->pHSensor->getPH());
-    comunity->sendMixTankPH();
+    // comunity->sendMixTankPH();
+    static int count = 0;
+    // comunity->sendOutputText("การบ้าน คือ " + String(count++));
+    // hardwareIO->buzzer->on();
+
     hardwareIO->lcdOutput->printL("PH = " + String(hardwareIO->pHSensor->getPH()) + " | " + hardwareIO->pHSensor->getPHString(), 0);
 
     hardwareIO->lcdOutput->printL(hardwareIO->rtc->getTimeToString(), 3);

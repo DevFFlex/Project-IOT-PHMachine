@@ -94,9 +94,11 @@ public:
           byte buffer_size = dataStr.length() + 1;
           char buffer[buffer_size];
 
+
           dataStr.toCharArray(buffer, buffer_size);
           clients[i].client.write(buffer);
           clients[i].client.flush();
+          Serial.println("send to " + clients[i].name + "    :   " + send_str);
         }
       }
     }
@@ -113,13 +115,18 @@ public:
         }
         data.trim();
 
+        if(data.indexOf("SET:CLIENT_NAME=") != -1){
+          data.replace("SET:CLIENT_NAME=","");
+          clients[i].name = data;
+          return;
+        }
+
         if (callback != NULL && data != "") {
           callback(data);
         }
       }
     }
   }
-
   void checkConnected() {
     if (timer2.isExpired()) {
       for (int i = 0; i < client_limite; i++) {

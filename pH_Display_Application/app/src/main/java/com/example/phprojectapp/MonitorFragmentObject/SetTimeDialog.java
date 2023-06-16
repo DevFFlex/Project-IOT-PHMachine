@@ -19,7 +19,7 @@ interface SetTimeDialogEvent{
 }
 
 public class SetTimeDialog extends AlertDialog.Builder{
-    private View listtime_view;
+    private View view;
     private AlertDialog dialog;
     private Variable variable;
 
@@ -30,7 +30,7 @@ public class SetTimeDialog extends AlertDialog.Builder{
 
 
     private LinearLayout box;
-    Button listtime_btnAdd,listtime_btnCancel,listtime_btnSave;
+    Button btnAdd,btnCancel,btnSave;
 
     private int itemCountMax = 4;
 
@@ -38,21 +38,21 @@ public class SetTimeDialog extends AlertDialog.Builder{
         super(context);
         this.variable = variable;
 
-        listtime_view = LayoutInflater.from(context).inflate(R.layout.list_time,null);
+        view = LayoutInflater.from(context).inflate(R.layout.list_time,null);
 
-        box = listtime_view.findViewById(R.id.listtime_itemView);
+        box = view.findViewById(R.id.listtime_itemView);
 
-        listtime_btnAdd = listtime_view.findViewById(R.id.listtime_btnAdd);
-        listtime_btnAdd.setOnClickListener(this::onClickAdd);
+        btnAdd = view.findViewById(R.id.btnAdd);
+        btnAdd.setOnClickListener(this::onClickAdd);
 
-        listtime_btnCancel = listtime_view.findViewById(R.id.listtime_btnExit);
-        listtime_btnCancel.setOnClickListener(this::onClickCancel);
+        btnCancel = view.findViewById(R.id.listtime_btnExit);
+        btnCancel.setOnClickListener(this::onClickCancel);
 
-        listtime_btnSave = listtime_view.findViewById(R.id.listtime_btnSave);
-        listtime_btnSave.setOnClickListener(this::onClickSave);
+        btnSave = view.findViewById(R.id.btnSave);
+        btnSave.setOnClickListener(this::onClickSave);
 
         updateItemLayout();
-        setView(listtime_view);
+        setView(view);
 
         dialog = this.create();
         dialog.getWindow().setBackgroundDrawableResource(R.drawable.bg_listtime);

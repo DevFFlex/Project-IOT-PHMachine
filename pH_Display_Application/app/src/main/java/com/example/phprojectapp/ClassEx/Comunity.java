@@ -6,53 +6,56 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-interface ClientOnEventListener {
-    void onMessage(String message);
-}
-
-public class Comunity extends ClientClass implements ClientOnEventListener {
+public class Comunity extends Client{
     private Variable variable;
     final public String SERVER_IP = "192.168.4.1"; //192.168.4.1
     final public int SERVER_PORT = 80; //80
 
+
+    private ComunityListener listener;
+    public void setListener(ComunityListener listener) {
+        this.listener = listener;
+    }
+
     public Comunity(Variable variable){
         this.variable = variable;
+        this.setListener(this::onMessangeEvent);
     }
 
     public void getInputPH(){
         sendToServer("GET:INPUT_PH");
     }
-
-    public void getMixTankPH(){
-        sendToServer("GET:MIXTANK_PH");
-    }
-
-    public void getUseTankPH(){
-        sendToServer("GET:USETANK_PH");
-    }
-
     public void setInputPH(float value){
         sendToServer("SET:INPUT_PH=" + String.valueOf(value));
     }
 
+    public void getMixTankPH(){
+        sendToServer("GET:MIXTANK_PH");
+    }
+    public void getUseTankPH(){
+        sendToServer("GET:USETANK_PH");
+    }
 
     public void setTimeBoard(String queryString){
         sendToServer("SET:TIME_BOARD=" + queryString);
     }
 
-    public void setTimeList(String value_str){
-        sendToServer("SET:TIME_LIST=" + value_str);
-    }
 
     public void setToggleRelay(int index){
         if (index < 0 || index > 6)return;
         sendToServer("SET:TOGGLE_RELAY=" + String.valueOf(index));
     }
 
-    public void getTimeList(){
-        sendToServer("GET:TIME_LIST");
+    public void setTimeAutoWork(String value_str){
+        sendToServer("SET:TIME_AUTO_WORK=" + value_str);
+    }
+    public void getTimeAutoWork(){
+        sendToServer("GET:TIME_AUTO_WORK=NULL");
     }
 
+    public void sendMessageChat(String name,String data){
+        sendToServer("MESSAGE:" + name + "=" + data);
+    }
 
     public String timeBoardObjectToQueryString(TimeBoardObject timeBoardObject){
         String out = "";
@@ -67,32 +70,9 @@ public class Comunity extends ClientClass implements ClientOnEventListener {
     }
 
 
-    @Override
-    public void onMessage(String message) {
-        if (!message.contains(":"))return;
+    private void onMessangeEvent(String header,String command,String value){
 
-        String[] data = message.split(":");
-        String header = data[0].trim();
-        String commands = data[1];
-
-        if(header.equals("RESP")){
-
-            if (commands.equals("S_KICK")){
-                try {
-                    disconnect();
-                } catch (IOException e) { }
-            }
-
-        }else if(header.equals("SET")){
-            if(!commands.contains("="))return;
-
-            String data2[] = commands.split("=");
-            String command = data2[0].trim();
-            String value = data2[1].trim();
-
-            String output = "message = " + message + "\n";
-            output += "command = " + command + "\n";
-            output += "value = " + value + "\n";
+        if(header.equals("SET")){
 
             if (command.equals("OUTPUT")){
                 variable.outout_text = value;
@@ -116,7 +96,7 @@ public class Comunity extends ClientClass implements ClientOnEventListener {
                 }catch (Exception e){ }
             }
 
-            if (command.equals("TIME_LIST")){
+            if (command.equals("TIME_AUTO_WORK")){
 
                 String[] timeLayer1 = value.split("#");
 
@@ -139,42 +119,12 @@ public class Comunity extends ClientClass implements ClientOnEventListener {
                     variable.timeObjectList.addItem(hour,minute,second,status,ph);
                 }
                 System.out.println(value);
-//                System.out.println(timeLayer1[1]);
-//                System.out.println(timeLayer1.length);
             }
 
 
-            if (command.equals("TIME_BOARD")){
-
-            }
-
+        }else if(header.equals("MESSAGE")){
+            listener.onMessageFromUser(command,value);
         }
-
-
-
-
-
-
-
     }
+
 }
-
-
-//class A{
-//    private B b;
-//
-//    A() {
-//        // คอนสตรักเตอร์ A ที่ไม่รับพารามิเตอร์
-//    }
-//
-//    A(B b){
-//        this.b = b;
-//    }
-//}
-//
-//
-//class B extends A{
-//    B(){
-//        super(this);
-//    }
-//}

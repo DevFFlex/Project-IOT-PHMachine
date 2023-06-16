@@ -50,7 +50,7 @@
 
             <Button
                 android:layout_marginHorizontal="30dp"
-                android:id="@+id/listtime_btnAdd"
+                android:id="@+id/btnAdd"
                 android:layout_gravity="center_horizontal"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
@@ -61,7 +61,7 @@
                 android:textColor="#FFFF"/>
 
             <Button
-                android:id="@+id/listtime_btnSave"
+                android:id="@+id/btnSave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

@@ -81,28 +81,36 @@ void Comunity::onClientMessage(String str_trim) {
       recvTimeBoard(value);
       // sendRTCTime();
     }
-
     if (command == "INPUT_PH") {
       recvInputPH(value);
       sendInputPH();
     }
-
-    if (command == "TIME_LIST") {
+    if (command == "TIME_AUTO_WORK") {
       recvTimerAutoWork(value);
     }
-
     if (command == "TOGGLE_RELAY"){
       recvToggleRelay(value);
     }
 
 
-  } else if (header == "GET") {
+  }
+  
+  if (header == "GET") {
 
     if (commands == "INPUT_PH") sendInputPH();
     if (commands == "MIXTANK_PH") sendMixTankPH();
     if (commands == "USETANK_PH") sendUseTankPH();
-    if (commands == "TIME_LIST") sendTimeAutoWork();
+    if (commands == "TIME_AUTO_WORK") {
+      Serial.println("TIME_AUTO_WORK-------------");
+      sendTimeAutoWork();
+    }
     if (commands == "RTC_TIME") sendRTCTime();
+  }
+
+  if (header == "MESSAGE"){
+    ServerPH::send("MESSAGE:" + command + "=" + value);
+    Serial.println("command = " + command);
+    Serial.println("value = " + value);
   }
 }
 
@@ -124,7 +132,7 @@ void Comunity::sendUseTankPH() {
 }
 
 void Comunity::sendTimeAutoWork() {
-  ServerPH::send("SET:TIME_LIST=" + queryStringTimeAutoWork());
+  ServerPH::send("SET:TIME_AUTO_WORK=" + queryStringTimeAutoWork());
 }
 
 void Comunity::sendRTCTime() {
@@ -134,9 +142,6 @@ void Comunity::sendRTCTime() {
 void Comunity::sendOther(String data_str){
   ServerPH::send(data_str);
 }
-
-
-
 
 
 void Comunity::recvInputPH(String value) {
@@ -213,26 +218,10 @@ String Comunity::queryStringTimeAutoWork() {
     format += (varObject->timerautowork[i].getDelete()) ? "true" : "false";
     if (i != 3) format += "#";
   }
-
+  Serial.println(format);
   return format;
 }
 
 
-
-// byte* Comunity::timeboardFromCToSFormatToByte(String queryStringFromClient) {
-//   byte numsize = 7;
-//   String* item = new String[numsize];
-//   stringManage->split(item, queryStringFromClient, ",", 7);
-
-//   byte itemByte[numsize];
-//   int itemInt[numsize];
-
-//   for (int i = 0; i < numsize; i++) {
-//     itemInt[i] = item[i].toInt();
-//     itemByte[i] = byte(itemInt[i]);
-//   }
-
-//   return itemByte;
-// }
 
 
