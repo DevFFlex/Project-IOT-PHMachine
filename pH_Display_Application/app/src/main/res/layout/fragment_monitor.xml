@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
-
+    android:background="@color/background"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,174 +11,213 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
         <LinearLayout
-            android:orientation="vertical"
+            android:layout_weight="2"
+            android:background="@color/bg_simulate"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <!--    Main Layout-->
-            <LinearLayout
-                android:layout_weight="2"
-                android:background="@color/bg_simulate"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <!--    display meter   -->
-                <FrameLayout
-                    android:background="@color/bg_simulate"
-                    android:id="@+id/fragMeter"
-                    android:layout_width="match_parent"
-                    android:layout_height="500sp">
-
-                    <LinearLayout
-                        android:id="@+id/monitor_ll_rtctime"
-                        android:background="#030125"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:id="@+id/monitor_tvTimeBoard"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="00:00:00"
-                            android:textSize="40sp"
-                            android:textAlignment="center"
-                            android:textColor="#FFFF"
-                            />
-
-
-                    </LinearLayout>
-
-                </FrameLayout>
+                android:layout_height="wrap_content">
                 <LinearLayout
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <Button
-                        android:id="@+id/monitor_btnMeterBack"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="&lt;"
-                        android:textSize="20sp"
-                        android:textStyle="bold"/>
-
-                    <Button
-                        android:id="@+id/monitor_btnMeterNext"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=">"
-                        android:textSize="20sp"
-                        android:textStyle="bold"/>
-
-                </LinearLayout>
-
-                <!--    input and data display-->
-                <LinearLayout
-                    android:layout_marginVertical="20dp"
-                    android:layout_width="match_parent"
+                    android:id="@+id/monitor_ll_temp"
+                    android:background="#030125"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/bg_simulate"
-                    android:orientation="vertical">
-
-
-                    <!-- STOP & Change -->
-                    <LinearLayout
-                        android:id="@+id/layout_stopAchange"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:visibility="visible">
-                        <!-- pH -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_horizontal"
-                            android:orientation="horizontal">
-
-                            <TextView
-
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:autoSizeTextType="uniform"
-                                android:text="pH ที่ต้องการ : "
-                                android:textSize="30dp"
-                                android:textStyle="bold"
-                                android:textColor="@color/fg_default"/>
-
-                            <TextView
-                                android:id="@+id/monitor_tvPHNeeded"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:autoSizeTextType="uniform"
-                                android:text="12.2"
-                                android:textColor="#0AA6CD"
-                                android:textSize="35dp"
-                                android:textStyle="bold" />
-
-                        </LinearLayout>
-
-
-                    </LinearLayout>
-
-
-                </LinearLayout>
-
-                <!--    Button   -->
-                <LinearLayout
-                    android:background="@color/bg_simulate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
-
-                    <Button
-                        android:id="@+id/monitor_btnChangePH"
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/btn_style1"
-                        android:paddingHorizontal="20dp"
-                        android:shadowColor="@color/white"
-                        android:shadowRadius="55"
-                        android:text="เริ่มปรับค่า pH"
-                        android:textColor="#FFFF"
-                        android:textSize="20dp"
-                        android:textStyle="bold" />
-
-                    <Button
-                        android:layout_marginTop="20dp"
-                        android:id="@+id/monitor_btnSetTime"
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/btn_style1"
-                        android:shadowColor="@color/white"
-                        android:shadowRadius="55"
-                        android:text=" ตั้งเวลา"
-                        android:textColor="#FFFF"
-                        android:textSize="20dp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-                <!-- Output Display Text -->
-                <LinearLayout
-                    android:id="@+id/test_lo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_layout1">
+                    android:paddingHorizontal="20sp"
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/monitor_tvOutputDebug"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="T"
+                        android:textSize="30sp"
+                        android:textAlignment="center"
+                        android:textColor="#FF0C0C"
+                        />
+
+                    <TextView
+                        android:id="@+id/monitor_tvTemp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="35"
+                        android:textSize="30sp"
+                        android:textAlignment="center"
+                        android:textColor="#FFD504"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:paddingHorizontal="10sp"
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/monitor_ll_rtctime"
+                    android:background="@drawable/bg_layout3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/monitor_tvTimeBoard"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="00:00:00"
+                        android:textSize="40sp"
+                        android:textAlignment="center"
+                        android:textColor="#FFFF"
+                        />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/monitor_ll_EC"
+                    android:background="#030125"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="20sp"
+                    android:layout_gravity="end"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="EC"
+                        android:textSize="30sp"
+                        android:textAlignment="center"
+                        android:textColor="#0B43EA"
+                        />
+
+                    <TextView
+                        android:id="@+id/monitor_tvEC"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="00"
+                        android:textSize="30sp"
+                        android:textAlignment="center"
+                        android:textColor="#1285FF"
+                        />
+                </LinearLayout>
+
+            </FrameLayout>
+            <!--    display meter   -->
+            <FrameLayout
+                android:background="@color/bg_simulate"
+                android:id="@+id/fragMeter"
+                android:layout_width="match_parent"
+                android:layout_height="500sp">
+
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/monitor_btnMeterBack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="&lt;"
+                    android:textSize="20sp"
+                    android:textStyle="bold"/>
+
+                <Button
+                    android:id="@+id/monitor_btnMeterNext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=">"
+                    android:textSize="20sp"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+
+            <!--    input and data display-->
+            <LinearLayout
+                android:layout_marginVertical="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/bg_simulate"
+                android:orientation="vertical">
+
+
+                <!-- STOP & Change -->
+                <LinearLayout
+                    android:id="@+id/layout_stopAchange"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+                    <!-- pH -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:text="NULL"
-                        android:textColor="@color/fg_default" />
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal">
+
+                        <TextView
+
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:autoSizeTextType="uniform"
+                            android:text="pH ที่ต้องการ : "
+                            android:textSize="30dp"
+                            android:textStyle="bold"
+                            android:textColor="@color/fg_default"/>
+
+                        <TextView
+                            android:id="@+id/monitor_tvPHNeeded"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:autoSizeTextType="uniform"
+                            android:text="12.2"
+                            android:textColor="#0AA6CD"
+                            android:textSize="35dp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+
                 </LinearLayout>
 
 
             </LinearLayout>
+
+            <!--    Button   -->
+            <LinearLayout
+                android:background="@color/bg_simulate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/monitor_btnChangePH"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_style1"
+                    android:paddingHorizontal="20dp"
+                    android:shadowColor="@color/white"
+                    android:shadowRadius="55"
+                    android:text="เริ่มปรับค่า pH"
+                    android:textColor="#FFFF"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:layout_marginTop="20dp"
+                    android:id="@+id/monitor_btnSetTime"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_style1"
+                    android:shadowColor="@color/white"
+                    android:shadowRadius="55"
+                    android:text=" ตั้งเวลา"
+                    android:textColor="#FFFF"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
 
         </LinearLayout>
 

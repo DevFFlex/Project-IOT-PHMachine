@@ -1,12 +1,12 @@
-#include "KeypadClass.h"
-#include "LcdClass.h"
+#include "Hardware/KeypadClass.h"
+#include "Hardware/LcdClass.h"
 
-#include "RTC_Class.h"
-#include "PCF_Class.h"
-#include "PHSensorClass.h"
-#include "WaterSensor_Class.h"
-#include "SD_Class.h"
-#include "Buzzer.h"
+#include "Hardware/RTC_Class.h"
+#include "Hardware/PCF_Class.h"
+#include "Hardware/PHSensorClass.h"
+#include "Hardware/WaterSensor_Class.h"
+#include "Hardware/SD_Class.h"
+#include "Hardware/Buzzer.h"
 
 
 class HardwareIO {
@@ -68,6 +68,6 @@ void HardwareIO::loop() {
   relay->loop();
   pHSensor->loop();
   waterSensor->loop();
-  // sdcard->loop)_;
+  sdcard->loop();
   buzzer->loop();
 }

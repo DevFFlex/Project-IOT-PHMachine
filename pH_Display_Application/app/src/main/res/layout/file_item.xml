@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:layout_margin="20sp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:id="@+id/file_tv_type"
+            android:background="#FAF86B"
+            android:layout_width="50sp"
+            android:layout_height="match_parent"
+            android:text="dir"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textColor="#020429"/>
+
+        <Button
+            android:id="@+id/file_tv_name"
+            android:layout_weight="1"
+            android:background="@drawable/bg_layout3"
+            android:layout_width="0sp"
+            android:layout_height="50sp"
+            android:text="file name"
+            android:textSize="20sp"
+            android:textAlignment="center"
+            android:textColor="#FFFF"
+            android:gravity="center"/>
+
+        <Button
+            android:id="@+id/file_btn_del"
+            android:layout_width="50sp"
+            android:layout_height="match_parent"
+            android:text="DEL"
+            android:textColor="#FFFF"
+            android:background="@drawable/bg_layout6"/>
+
+
+
+    </LinearLayout>
+
+</LinearLayout>

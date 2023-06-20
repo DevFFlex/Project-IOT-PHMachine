@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.phprojectapp.ClassEx.Variable;
 import com.example.phprojectapp.R;
 
 import android.graphics.Color;
@@ -26,6 +27,7 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -33,15 +35,18 @@ import java.util.Random;
 public class GraphMeter extends Fragment {
     private View view;
     private LineChart lineChart;
+    private Variable variable;
 
     private LineDataSet dataSet;
     private LineData lineData;
+
     private Random random = new Random();
     private Handler handler = new Handler();
+    List<Entry> entries = new ArrayList<>();
 
 
-    public GraphMeter() {
-
+    public GraphMeter(Variable variable) {
+        this.variable = variable;
     }
 
 
@@ -52,6 +57,20 @@ public class GraphMeter extends Fragment {
 
 
 
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                update();
+                handler.postDelayed(this,500);
+//                updateGraph();
+            }
+        });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        handler.removeCallbacksAndMessages(null);
     }
 
     @Override
@@ -60,69 +79,43 @@ public class GraphMeter extends Fragment {
         view  = inflater.inflate(R.layout.fragment_graph_meter, container, false);
         lineChart = view.findViewById(R.id.lineChart);
 
-        lineChart.setDrawGridBackground(false);
+        entries.add(new Entry(0, 0));
 
-        List<Entry> entries = new ArrayList<>();
-        dataSet = new LineDataSet(entries, "Realtime Data");
-        lineData = new LineData(dataSet);
+        dataSet = new LineDataSet(entries, "PH");  // อ้างอิงตัวแปร dataSet เดิม
+
+        dataSet.setColors(Color.RED);
+        dataSet.setLineWidth(5f);
+        dataSet.setCircleColors(Collections.singletonList(Color.BLUE));
+        dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+
+        lineData = new LineData(dataSet);  // อ้างอิงตัวแปร lineData เดิม
 
         lineChart.setData(lineData);
-
-        startRealtimeUpdate();
-
-//        Description description = new Description();
-//        description.setText("Realtime Chart");
-//        lineChart.setDescription(description);
-
-
-//        // สร้างข้อมูลสำหรับกราฟเส้น
-//        List<Entry> entries = new ArrayList<>();
-//        entries.add(new Entry(0, 4));
-//        entries.add(new Entry(1, 8));
-//        entries.add(new Entry(2, 6));
-//        entries.add(new Entry(3, 2));
-//        entries.add(new Entry(4, 7));
-//
-//        // สร้างชุดข้อมูลเส้น
-//        LineDataSet dataSet = new LineDataSet(entries, "Label");
-//        dataSet.setColor(Color.BLUE);
-//        dataSet.setCircleColor(Color.RED);
-//
-//        // สร้างข้อมูลเส้นทั้งหมด
-//        LineData lineData = new LineData(dataSet);
-//
-//        // กำหนดข้อมูลเส้นให้กับกราฟ
-//        lineChart.setData(lineData);
-//
-//        // กำหนดคำอธิบายกราฟ
-//        Description description = new Description();
-//        description.setText("Realtime Chart");
-//        lineChart.setDescription(description);
-//
-//        // กำหนดการตั้งค่าอื่นๆ ตามความต้องการ
-//
-//        // อัพเดทแผนภาพ
-//        lineChart.invalidate();
+        lineChart.setDrawGridBackground(false);
 
         return view;
     }
 
-    private void startRealtimeUpdate() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true){
-//                    float yValue = random.nextFloat() * 10; // สุ่มค่า Y ใหม่
-                    addEntry(20);
+    private void update() {
 
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-        }).start();
+        float yValue = random.nextFloat() * 10;
+        variable.extension.printDebug("GraphMeter","float = " + String.valueOf(entries.size()));
+        addEntry(yValue);
+
+        if (entries.size() > 20) {
+            entries.remove(0);
+        }
+
+        LineData data = lineChart.getData();
+        if (data != null) {
+            data.notifyDataChanged();
+            lineChart.notifyDataSetChanged();
+            lineChart.setVisibleXRangeMaximum(20);
+            lineChart.moveViewToX(data.getEntryCount());
+            lineChart.invalidate();
+        }
+
+
     }
 
     private void addEntry(float yValue) {
@@ -138,17 +131,14 @@ public class GraphMeter extends Fragment {
         data.notifyDataChanged();
 
         lineChart.notifyDataSetChanged();
-        lineChart.setVisibleXRangeMaximum(5); // แสดงข้อมูลล่าสุด 5 ค่าเท่านั้น
-        lineChart.moveViewToX(data.getEntryCount()); // เลื่อนกราฟไปที่ค่าล่าสุด
+        lineChart.setVisibleXRangeMaximum(10);
+        lineChart.moveViewToX(data.getEntryCount());
+
+
     }
 
     private LineDataSet createDataSet() {
         LineDataSet dataSet = new LineDataSet(null, "Realtime Data");
-        dataSet.setDrawValues(true);
-        dataSet.setDrawCircles(true);
-        dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-        dataSet.setLineWidth(10f);
-        dataSet.setColor(getResources().getColor(R.color.bg_IADD_SC));
         return dataSet;
     }
 

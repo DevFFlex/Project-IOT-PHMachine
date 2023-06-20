@@ -4,12 +4,9 @@
 
 // PCF8574 PCF(0x21);
 
-#define RELAY_CONTROLL_PIN 26
-
 class POUT {
 private:
   PCF8574 PCF;
-  Timer timerOnDelay;
   bool status_setup = true;
 
   int pinlist[8] = {
@@ -23,7 +20,6 @@ private:
     P7
   };
 
-
   int status[8] = {
     false,
     false,
@@ -35,7 +31,7 @@ private:
   };
 
 public:
-  POUT() : PCF(0x21) , timerOnDelay(3000) {
+  POUT() : PCF(0x21) {
 
     PCF.pinMode(pinlist[0], OUTPUT);
     PCF.pinMode(pinlist[1], OUTPUT);
@@ -58,17 +54,10 @@ public:
 
 void POUT::setup() {
   for (int i = 0;i<8;i++)off(pinlist[i]);
-  pinMode(RELAY_CONTROLL_PIN, OUTPUT);
 }
 
 void POUT::loop() {
-  if(timerOnDelay.isExpired() && status_setup){
-    status_setup = false;
-    
-    digitalWrite(RELAY_CONTROLL_PIN, 255);
-    Serial.println("Relay Ready!!!");
-
-  }
+  
 }
 
 

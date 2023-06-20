@@ -1,129 +1,79 @@
-#include "HelpClass.h"
-#include "TimerClass.h"
+#include "OtherClass/TimerClass.h"
+#include "OtherClass/StringManager.h"
 
-#include "VarObject.h"
-#include "ServerClass.h"
-
+#include "Variable.h"
 #include "HardwareIO.h"
-
-#include "Comunity.h"
+#include "Database.h"
 #include "ArduinoComunity.h"
 
+#include "Comunity.h"
+#include "SerialInput.h"
 #include "UserInterface.h"
 
-#include "Database.h"
-
-
-
-
-int step = 1;
 
 //------------- Class ------------------------
-StringManage *stringManage = new StringManage();
-VarObject *varObject = new VarObject();
 
+Variable *var = new Variable();
 HardwareIO *hardwareIO = new HardwareIO();
+Database *db = new Database(var,hardwareIO);
+ArduinoComunity *ardunoComunity = new ArduinoComunity(var,hardwareIO);
 
-Comunity *comunity = new Comunity(varObject, hardwareIO,stringManage);
-ArduinoComunity *ardunoComunity = new ArduinoComunity(hardwareIO,stringManage);
+Comunity *comunity = new Comunity(var,hardwareIO,db,ardunoComunity);
 
-UserInterface *ui = new UserInterface(varObject,comunity,hardwareIO);
 
-Database *db = new Database();
-
+SerialInput *sInput = new SerialInput(var,hardwareIO,comunity);
+UserInterface *ui = new UserInterface(var,hardwareIO);
 
 
 Timer t1(1000);
 
-ScanI2C scanI2C;
-
-
-
-void InputSerial() {
-
-  if (Serial.available() > 0) {
-    String data = Serial.readString();
-    data.trim();
-
-    if (data != "") {
-      if (data.indexOf("on") != -1) {
-        data.replace("on", "");
-
-        hardwareIO->relay->on(data.toInt());
-      }
-
-      if (data.indexOf("off") != -1) {
-        data.replace("off", "");
-        hardwareIO->relay->off(data.toInt());
-      }
-
-      if (data.indexOf("toggle") != -1) {
-        data.replace("toggle", "");
-        hardwareIO->relay->toggle(data.toInt());
-      }
-
-      if (data.indexOf("send_") != -1){
-        data.replace("send_","");
-        comunity->sendOther(data);
-      }
-
-      if (data.indexOf("buzzer") != -1){
-        data.replace("buzzer","");
-        hardwareIO->buzzer->freq = data.toInt();
-      }
-    }
-  }
-}
 
 //---------------------------------------------- setup loop -----------------------------------
 
 void setup() {
   Serial.begin(115200);
+  db->setup();
   // Serial.setTimeout(50);
-
   comunity->setup();
   hardwareIO->setup();
-  // scanI2C.setup();
   ardunoComunity->setup();
+  sInput->setup();
 }
 
 void loop() {
+  db->loop();
+
   comunity->loop();
   hardwareIO->loop();
   ardunoComunity->loop();
+  sInput->loop();
   ui->loop();
-
-  InputSerial();
-
+  
 
   if (t1.isExpired()) {
-    
-    varObject->setMixTankpH(hardwareIO->pHSensor->getPH());
-    // comunity->sendMixTankPH();
-    static int count = 0;
-    // comunity->sendOutputText("การบ้าน คือ " + String(count++));
+
+    var->mixTank_pH = hardwareIO->pHSensor->getPH();
+    comunity->sendMixTankPH();
     // hardwareIO->buzzer->on();
 
     hardwareIO->lcdOutput->printL("PH = " + String(hardwareIO->pHSensor->getPH()) + " | " + hardwareIO->pHSensor->getPHString(), 0);
 
     hardwareIO->lcdOutput->printL(hardwareIO->rtc->getTimeToString(), 3);
-    // hardwareIO->sdcard->listDir(SD,"/",0);
+
+    ardunoComunity->displayCMVM();
 
   }
-
 }
-
 
 //---------------------------------------------------------------------------------------------
 
-
 bool timerAutoWork_Compare_Rtctime(int index) {
-  byte active_hour = varObject->timerautowork[index].getHour();
-  byte active_minute = varObject->timerautowork[index].getMinute();
-  byte active_second = varObject->timerautowork[index].getSecond();
+  byte active_hour = var->timerautowork[index].getHour();
+  byte active_minute = var->timerautowork[index].getMinute();
+  byte active_second = var->timerautowork[index].getSecond();
 
-  if (active_hour == -1) return false;
+  if (active_hour == -1)
+    return false;
 
   return (hardwareIO->rtc->getHour() == active_hour && hardwareIO->rtc->getMinute() == active_minute && hardwareIO->rtc->getSecond() == active_second);
 }
-

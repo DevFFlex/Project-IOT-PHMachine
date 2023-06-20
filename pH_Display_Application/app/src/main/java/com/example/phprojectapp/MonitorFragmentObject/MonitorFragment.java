@@ -32,12 +32,11 @@ import java.util.Arrays;
 public class MonitorFragment extends Fragment {
 
 //    private PH_Meter_Animation ph_meter_animation;
-    private TextView monitor_tvPH, monitor_tvOutputDebug, monitor_tvPHNeeded,monitor_tvTimeBoard;
+    private TextView monitor_tvPH, monitor_tvPHNeeded,monitor_tvTimeBoard;
     private Button monitor_btnChangePH, monitor_btnSetTime,monitor_btnMeterBack,monitor_btnMeterNext;
     private ImageView monitor_imgUnderBar;
     private LinearLayout monitor_layout_rtctime;
 
-    CircleView monitor_CircleView;
 
     View monitorFragmentView;
 
@@ -51,8 +50,8 @@ public class MonitorFragment extends Fragment {
 
     public MonitorFragment(Variable var) {
         this.var = var;;
-        circleMeterFragment = new CircleMeter();
-        graphMeter = new GraphMeter();
+        circleMeterFragment = new CircleMeter(var);
+        graphMeter = new GraphMeter(var);
 
         meterfraglist.add(circleMeterFragment);
         meterfraglist.add(graphMeter);
@@ -79,9 +78,6 @@ public class MonitorFragment extends Fragment {
     private void updateUI(){
         if (var != null){
             monitor_tvPHNeeded.setText(String.valueOf(var.inputPH));
-//            monitor_tvPH.setText(String.valueOf(variable.mixtankPH));
-//            monitor_CircleView.getCircleAnimation().setCurrentPH(variable.mixtankPH);
-            monitor_tvOutputDebug.setText(var.outout_text);
         }
     }
 
@@ -91,8 +87,6 @@ public class MonitorFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         monitorFragmentView = inflater.inflate(R.layout.fragment_monitor, container, false);
-
-        monitor_CircleView = monitorFragmentView.findViewById(R.id.monitor_CircleView);
 
         monitor_imgUnderBar = monitorFragmentView.findViewById(R.id.monitor_imgUnderBar);
 
@@ -104,8 +98,6 @@ public class MonitorFragment extends Fragment {
         monitor_layout_rtctime = monitorFragmentView.findViewById(R.id.monitor_ll_rtctime);
 
 
-        monitor_tvPH = monitorFragmentView.findViewById(R.id.monitor_tvPH);
-        monitor_tvOutputDebug = monitorFragmentView.findViewById(R.id.monitor_tvOutputDebug);
         monitor_tvPHNeeded = monitorFragmentView.findViewById(R.id.monitor_tvPHNeeded);
         monitor_tvTimeBoard = monitorFragmentView.findViewById(R.id.monitor_tvTimeBoard);
 
@@ -140,7 +132,7 @@ public class MonitorFragment extends Fragment {
         setPHDialog.setSetPHDialogEvent(new SetPHDialogEvent() {
             @Override
             public void onClickOk(float value) {
-                var.extension.printAlert(String.valueOf(monitor_CircleView.getCircleAnimation().degreeList.get(0)));
+//                var.extension.printAlert(String.valueOf(monitor_CircleView.getCircleAnimation().degreeList.get(0)));
                 var.inputPH = value;
 
                 var.comunity.setInputPH(value);

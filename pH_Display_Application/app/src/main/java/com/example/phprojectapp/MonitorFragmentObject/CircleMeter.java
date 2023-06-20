@@ -4,63 +4,60 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.example.phprojectapp.ClassEx.Variable;
 import com.example.phprojectapp.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link CircleMeter#newInstance} factory method to
- * create an instance of this fragment.
- */
+import org.w3c.dom.Text;
+
 public class CircleMeter extends Fragment {
+    private View view;
+    private Variable variable;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private CircleView circleView;
+    private TextView mixtankPHView;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    public CircleMeter(Variable variable) {
+        this.variable = variable;
 
-    public CircleMeter() {
-        // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CircleMeter.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static CircleMeter newInstance(String param1, String param2) {
-        CircleMeter fragment = new CircleMeter();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
+        Handler handler = new Handler();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                updateUI();
+                handler.postDelayed(this, 10);
+            }
+        });
+
+    }
+
+    private void updateUI(){
+        if(variable != null){
+            mixtankPHView.setText(String.format("%.1f",variable.mixtankPH));
+            circleView.getCircleAnimation().setCurrentPH(variable.mixtankPH);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_circle_meter, container, false);
+        view = inflater.inflate(R.layout.fragment_circle_meter, container, false);
+
+        circleView = view.findViewById(R.id.monitor_circle_circleView);
+        mixtankPHView = view.findViewById(R.id.monitor_circle_tvPH);
+
+        return view;
     }
 }

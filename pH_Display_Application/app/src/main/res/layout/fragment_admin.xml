@@ -7,13 +7,14 @@
     tools:context=".AdminFragment">
 
     <LinearLayout
+        android:orientation="vertical"
         android:background="@color/bg_simulate"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <GridLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:columnCount="3"
             android:rowCount="3"
             android:padding="20dp"
@@ -68,6 +69,160 @@
 
 
         </GridLayout>
+
+        <Button
+            android:layout_gravity="center"
+            android:id="@+id/admin_btnSendTest"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_style1"
+            android:paddingHorizontal="20dp"
+            android:shadowColor="@color/white"
+            android:shadowRadius="55"
+            android:text="Send Data"
+            android:textColor="#FFFF"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:background="@drawable/bg_layout3"
+            android:orientation="vertical"
+            android:padding="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <LinearLayout
+                android:layout_marginVertical="10sp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_weight="1"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:text="Calibration "
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFF"/>
+
+                <EditText
+                    android:inputType="numberDecimal"
+                    android:textAlignment="center"
+                    android:id="@+id/admin_et_calibration"
+                    android:textColor="#070707"
+                    android:background="#FFFF"
+                    android:layout_weight="1"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginVertical="10sp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_weight="1"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:text="M "
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFF"/>
+
+                <EditText
+                    android:inputType="numberDecimal"
+                    android:textAlignment="center"
+                    android:id="@+id/admin_et_m"
+                    android:textColor="#070707"
+                    android:background="#FFFF"
+                    android:layout_weight="1"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginVertical="10sp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_weight="1"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:text="VoltIn "
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFF"/>
+
+                <EditText
+                    android:inputType="numberDecimal"
+                    android:textAlignment="center"
+                    android:id="@+id/admin_et_voltin"
+                    android:textColor="#070707"
+                    android:background="#FFFF"
+                    android:layout_weight="1"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginVertical="10sp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_weight="1"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:text="Max Analog "
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFF"/>
+
+                <EditText
+                    android:inputType="numberDecimal"
+                    android:textAlignment="center"
+                    android:id="@+id/admin_et_maxAnalog"
+                    android:textColor="#070707"
+                    android:background="#FFFF"
+                    android:layout_weight="1"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginVertical="10sp"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/admin_btn_arduinoSetvalue"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Set Value"/>
+
+                <Button
+                    android:id="@+id/admin_btn_arduinoGetdefault"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Get Default"/>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
 

@@ -7,9 +7,26 @@ import java.util.List;
 
 
 public class Comunity extends Client{
-    private Variable variable;
+    private Variable var;
     final public String SERVER_IP = "192.168.4.1"; //192.168.4.1
     final public int SERVER_PORT = 80; //80
+    final public String[] COMMANS = {
+            "INPUT_PH",
+            "MIXTANK_PH",
+            "USETANK_PH",
+            "TIME_AUTO_WORK",
+            "RTC_TIME",
+            "OUTPUT",
+            "TOGGLE_RELAY",
+            "FILE_DIR"
+    };
+
+    final public String H_GET = "GET";
+    final public String H_SET = "SET";
+    final public String H_MESSAGE = "MESSAGE";
+
+    final public String SYMBOL_L1 = ":";
+    final public String SYMBOL_L2 = "=";
 
 
     private ComunityListener listener;
@@ -17,44 +34,53 @@ public class Comunity extends Client{
         this.listener = listener;
     }
 
-    public Comunity(Variable variable){
-        this.variable = variable;
+    public Comunity(Variable var){
+        super(var);
+        this.var = var;
         this.setListener(this::onMessangeEvent);
     }
 
+    private void send(String h_sender,String command,String value){
+        String string = String.format("%s%s%s%s%s",h_sender,SYMBOL_L1,command,SYMBOL_L2,value);
+        sendToServer(string);
+        var.extension.printDebug("Comunity",string);
+    }
+
     public void getInputPH(){
-        sendToServer("GET:INPUT_PH");
+
     }
     public void setInputPH(float value){
-        sendToServer("SET:INPUT_PH=" + String.valueOf(value));
+        send(H_SET,COMMANS[0],String.valueOf(value));
     }
 
-    public void getMixTankPH(){
-        sendToServer("GET:MIXTANK_PH");
-    }
-    public void getUseTankPH(){
-        sendToServer("GET:USETANK_PH");
+    public void setTimeAutoWork(String value){
+        send(H_SET,COMMANS[3],String.valueOf(value));
     }
 
-    public void setTimeBoard(String queryString){
-        sendToServer("SET:TIME_BOARD=" + queryString);
+    public void setTimeBoard(String value){
+        send(H_SET,COMMANS[4],String.valueOf(value));
     }
-
 
     public void setToggleRelay(int index){
         if (index < 0 || index > 6)return;
-        sendToServer("SET:TOGGLE_RELAY=" + String.valueOf(index));
+        send(H_SET,COMMANS[6],String.valueOf(index));
     }
 
-    public void setTimeAutoWork(String value_str){
-        sendToServer("SET:TIME_AUTO_WORK=" + value_str);
-    }
     public void getTimeAutoWork(){
         sendToServer("GET:TIME_AUTO_WORK=NULL");
     }
 
+    public void getSDDir(String path){
+        sendToServer("GET:FILE_DIR=" + path);
+    }
+
+    public void getCMVM(){
+        sendToServer("GET:CMVM=NULL");
+    }
+
     public void sendMessageChat(String name,String data){
         sendToServer("MESSAGE:" + name + "=" + data);
+        System.out.println("on comunity : data = " + data);
     }
 
     public String timeBoardObjectToQueryString(TimeBoardObject timeBoardObject){
@@ -69,62 +95,158 @@ public class Comunity extends Client{
         return out;
     }
 
+    private void H_GetSetProcess(String header,int index,String value){
+        String head_sender = (header.equals(H_GET)) ? H_SET : H_GET;
+        String format = head_sender + SYMBOL_L1 + COMMANS[index] + SYMBOL_L2;
+        switch (index){
+
+
+            case 0:
+                if(header.equals(H_GET)){
+
+                }else if(header.equals(H_SET)){
+                    try{
+                        var.inputPH = Float.parseFloat(value);
+                    }catch (Exception e){}
+                }
+                break;
+
+
+
+
+
+            case 1:
+                if(header.equals(H_GET)){
+
+                }else if(header.equals(H_SET)){
+                    try{
+                        var.mixtankPH = Float.parseFloat(value);
+                    }catch (Exception e){ }
+                }
+                break;
+
+
+
+
+
+            case 2:
+                if(header.equals(H_GET)){
+
+                }else if(header.equals(H_SET)){
+                    try{
+                        var.usetankPH = Float.parseFloat(value);
+                    }catch (Exception e){ }
+                }
+                break;
+
+
+
+
+
+            case 3:
+                if(header.equals(H_GET)){
+
+                }else if(header.equals(H_SET)){
+                    String[] timeLayer1 = value.split("#");
+
+                    int i = 0;
+                    var.timeObjectList.clearAllItem();
+                    for (String element:timeLayer1) {
+                        String val[] = element.split(",");
+
+                        int hour = Integer.valueOf(val[0]);
+                        int minute = Integer.valueOf(val[1]);
+                        int second = Integer.valueOf(val[2]);
+                        boolean status = Boolean.valueOf(val[3]);
+                        float ph = Float.valueOf(val[4]);
+                        boolean delete_status = Boolean.valueOf(val[5]);
+
+                        System.out.println(String.valueOf(i) + " |" + String.valueOf(hour) +":" + String.valueOf(minute) +":" + String.valueOf(second));
+                        i++;
+
+                        if(delete_status)continue;
+                        var.timeObjectList.addItem(hour,minute,second,status,ph);
+                    }
+                    System.out.println(value);
+                }
+                break;
+
+
+
+
+
+            case 4:
+                if(header.equals(H_GET)){
+
+                }else if(header.equals(H_SET)){
+
+                }
+                break;
+
+
+
+            case 5:
+                if(header.equals(H_GET)){
+
+                }else if(header.equals(H_SET)){
+                    var.outout_text = value;
+                }
+                break;
+
+
+
+            case 6:
+                if(header.equals(H_GET)){
+
+                }else if(header.equals(H_SET)){
+
+                }
+                break;
+
+
+            case 7:
+                if(header.equals(H_GET)){}
+                else if(header.equals(H_SET)){
+                    var.extension.printDebug("Comunity",value);
+                    var.outout_text = value;
+
+                    var.file_list.clear();
+                    String[] data = value.split(",");
+                    for (int i = 0;i<data.length;i++) {
+                        String []data2 = data[i].split("\\|");
+                        var.extension.printDebug("Comunity","data[i] = " + data[i]);
+                        var.extension.printDebug("Comunity","data[0] = " + data2[0] + "\t\tdata[1] = " + data2[1]);
+
+                        var.file_list.add(data2);
+                    }
+                }
+
+        }
+    }
+
+    private void H_MessageProcess(String command,String value){
+        if(!command.equals(var.comunity.USERNAME))var.outout_text = command + " | " + value;
+
+        String []messageObj = {
+                command
+                ,value
+        };
+        var.chat_his.add(messageObj);
+        if(var.chat_his.size() > 8)var.chat_his.remove(0);
+    }
+
 
     private void onMessangeEvent(String header,String command,String value){
 
-        if(header.equals("SET")){
+        if(header.equals(H_GET) || header.equals(H_SET)){
+            for(int i = 0;i<COMMANS.length;i++){
 
-            if (command.equals("OUTPUT")){
-                variable.outout_text = value;
+                if(command.equals(COMMANS[i]))H_GetSetProcess(header,i,value);
             }
-
-            if (command.equals("INPUT_PH")){
-                try{
-                    variable.inputPH = Float.parseFloat(value);
-                }catch (Exception e){}
-            }
-
-            if (command.equals("MIXTANK_PH")){
-                try{
-                    variable.mixtankPH = Float.parseFloat(value);
-                }catch (Exception e){ }
-            }
-
-            if (command.equals("USETANK_PH")){
-                try{
-                    variable.usetankPH = Float.parseFloat(value);
-                }catch (Exception e){ }
-            }
-
-            if (command.equals("TIME_AUTO_WORK")){
-
-                String[] timeLayer1 = value.split("#");
-
-                int i = 0;
-                variable.timeObjectList.clearAllItem();
-                for (String element:timeLayer1) {
-                    String val[] = element.split(",");
-
-                    int hour = Integer.valueOf(val[0]);
-                    int minute = Integer.valueOf(val[1]);
-                    int second = Integer.valueOf(val[2]);
-                    boolean status = Boolean.valueOf(val[3]);
-                    float ph = Float.valueOf(val[4]);
-                    boolean delete_status = Boolean.valueOf(val[5]);
-
-                    System.out.println(String.valueOf(i) + " |" + String.valueOf(hour) +":" + String.valueOf(minute) +":" + String.valueOf(second));
-                    i++;
-
-                    if(delete_status)continue;
-                    variable.timeObjectList.addItem(hour,minute,second,status,ph);
-                }
-                System.out.println(value);
-            }
-
-
-        }else if(header.equals("MESSAGE")){
-            listener.onMessageFromUser(command,value);
         }
+
+
+        if(header.equals(H_MESSAGE))H_MessageProcess(command,value);
     }
 
 }

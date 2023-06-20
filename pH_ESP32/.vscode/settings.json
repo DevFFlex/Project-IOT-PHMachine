@@ -1,0 +1,8 @@
+{
+    "C_Cpp.default.compilerPath": "c:\\Users\\FFlex\\Desktop\\GitProject\\Project-IOT-PHMachine\\pH_ESP32\\pH_ESP32.ino",
+    "C_Cpp.errorSquiggles": "enabled",
+    "files.associations": {
+        "*.php": "php",
+        "functional": "cpp"
+    }
+}

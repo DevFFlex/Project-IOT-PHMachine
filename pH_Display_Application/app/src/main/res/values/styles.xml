@@ -12,7 +12,7 @@
     <style
         name="MyPreferenceTextAppearance"
         parent="TextAppearance.MaterialComponents.Subtitle1">
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColor">#FF0000</item>
 
     </style>
 

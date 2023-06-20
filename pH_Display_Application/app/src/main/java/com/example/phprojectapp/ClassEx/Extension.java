@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
@@ -20,6 +21,7 @@ import java.util.List;
 public class Extension{
 
     Context context;
+    String TAG_LOGGER = "APP_DEBUG";
 
     public Extension(Context context){
         this.context = context;
@@ -42,6 +44,14 @@ public class Extension{
 
     public void printAlert(String stringIn){
         Toast.makeText(context,stringIn,Toast.LENGTH_SHORT).show();
+    }
+
+    public void printDebug(String classname,String value){
+        Log.d(TAG_LOGGER,classname + ".java\t\t" +value);
+    }
+
+    public void printError(String classname,String error){
+        Log.e(TAG_LOGGER,classname + ".java\t\t" +error);
     }
 
     public void openWebLink(String url){

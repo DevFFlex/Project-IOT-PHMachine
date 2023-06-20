@@ -1,4 +1,4 @@
-package com.example.phprojectapp.MonitorFragmentObject;
+package com.example.phprojectapp.Dialog;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -9,14 +9,11 @@ import android.widget.EditText;
 
 import com.example.phprojectapp.R;
 
-interface TestDialogEvent{
-    void onClickOk(String str);
-}
-
 public class TestDialog extends AlertDialog.Builder {
-    private TestDialogEvent testDialogEvent;
-    public void setTestDialogEvent(TestDialogEvent testDialogEvent) {
-        this.testDialogEvent = testDialogEvent;
+    private DialogEventListener listener;
+
+    public void setListener(DialogEventListener listener) {
+        this.listener = listener;
     }
 
     private View view;
@@ -41,7 +38,7 @@ public class TestDialog extends AlertDialog.Builder {
                 String inputText = et1.getText().toString();
 
                 if (!inputText.equals("")){
-                    testDialogEvent.onClickOk(inputText);
+                    listener.onTestDialog_Ok(inputText);
                     et1.setText("");
                 }
             }

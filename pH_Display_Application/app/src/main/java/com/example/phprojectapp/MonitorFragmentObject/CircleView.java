@@ -121,7 +121,7 @@ class CircleAnimation{ //-------------------------------------------------------
     private View view;
     private Canvas canvas;
 
-    private List<CirclePHBall> circlePHBallList;
+    public List<CirclePHBall> circlePHBallList;
     public List<Float> degreeList;
 
     Paint line_paint;
@@ -130,7 +130,8 @@ class CircleAnimation{ //-------------------------------------------------------
     float line_endX;
     float line_endY;
 
-    float line_degree = 180;
+    float line_degree_calibrate = 100;
+    float line_degree = 180 + line_degree_calibrate;
     float line_degreeSpeed = 4;
     float line_width = 350;
     boolean line_degreeIsFirstAnim = true;
@@ -139,6 +140,8 @@ class CircleAnimation{ //-------------------------------------------------------
 
     CircleAnimation(View view){
         this.view = view;
+
+
 
         circlePHBallList = new ArrayList<>();
         degreeList = new ArrayList<Float>();
@@ -196,12 +199,11 @@ class CircleAnimation{ //-------------------------------------------------------
         line_endY = (float) (line_width * Math.sin(Math.toRadians(line_degree))) + line_startY;
 
 
-
         if (line_degreeIsFirstAnim){
             line_degree+=line_degreeSpeed;
         }else if(!line_degreeIsFirstAnim && line_degree != line_degreeCurrent){
             line_degreeMoveSpeed = Math.abs(line_degreeCurrent - line_degree) / 12;
-            line_degree += line_degreeMoveSpeed * (((line_degreeCurrent - line_degree) > 0) ? 1f : -1f);
+            line_degree += line_degreeMoveSpeed * (((line_degreeCurrent  - line_degree) > 0) ? 1f : -1f);
         }
 
         if (line_degree % 24 == 0 && currentPH <= 14){
@@ -225,7 +227,7 @@ class CircleAnimation{ //-------------------------------------------------------
         //192-528
         float ph = map(ph_input,0,14,192,528);
 
-        this.line_degreeCurrent = ph;
+        this.line_degreeCurrent = ph + line_degree_calibrate - 8;
 
 
     }

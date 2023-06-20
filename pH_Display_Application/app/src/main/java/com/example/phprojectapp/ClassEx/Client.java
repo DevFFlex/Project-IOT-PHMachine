@@ -13,6 +13,7 @@ interface ClientEventListener{
 }
 
 public class Client{
+    private Variable var;
     private PrintWriter output;
     private BufferedReader input;
 
@@ -29,8 +30,8 @@ public class Client{
         return this.isConnect;
     }
 
-    public Client(){
-
+    public Client(Variable v){
+        this.var = v;
     }
     public void connect(String SERVER_IP,int SERVER_PORT,String name){
         new Thread(new Runnable() {
@@ -50,15 +51,23 @@ public class Client{
                         recv();
                     }
 
-                    System.out.println("isConnected ggggg");
+                    var.extension.printDebug("Client","isConnect = True");
 
-                } catch (IOException e) { e.printStackTrace(); }
+
+
+                } catch (IOException e) {
+                    var.extension.printError("Client","Socket Connect Fail");
+                }
             }
         }).start();
     }
 
-    public void disconnect() throws IOException {
-        socket.close();
+    public void disconnect() {
+        try {
+            socket.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         socket = null;
         isConnect = false;
     }
@@ -81,6 +90,7 @@ public class Client{
                             char c = (char) input.read();
 
                             if (c == endKeyword){
+                                var.extension.printDebug("Client","Message = " + message);
                                 if (message != ""){
                                     if (!message.contains(":"))return;
 
@@ -93,6 +103,8 @@ public class Client{
                                     String command = data2[0];
                                     String value = data[1];
 
+                                    if(value.contains("="))value = value.split("=")[1];
+
                                     listener.onMessage(header,command,value);
                                 }
                                 message = "";
@@ -101,9 +113,8 @@ public class Client{
                             }
                             Thread.sleep(10);
                         } catch (IOException | InterruptedException e) {
-//                            isConnect = false;
-                            e.printStackTrace();
-                            System.out.println("recv error----------------------------");
+                            isConnect = false;
+                            var.extension.printError("Client","recv message,fail connected");
                         }
                     }
                 }
@@ -144,7 +155,7 @@ public class Client{
                         output.flush();
                     }catch (Exception e){
                         isConnect = false;
-                        System.out.println("send error----------------------------");
+                        var.extension.printError("Client","send message,fail connected");
                     }
                 }
             }

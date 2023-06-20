@@ -4,6 +4,11 @@
 #include <WiFi.h>
 #include <functional>
 
+#include <SD.h>
+
+#include <AsyncTCP.h>
+#include <ESPAsyncWebServer.h>
+
 #define CLIENT_LIMITE 4
 
 typedef struct clientObject_struct {
@@ -115,8 +120,8 @@ public:
         }
         data.trim();
 
-        if(data.indexOf("SET:CLIENT_NAME=") != -1){
-          data.replace("SET:CLIENT_NAME=","");
+        if (data.indexOf("SET:CLIENT_NAME=") != -1) {
+          data.replace("SET:CLIENT_NAME=", "");
           clients[i].name = data;
           return;
         }
@@ -147,9 +152,10 @@ class ServerPH {
 private:
   WiFiServer *server;
   ClientList *clients;
+  AsyncWebServer *aws;
 
 
-  String *SSID,*PASS;
+  String *SSID, *PASS;
 
   bool openWifiStatus = false;
 
@@ -158,11 +164,12 @@ private:
 
 public:
 
-  ServerPH(String *_SSID,String *_PASS) {
+  ServerPH(String *_SSID, String *_PASS) {
     SSID = _SSID;
     PASS = _PASS;
     server = new WiFiServer(80);
     clients = new ClientList(server);
+    aws = new AsyncWebServer(5000);
   }
 
   ~ServerPH() {
@@ -192,6 +199,20 @@ void ServerPH::setup() {
   Serial.println(IP);
 
   server->begin();
+
+  aws->on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
+    // request->send(200, "text/plain", "Hello, ESP32!");
+    File file = SD.open("/index.html");
+    if (file) {
+      String content = file.readString();
+      file.close();
+      request->send(200, "text/html", content);
+    } else {
+      request->send(404);
+    }
+  });
+
+  aws->begin();
 
   openWifiStatus = true;
 }

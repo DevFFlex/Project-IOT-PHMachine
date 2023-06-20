@@ -1,14 +1,14 @@
+#include <functional>
+
 class UserInterface {
 private:
-  VarObject *varObject;
-  Comunity *comunity;
+  Variable *var;
   HardwareIO *hardwareIO;
 
 public:
 
-  UserInterface(VarObject *varObjectIn, Comunity *comunityIn, HardwareIO *hardwareIOIn) {
-    varObject = varObjectIn;
-    comunity = comunityIn;
+  UserInterface(Variable *varObjectIn,HardwareIO *hardwareIOIn) {
+    var = varObjectIn;
     hardwareIO = hardwareIOIn;
 
 

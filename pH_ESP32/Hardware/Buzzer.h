@@ -25,7 +25,7 @@ public:
   void loop() {
 
     if (t_buzzer.isExpired()) {
-      Serial.println("buzzer toggle");
+      // Serial.println("buzzer toggle");
       off();
     }
     // uint8_t octave = 1;
