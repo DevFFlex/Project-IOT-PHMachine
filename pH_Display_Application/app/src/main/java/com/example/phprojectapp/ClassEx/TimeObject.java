@@ -3,7 +3,6 @@ package com.example.phprojectapp.ClassEx;
 public class TimeObject {
     private int hour;
     private int minute;
-    private int second;
     private boolean status;
     private float ph;
 
@@ -21,14 +20,6 @@ public class TimeObject {
 
     public void setMinute(int minute) {
         this.minute = minute;
-    }
-
-    public int getSecond() {
-        return second;
-    }
-
-    public void setSecond(int second) {
-        this.second = second;
     }
 
     public boolean isStatus() {
@@ -52,7 +43,6 @@ public class TimeObject {
 
         out+= (hour < 10) ? "0":""+ String.valueOf(hour) + ":";
         out+= (minute < 10) ? "0":""+ String.valueOf(minute) + ":";
-        out+= (second < 10) ? "0":""+ String.valueOf(second);
 
         return out;
     }

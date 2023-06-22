@@ -58,7 +58,6 @@ class ItemLayout extends View {
 
         int hour = timeObject.getHour();
         int minute = timeObject.getMinute();
-        int second = timeObject.getSecond();
         boolean status = timeObject.isStatus();
         float ph = timeObject.getPh();
 
@@ -66,7 +65,7 @@ class ItemLayout extends View {
         else switch_status.setText(default_status_off);
         switch_status.setChecked(timeObject.isStatus());
 
-        textView_time.setText(String.format("%02d:%02d:%02d",hour,minute,second));
+        textView_time.setText(String.format("%02d:%02d:00",hour,minute));
 
         textView_ph.setText(String.valueOf(ph));
     }
@@ -80,7 +79,7 @@ class ItemLayout extends View {
         if (b) switch_status.setText(default_status_on);
         else switch_status.setText(default_status_off);
 
-        itemLayoutEvent.onSwitch(timeObject,b);
+        if(itemLayoutEvent != null)itemLayoutEvent.onSwitch(timeObject,b);
     }
 
 

@@ -86,7 +86,7 @@
             android:background="@drawable/et_style1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textColor="@color/white"
+            android:textColor="#005EFF"
             android:textSize="40sp"/>
 
         <Button

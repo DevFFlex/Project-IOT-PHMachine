@@ -55,7 +55,6 @@ class TimePickerDialog extends AlertDialog.Builder{
 
         timeObject.setHour(inputtime_tpk.getCurrentHour());
         timeObject.setMinute(inputtime_tpk.getCurrentMinute());
-        timeObject.setSecond(0);
 
         float ph_nd;
         try {

@@ -69,17 +69,19 @@ public class SetTimeDialog extends AlertDialog.Builder{
     public void updateItemLayout(){
         box.removeAllViewsInLayout();
         for (TimeObject timeObject:variable.timeObjectList.data) {
+            TimeObject ttt = timeObject;
             ItemLayout itemLayout = new ItemLayout(getContext(),timeObject);
             itemLayout.setItemLayoutEvent(new ItemLayoutEvent() {
                 @Override
                 public void onDelete(TimeObject timeObject) {
-                    variable.timeObjectList.data.remove(timeObject);
+                    variable.timeObjectList.data.remove(ttt);
                     updateItemLayout();
                 }
 
                 @Override
                 public void onSwitch(TimeObject timeObject, boolean status) {
-                    variable.timeObjectList.getTimeObject(timeObject).setStatus(status);
+                    variable.timeObjectList.getTimeObject(ttt).setStatus(status);
+
                 }
             });
 
@@ -118,7 +120,6 @@ public class SetTimeDialog extends AlertDialog.Builder{
             if(has){
                 out += String.valueOf(timeObject.getHour()) + ",";
                 out += String.valueOf(timeObject.getMinute()) + ",";
-                out += String.valueOf(timeObject.getSecond()) + ",";
                 out += String.valueOf(timeObject.isStatus()) + ",";
                 out += String.valueOf(timeObject.getPh()) + "";
             }else{

@@ -3,7 +3,6 @@ class TimerAutoWork
 private:
     int hour;
     int minute;
-    int second;
     float ph;
     bool status;
     bool delete_;
@@ -13,7 +12,6 @@ public:
     {
         hour = -1;
         minute = -1;
-        second = -1;
         ph = -1;
         status = false;
         delete_ = true;
@@ -29,10 +27,6 @@ public:
         minute = minuteIn;
     }
 
-    void setSecond(int secondIn)
-    {
-        second = secondIn;
-    }
 
     void setPH(float phIn)
     {
@@ -59,10 +53,6 @@ public:
         return minute;
     }
 
-    int getSecond()
-    {
-        return second;
-    }
 
     float getPH()
     {
@@ -83,7 +73,7 @@ public:
     {
         char buffer[50];
 
-        sprintf(buffer, "%02d:%02d:%02d  status = %s   ph = %.1f   delete = %s", hour, minute, second, String(status), ph, String(delete_));
+        sprintf(buffer, "%02d:%02d:00  status = %s   ph = %.1f   delete = %s", hour, minute, String(status), ph, String(delete_));
 
         String result = String(buffer);
 

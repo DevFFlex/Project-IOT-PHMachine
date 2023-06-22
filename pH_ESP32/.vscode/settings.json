@@ -3,6 +3,11 @@
     "C_Cpp.errorSquiggles": "enabled",
     "files.associations": {
         "*.php": "php",
-        "functional": "cpp"
+        "functional": "cpp",
+        "*.tcc": "cpp",
+        "array": "cpp",
+        "tuple": "cpp",
+        "type_traits": "cpp",
+        "utility": "cpp"
     }
 }

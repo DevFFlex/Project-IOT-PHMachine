@@ -44,6 +44,9 @@ public class GraphMeter extends Fragment {
     private Handler handler = new Handler();
     List<Entry> entries = new ArrayList<>();
 
+    private float time = 0;
+    private int MAX_RANGE = 10;
+
 
     public GraphMeter(Variable variable) {
         this.variable = variable;
@@ -54,17 +57,7 @@ public class GraphMeter extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                update();
-                handler.postDelayed(this,500);
-//                updateGraph();
-            }
-        });
+        
     }
 
     @Override
@@ -79,10 +72,15 @@ public class GraphMeter extends Fragment {
         view  = inflater.inflate(R.layout.fragment_graph_meter, container, false);
         lineChart = view.findViewById(R.id.lineChart);
 
-        entries.add(new Entry(0, 0));
+
+        entries.clear();
+        for(int i = 0;i<10;i++)entries.add(new Entry(i, 7));
+
 
         dataSet = new LineDataSet(entries, "PH");  // อ้างอิงตัวแปร dataSet เดิม
-
+        dataSet.clear();
+        lineChart.clear();
+        time = 0;
         dataSet.setColors(Color.RED);
         dataSet.setLineWidth(5f);
         dataSet.setCircleColors(Collections.singletonList(Color.BLUE));
@@ -92,55 +90,73 @@ public class GraphMeter extends Fragment {
 
         lineChart.setData(lineData);
         lineChart.setDrawGridBackground(false);
+        lineChart.setScaleEnabled(false);
+        lineChart.setDragEnabled(false);
+        lineChart.setGridBackgroundColor(Color.BLACK);  // กำหนดสีพื้นหลังของเส้นกริด
+
+        XAxis xAxis = lineChart.getXAxis();
+        xAxis.setTextColor(Color.BLACK);  // กำหนดสีของตัวอักษรบนแกน x
+        xAxis.setTextSize(12f);  // กำหนดขนาดตัวอักษรบนแกน x
+        xAxis.setAxisLineColor(Color.BLACK);  // กำหนดสีของเส้นขอบแกน x
+
+        YAxis yAxis = lineChart.getAxisLeft();
+        yAxis.setTextColor(Color.BLACK);  // กำหนดสีของตัวอักษรบนแกน y
+        yAxis.setTextSize(12f);  // กำหนดขนาดตัวอักษรบนแกน y
+        yAxis.setAxisLineColor(Color.BLACK);  // กำ\\
+
+        Description description = new Description();
+        description.setText("PH Graph");  // กำหนดคำอธิบายของกราฟ
+        description.setTextColor(Color.RED);  // กำหนดสีของคำอธิบาย
+        description.setTextSize(14f);  // กำหนดขนาดตัวอักษรของคำอธิบาย
+
+        lineChart.setDescription(description);
+
+//        lineChart.setVisibleXRange(0, 30);
+//        lineChart.setVisibleYRange(0, 14, YAxis.AxisDependency.LEFT);
+//        lineChart.setVisibleYRangeMaximum(14,YAxis.AxisDependency.LEFT);
+
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                update();
+                handler.postDelayed(this,1000);
+//                updateGraph();
+            }
+        });
 
         return view;
     }
 
     private void update() {
 
-        float yValue = random.nextFloat() * 10;
-        variable.extension.printDebug("GraphMeter","float = " + String.valueOf(entries.size()));
+//        float yValue = random.nextFloat() * 10;
+        float yValue = variable.mixtankPH;
+//        variable.extension.printDebug("GraphMeter","float = " + String.valueOf(entries.size()));
+
+        variable.extension.printDebug("GraphMeter", "time = " + String.valueOf(time));
+
+        if (dataSet.getEntryCount() > MAX_RANGE) {
+            dataSet.removeEntry(0);
+        }
         addEntry(yValue);
 
-        if (entries.size() > 20) {
-            entries.remove(0);
-        }
-
-        LineData data = lineChart.getData();
-        if (data != null) {
-            data.notifyDataChanged();
-            lineChart.notifyDataSetChanged();
-            lineChart.setVisibleXRangeMaximum(20);
-            lineChart.moveViewToX(data.getEntryCount());
-            lineChart.invalidate();
-        }
-
+        time += 1;
 
     }
 
     private void addEntry(float yValue) {
         LineData data = lineChart.getData();
-        LineDataSet dataSet = (LineDataSet) data.getDataSetByIndex(0);
 
-        if (dataSet == null) {
-            dataSet = createDataSet();
-            data.addDataSet(dataSet);
-        }
-
-        data.addEntry(new Entry(dataSet.getEntryCount(), yValue), 0);
+        data.addEntry(new Entry(time, yValue), 0);
         data.notifyDataChanged();
 
         lineChart.notifyDataSetChanged();
-        lineChart.setVisibleXRangeMaximum(10);
-        lineChart.moveViewToX(data.getEntryCount());
+//        lineChart.setVisibleXRangeMaximum(MAX_RANGE);
+//        lineChart.moveViewToX(data.getEntryCount());
+
+        lineChart.invalidate();
 
 
     }
-
-    private LineDataSet createDataSet() {
-        LineDataSet dataSet = new LineDataSet(null, "Realtime Data");
-        return dataSet;
-    }
-
-
 }

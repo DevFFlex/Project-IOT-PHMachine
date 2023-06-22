@@ -103,6 +103,7 @@ public:
           dataStr.toCharArray(buffer, buffer_size);
           clients[i].client.write(buffer);
           clients[i].client.flush();
+          // if(dataStr.indexOf("SET:MIXTANK_PH=") == -1)Serial.println("send to " + clients[i].name + "    :   " + send_str);
           Serial.println("send to " + clients[i].name + "    :   " + send_str);
         }
       }

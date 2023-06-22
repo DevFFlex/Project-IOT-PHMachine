@@ -11,11 +11,10 @@ public class TimeObjectList {
 
     }
 
-    public void addItem(int hour,int minute,int second,boolean status,float ph){
+    public void addItem(int hour,int minute,boolean status,float ph){
         TimeObject timeObject = new TimeObject();
         timeObject.setHour(hour);
         timeObject.setMinute(minute);
-        timeObject.setSecond(second);
         timeObject.setStatus(status);
         timeObject.setPh(ph);
 

@@ -21,7 +21,7 @@ ArduinoComunity *ardunoComunity = new ArduinoComunity(var,hardwareIO);
 Comunity *comunity = new Comunity(var,hardwareIO,db,ardunoComunity);
 
 
-SerialInput *sInput = new SerialInput(var,hardwareIO,comunity);
+SerialInput *sInput = new SerialInput(var,hardwareIO,comunity,ardunoComunity);
 UserInterface *ui = new UserInterface(var,hardwareIO);
 
 
@@ -53,14 +53,14 @@ void loop() {
   if (t1.isExpired()) {
 
     var->mixTank_pH = hardwareIO->pHSensor->getPH();
-    comunity->sendMixTankPH();
     // hardwareIO->buzzer->on();
 
     hardwareIO->lcdOutput->printL("PH = " + String(hardwareIO->pHSensor->getPH()) + " | " + hardwareIO->pHSensor->getPHString(), 0);
 
     hardwareIO->lcdOutput->printL(hardwareIO->rtc->getTimeToString(), 3);
 
-    ardunoComunity->displayCMVM();
+  
+    
 
   }
 }
@@ -70,10 +70,9 @@ void loop() {
 bool timerAutoWork_Compare_Rtctime(int index) {
   byte active_hour = var->timerautowork[index].getHour();
   byte active_minute = var->timerautowork[index].getMinute();
-  byte active_second = var->timerautowork[index].getSecond();
 
   if (active_hour == -1)
     return false;
 
-  return (hardwareIO->rtc->getHour() == active_hour && hardwareIO->rtc->getMinute() == active_minute && hardwareIO->rtc->getSecond() == active_second);
+  return (hardwareIO->rtc->getHour() == active_hour && hardwareIO->rtc->getMinute() == active_minute);
 }

@@ -12,17 +12,10 @@ private:
   HardwareIO *hardwareIO;
 
   String data_buffer = "";
-  int test_count = 0;
-  float ph_old = 0.0;
-  float ph_last = 0.0;
-
-  float var_calibrate = 0;
-  float var_m = 0;
-  float var_voltin = 0;
-  float var_max_analog = 0;
+  String *item = new String[6];
+  String *c_v = new String[2];
 
 public:
-  String text = "NULL";
 
   ArduinoComunity(Variable *varIn, HardwareIO *hardwareIOIn)
   {
@@ -32,15 +25,11 @@ public:
 
   void setup();
   void loop();
-  void displayCMVM();
-
   void onRecv(String data_command, String data_value);
+  void setValueAll(String clb,String m,String voltIn,String max_analog);
+  void setValueAllDefault();
 
-  void getValueCalibrate();
-  void getValueM();
-  void getValueVoltIn();
-  void getValueMaxAnalog();
-  void getValueAll();
+  void displayCMVM();
 };
 
 void ArduinoComunity::setup()
@@ -53,20 +42,24 @@ void ArduinoComunity::loop()
 
   while (Serial2.available())
   {
-    char d = (char)Serial2.read();
-    data_buffer += String(d);
-    delay(10);
+    char c = (char)Serial2.read();
+    data_buffer += String(c);
+    delay(5);
+    // Serial.print(String(c));
   }
 
   if (data_buffer != "")
   {
     data_buffer.trim();
+    // Serial.println(""); 
 
-    String *item = new String[2];
+    var->strManager->split(item, data_buffer, ",", 6);
+  
+    for (int i = 0;i < 6;i++){
+      var->strManager->split(c_v,item[i],"=",2);
+      onRecv(c_v[0], c_v[1]);
+    }
 
-    var->strManager->split(item, data_buffer, "=", 2);
-
-    onRecv(item[0], item[1]);
 
     data_buffer = "";
   }
@@ -76,61 +69,47 @@ void ArduinoComunity::onRecv(String command, String value)
 {
   if (command.indexOf("SE_PH") != -1)
   {
-    ph_old = ph_last;
-    ph_last = value.toFloat();
-
-    hardwareIO->pHSensor->setPH(ph_last);
+    hardwareIO->pHSensor->setPH(value.toFloat());
   }
 
-  if(command.indexOf("S_CLB") != -1){
-    var_calibrate = value.toFloat();
+  if(command.indexOf("SE_CLB") != -1){
+    var->phCalibrateSet->calibrate = value.toFloat();
   }
 
-  if(command.indexOf("S_M")!= -1){
-    var_m = value.toFloat();
+  if(command.indexOf("SE_MP")!= -1){
+    var->phCalibrateSet->m = value.toFloat();
   }
 
-  if(command.indexOf("S_VI")!= -1){
-    var_voltin = value.toFloat();
+  if(command.indexOf("SE_VOLTIN")!= -1){
+    var->phCalibrateSet->voltin = value.toFloat();
   }
 
-  if(command.indexOf("S_AMAX")!= -1){
-    var_max_analog = value.toFloat();
+  if(command.indexOf("SE_MAX_ANALOG")!= -1){
+    var->phCalibrateSet->max_analog = value.toFloat();
   }
+
+  if(command.indexOf("SE_ANALOG_AVG") != -1){
+    var->phCalibrateSet->analogAvg = value.toFloat();
+  }
+
 }
 
-void ArduinoComunity::getValueCalibrate()
-{
-  Serial2.write("G_CLB");
+void ArduinoComunity::setValueAllDefault(){
+  Serial2.write("SDEFAULT");
 }
 
-void ArduinoComunity::getValueM()
-{
-  Serial2.write("G_M");
+void ArduinoComunity::setValueAll(String clb = "DE",String m = "DE",String voltIn = "DE",String max_analog = "DE"){
+  String set_str = "";
+  set_str += "S_CLB=" + clb + ",";
+  set_str += "S_M=" + m + ",";
+  set_str += "S_VI=" + voltIn + ",";
+  set_str += "S_AMAX=" + max_analog + "\n";
+  Serial2.write(set_str.c_str());
 }
-
-void ArduinoComunity::getValueVoltIn()
-{
-  Serial2.write("G_VI");
-}
-
-void ArduinoComunity::getValueMaxAnalog()
-{
-  Serial2.write("G_AMAX");
-}
-
-
-void ArduinoComunity::getValueAll(){
-  getValueCalibrate();
-  getValueM();
-  getValueVoltIn();
-  getValueMaxAnalog();
-}
-
 void ArduinoComunity::displayCMVM(){
   Serial.println("----------------------------------------------");
-  Serial.println("Calibrate : " + String(var_calibrate));
-  Serial.println("M : " + String(var_m));
-  Serial.println("VoltIn : " + String(var_voltin));
-  Serial.println("Max Analog : " + String(var_max_analog));
+  Serial.println("Calibrate : " + String(var->phCalibrateSet->calibrate));
+  Serial.println("M : " + String(var->phCalibrateSet->m));
+  Serial.println("VoltIn : " + String(var->phCalibrateSet->voltin));
+  Serial.println("Max Analog : " + String(var->phCalibrateSet->max_analog));
 }

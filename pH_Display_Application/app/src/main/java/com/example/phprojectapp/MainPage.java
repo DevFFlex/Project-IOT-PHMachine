@@ -188,6 +188,7 @@ public class MainPage extends AppCompatActivity {
         String name = preferences.getString("username",var.comunity.USERNAME);
 
         var.comunity.connect(ip,Integer.valueOf(port),name);
+        var.extension.printDebug("MainPage","onClickConeect");
     }
 
     public void onClickDisconnect(View v){

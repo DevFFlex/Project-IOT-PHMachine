@@ -1,12 +1,13 @@
 package com.example.phprojectapp.ClassEx;
 
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class Comunity extends Client{
+
+    private OnComunityEventListener onComunityEventListener;
+    public void setOnComunityEventListener(OnComunityEventListener onComunityEventListener) {
+        this.onComunityEventListener = onComunityEventListener;
+    }
+
     private Variable var;
     final public String SERVER_IP = "192.168.4.1"; //192.168.4.1
     final public int SERVER_PORT = 80; //80
@@ -18,7 +19,8 @@ public class Comunity extends Client{
             "RTC_TIME",
             "OUTPUT",
             "TOGGLE_RELAY",
-            "FILE_DIR"
+            "FILE_DIR",
+            "CMVM"
     };
 
     final public String H_GET = "GET";
@@ -65,6 +67,8 @@ public class Comunity extends Client{
         if (index < 0 || index > 6)return;
         send(H_SET,COMMANS[6],String.valueOf(index));
     }
+
+    public void setCMVM(String value){sendToServer("SET:CMVM=" + value);}
 
     public void getTimeAutoWork(){
         sendToServer("GET:TIME_AUTO_WORK=NULL");
@@ -156,16 +160,15 @@ public class Comunity extends Client{
 
                         int hour = Integer.valueOf(val[0]);
                         int minute = Integer.valueOf(val[1]);
-                        int second = Integer.valueOf(val[2]);
-                        boolean status = Boolean.valueOf(val[3]);
-                        float ph = Float.valueOf(val[4]);
-                        boolean delete_status = Boolean.valueOf(val[5]);
+                        boolean status = Boolean.valueOf(val[2]);
+                        float ph = Float.valueOf(val[3]);
+                        boolean delete_status = Boolean.valueOf(val[4]);
 
-                        System.out.println(String.valueOf(i) + " |" + String.valueOf(hour) +":" + String.valueOf(minute) +":" + String.valueOf(second));
+                        var.extension.printDebug("Comunity",String.valueOf(i) + " |" + String.valueOf(hour) +":" + String.valueOf(minute) + "\t" + String.valueOf(status) + "\t" + String.valueOf(ph) + "\t" + String.valueOf(delete_status));
                         i++;
 
                         if(delete_status)continue;
-                        var.timeObjectList.addItem(hour,minute,second,status,ph);
+                        var.timeObjectList.addItem(hour,minute,status,ph);
                     }
                     System.out.println(value);
                 }
@@ -220,6 +223,26 @@ public class Comunity extends Client{
                         var.file_list.add(data2);
                     }
                 }
+                break;
+
+            case 8:
+                if(header.equals(H_SET)){
+
+
+                    String[] data = value.split(",");
+//                    var.cmvmObject.calibration = Float.parseFloat(data[0]);
+//                    var.cmvmObject.m = Float.parseFloat(data[1]);
+//                    var.cmvmObject.voltin = Float.parseFloat(data[2]);
+//                    var.cmvmObject.max_analog = Float.parseFloat(data[3]);
+//                    var.cmvmObject.analogAvg = Float.parseFloat(data[4]);
+
+
+                    if(onComunityEventListener != null){
+                        onComunityEventListener.onCMVM(Float.parseFloat(data[0]),Float.parseFloat(data[1]),Float.parseFloat(data[2]),Float.parseFloat(data[3]),Float.parseFloat(data[4]));
+                    }
+
+                }
+                break;
 
         }
     }

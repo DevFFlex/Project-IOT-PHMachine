@@ -19,6 +19,7 @@ public class Variable{
     public float usetankPH;
     public TimeObjectList timeObjectList;
     public TimeBoardObject timeBoardObject;
+    public CMVMObject cmvmObject;
     public String outout_text = "";
     public ArrayList<String[]> chat_his = new ArrayList<String[]>();
     public ArrayList<String[]> file_list = new ArrayList<>();
@@ -46,6 +47,7 @@ public class Variable{
         this.inputPH = 0;
         this.mixtankPH = 7;
         this.timeObjectList = new TimeObjectList();
+        this.cmvmObject = new CMVMObject();
 
         animationOption = new AnimationOption(context);
         soundEffect = new SoundEffect(context);

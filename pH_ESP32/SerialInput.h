@@ -5,12 +5,14 @@ private:
     Variable *var;
     HardwareIO *hardwareIO;
     Comunity *comunity;
+    ArduinoComunity *ardunoComunity;
 public:
-    SerialInput(Variable *varIn,HardwareIO *hardIn,Comunity *comIn)
+    SerialInput(Variable *varIn,HardwareIO *hardIn,Comunity *comIn,ArduinoComunity *ardunoComunityIn)
     {
         var = varIn;
         hardwareIO = hardIn;
         comunity = comIn;
+        ardunoComunity = ardunoComunityIn;
     }
 
     void setup();
@@ -83,6 +85,11 @@ void SerialInput::loop()
             if (data.indexOf("sd del ") != -1){
                 data.replace("sd del ","");
                 hardwareIO->sdcard->deleteFile(data.c_str());
+            }
+
+            if (data.indexOf("set cmvm") != -1){
+              data.replace("set cmvm","");
+              ardunoComunity->setValueAll("10", "20", "30", "40");
             }
         
         }
