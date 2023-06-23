@@ -28,6 +28,7 @@ public:
   void setup();
   void loop();
   void printL(String text, byte l);
+  void clear();
 
   void setPage(byte page);
   byte getPage();
@@ -62,4 +63,9 @@ void LcdOutput::printL(String text, byte l) {
   for (int i = 0; i < HSize1; i++) lcd1.print(" ");
   lcd1.setCursor(0, l);
   lcd1.print(text);
+}
+
+
+void LcdOutput::clear(){
+  lcd1.clear();
 }

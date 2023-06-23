@@ -1,5 +1,5 @@
 #include "Server.h"
-#include "ServerClass.h"
+#include "Server/ServerClass.h"
 
 #define H_GET "GET"
 #define H_SET "SET"
@@ -39,6 +39,7 @@ public:
 
   //------------ send to client function ------------------
   void setC_InputPH();
+  void setC_InputPH_Finish();
   void setC_MixtankPH();
   void setC_Temp();
   void setC_TimeAutoWork();
@@ -122,7 +123,7 @@ void Comunity::H_GetSetProcess(String header_arg, String command_arg, String val
     else if (header_arg == H_SET)
     {
       recvInputPH(value);
-      setC_Output("Server set ph value " + String(value.toFloat()) + " success");
+      // setC_Output("Server set ph value " + String(value.toFloat()) + " success");
     }
   }
 
@@ -199,6 +200,11 @@ void Comunity::setC_InputPH()
   ServerPH::send("SET:INPUT_PH=" + String(var->input_ph));
 }
 
+void Comunity::setC_InputPH_Finish()
+{
+  ServerPH::send("SET:INPUT_PH=FINISH");
+}
+
 void Comunity::setC_MixtankPH()
 {
   ServerPH::send("SET:MIXTANK_PH=" + String(var->mixTank_pH));
@@ -234,6 +240,7 @@ void Comunity::setC_Output(String output_text)
   ServerPH::send("SET:OUTPUT=" + output_text);
 }
 
+
 void Comunity::sendOther(String data_str)
 {
   ServerPH::send(data_str);
@@ -241,7 +248,12 @@ void Comunity::sendOther(String data_str)
 
 void Comunity::recvInputPH(String value)
 {
-  var->input_ph = value.toFloat();
+  if(value.indexOf("stop") != -1){
+    var->workVar.working_status = false;
+  }else{
+    var->input_ph = value.toFloat();
+    var->workVar.working_status = true;
+  }
 }
 void Comunity::recvTimerAutoWork(String value)
 {

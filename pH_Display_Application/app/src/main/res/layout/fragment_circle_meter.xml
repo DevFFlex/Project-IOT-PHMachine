@@ -52,10 +52,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Base"
+            android:text="เบส"
             android:textSize="50sp"
             android:textAlignment="center"
-            android:textColor="#00B3FA"
+            android:textColor="#4300FA"
             android:textStyle="bold"
             />
     </LinearLayout>
@@ -69,7 +69,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Acid"
+            android:text="กรด"
             android:textSize="50sp"
             android:textAlignment="center"
             android:textColor="#FA3B00"

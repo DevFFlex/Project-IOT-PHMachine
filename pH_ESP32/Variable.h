@@ -1,8 +1,15 @@
 #include "VarObject/TimerAutoWork.h"
 #include "VarObject/PHCalibrateSet.h"
 
-class Variable
-{
+class Work_Variable{
+  public:
+  int step = 0;
+  bool working_status = false;
+  bool working_status_setup = true;
+  bool change_step = false;
+};
+
+class Variable {
 
 public:
   float input_ph = 0;
@@ -12,12 +19,11 @@ public:
   PHCalibrateSet *phCalibrateSet = new PHCalibrateSet();
 
   StringManager *strManager = new StringManager();
+  
+  Work_Variable workVar;
 
   float onClientRequestStatus = false;
-  Variable()
-  {
 
+  Variable() {
   }
-
 };
-

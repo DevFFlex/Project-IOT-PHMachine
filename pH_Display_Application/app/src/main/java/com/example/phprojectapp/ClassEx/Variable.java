@@ -17,6 +17,7 @@ public class Variable{
     public float inputPH;
     public float mixtankPH;
     public float usetankPH;
+    public boolean working_ph = false;
     public TimeObjectList timeObjectList;
     public TimeBoardObject timeBoardObject;
     public CMVMObject cmvmObject;
@@ -48,6 +49,7 @@ public class Variable{
         this.mixtankPH = 7;
         this.timeObjectList = new TimeObjectList();
         this.cmvmObject = new CMVMObject();
+
 
         animationOption = new AnimationOption(context);
         soundEffect = new SoundEffect(context);

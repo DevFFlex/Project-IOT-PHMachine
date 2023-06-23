@@ -1,6 +1,8 @@
-#define BUZZER_PIN 27
 #include <Arduino.h>
 
+#define BUZZER_PIN 27
+
+#define BUZZER_DF_TIMEOFF_MS 1000
 
 class Buzzer {
 private:
@@ -12,7 +14,7 @@ public:
   Timer t_buzzer;
 
   Buzzer()
-    : t_buzzer(1000) {
+    : t_buzzer(BUZZER_DF_TIMEOFF_MS) {
 
     ledcSetup(0, 1E5, 12);
     ledcAttachPin(BUZZER_PIN, 0);
@@ -25,18 +27,26 @@ public:
   void loop() {
 
     if (t_buzzer.isExpired()) {
-      // Serial.println("buzzer toggle");
       off();
     }
-    // uint8_t octave = 1;
-    // ledcWriteNote(0, NOTE_C, octave);
     
   }
 
   void on() {
+    t_buzzer.reset();
+
     status_buzzer = true;
     ledcWriteTone(0, freq);
+    
   }
+
+  void on(int freqIn){
+    t_buzzer.reset();
+    
+    status_buzzer = true;
+    ledcWriteTone(0, freqIn);
+  }
+
   void off() {
     ledcWriteTone(0, 0);
   }

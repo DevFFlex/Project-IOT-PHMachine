@@ -1,11 +1,8 @@
-#include "HardwareSerial.h"
 #include "WiFiClient.h"
 #include "WiFiServer.h"
 #include <WiFi.h>
 #include <functional>
-
 #include <SD.h>
-
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 
@@ -20,7 +17,7 @@ typedef struct clientObject_struct {
 
 class ClientList {
 private:
-  Timer time1, timer2;
+  Timer timer2;
 
   WiFiServer *server;
   ClientObject clients[CLIENT_LIMITE];
@@ -28,18 +25,10 @@ private:
   const int client_limite = CLIENT_LIMITE;
   const int _timeout = 3000;
 
-  void display() {
-    if (time1.isExpired()) {
-      Serial.println('---------client list----------');
-      for (int i = 0; i < client_limite; i++) {
-        Serial.println("client [" + String(i) + "] = " + String(clients[i].client) + "   name = " + clients[i].name + "     ip = " + clients[i].ip);
-      }
-    }
-  }
 
 public:
   ClientList(WiFiServer *serverIn)
-    : time1(1000), timer2(1000) {
+    : timer2(1000) {
     server = serverIn;
   }
 
@@ -48,11 +37,23 @@ public:
     if (client) {
       add(&client, client.localIP().toString());
     }
-
-    // display();
-
     checkConnected();
   }
+
+  String getClientString(){
+    int count = 0;
+    String namelist = "";
+    for (int i = 0;i<CLIENT_LIMITE;i++){
+        if(clients[i].client){
+            count++;
+            namelist += clients[i].name + ",";
+        }
+    }
+    String out = "" + String(count)+ "|"+ namelist;
+    out = out.substring(0,out.lastIndexOf(","));
+    return out;
+  }
+
 
 
   void add(WiFiClient *client, String IPAddress) {
@@ -104,7 +105,7 @@ public:
           clients[i].client.write(buffer);
           clients[i].client.flush();
           // if(dataStr.indexOf("SET:MIXTANK_PH=") == -1)Serial.println("send to " + clients[i].name + "    :   " + send_str);
-          Serial.println("send to " + clients[i].name + "    :   " + send_str);
+          // Serial.println("send to " + clients[i].name + "    :   " + send_str);
         }
       }
     }
@@ -133,6 +134,7 @@ public:
       }
     }
   }
+  
   void checkConnected() {
     if (timer2.isExpired()) {
       for (int i = 0; i < client_limite; i++) {
@@ -148,79 +150,3 @@ public:
     }
   }
 };
-
-class ServerPH {
-private:
-  WiFiServer *server;
-  ClientList *clients;
-  AsyncWebServer *aws;
-
-
-  String *SSID, *PASS;
-
-  bool openWifiStatus = false;
-
-  std::function<void(String)> onMessageCallback;
-
-
-public:
-
-  ServerPH(String *_SSID, String *_PASS) {
-    SSID = _SSID;
-    PASS = _PASS;
-    server = new WiFiServer(80);
-    clients = new ClientList(server);
-    aws = new AsyncWebServer(5000);
-  }
-
-  ~ServerPH() {
-    delete clients;
-  }
-
-  void setup();
-  void loop();
-
-  void send(String send_str);
-
-  void setOnMessageListener(std::function<void(String)> callback) {
-    onMessageCallback = callback;
-  }
-
-  bool isClient();
-};
-
-
-void ServerPH::setup() {
-  Serial.println("hospot : " + *SSID + "   " + *PASS);
-  WiFi.softAP(SSID->c_str(), PASS->c_str());
-
-  IPAddress IP = WiFi.softAPIP();
-
-  Serial.print("AP IP address: ");
-  Serial.println(IP);
-
-  server->begin();
-
-  aws->on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
-    // request->send(200, "text/plain", "Hello, ESP32!");
-    File file = SD.open("/index.html");
-    if (file) {
-      String content = file.readString();
-      file.close();
-      request->send(200, "text/html", content);
-    } else {
-      request->send(404);
-    }
-  });
-
-  aws->begin();
-
-  openWifiStatus = true;
-}
-void ServerPH::loop() {
-  clients->loop();
-  clients->checkAvailable(onMessageCallback);
-}
-void ServerPH::send(String send_str) {
-  clients->send(send_str);
-}

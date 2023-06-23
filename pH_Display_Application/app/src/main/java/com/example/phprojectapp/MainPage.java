@@ -118,7 +118,7 @@ public class MainPage extends AppCompatActivity {
                 public void run() {
                     mainpage_outputDisplayLayout.setVisibility(View.GONE);
                 }
-            },2000);
+            },5000);
             var.outout_text = "";
         }
 
@@ -127,6 +127,7 @@ public class MainPage extends AppCompatActivity {
         }else{
             mainpage_chatInputLayout.setVisibility(View.VISIBLE);
         }
+
 
 
 

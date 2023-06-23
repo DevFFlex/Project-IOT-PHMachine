@@ -7,6 +7,7 @@
 #include "Hardware/WaterSensor_Class.h"
 #include "Hardware/SD_Class.h"
 #include "Hardware/Buzzer.h"
+// #include "Hardware/DHT_Sensor.h"
 
 
 class HardwareIO {
@@ -19,6 +20,7 @@ public:
   WaterSensor *waterSensor;
   SDCard *sdcard;
   Buzzer *buzzer;
+  // DHT_Sensor *dht;
 
   HardwareIO() {
     lcdOutput = new LcdOutput();
@@ -29,6 +31,7 @@ public:
     waterSensor = new WaterSensor();
     sdcard = new SDCard();
     buzzer = new Buzzer();
+    // dht = new DHT_Sensor();
   }
 
   void setup();
@@ -44,6 +47,7 @@ public:
     delete waterSensor;
     delete sdcard;
     delete buzzer;
+    // delete dht;
   }
 };
 
@@ -57,6 +61,7 @@ void HardwareIO::setup() {
   waterSensor->setup();
   sdcard->setup();
   buzzer->setup();
+  // dht->setup();
   
 }
 
@@ -70,4 +75,5 @@ void HardwareIO::loop() {
   waterSensor->loop();
   sdcard->loop();
   buzzer->loop();
+  // dht->loop();
 }

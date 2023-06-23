@@ -86,34 +86,35 @@ public class GraphMeter extends Fragment {
         dataSet.setCircleColors(Collections.singletonList(Color.BLUE));
         dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
 
+
         lineData = new LineData(dataSet);  // อ้างอิงตัวแปร lineData เดิม
 
         lineChart.setData(lineData);
         lineChart.setDrawGridBackground(false);
         lineChart.setScaleEnabled(false);
         lineChart.setDragEnabled(false);
-        lineChart.setGridBackgroundColor(Color.BLACK);  // กำหนดสีพื้นหลังของเส้นกริด
+        lineChart.setGridBackgroundColor(Color.BLACK);
 
         XAxis xAxis = lineChart.getXAxis();
-        xAxis.setTextColor(Color.BLACK);  // กำหนดสีของตัวอักษรบนแกน x
-        xAxis.setTextSize(12f);  // กำหนดขนาดตัวอักษรบนแกน x
-        xAxis.setAxisLineColor(Color.BLACK);  // กำหนดสีของเส้นขอบแกน x
+        xAxis.setTextColor(Color.BLACK);
+        xAxis.setTextSize(12f);
+        xAxis.setAxisLineColor(Color.BLACK);
 
         YAxis yAxis = lineChart.getAxisLeft();
-        yAxis.setTextColor(Color.BLACK);  // กำหนดสีของตัวอักษรบนแกน y
-        yAxis.setTextSize(12f);  // กำหนดขนาดตัวอักษรบนแกน y
-        yAxis.setAxisLineColor(Color.BLACK);  // กำ\\
+        yAxis.setAxisMinimum(0);
+        yAxis.setAxisMaximum(14);
+        yAxis.setEnabled(false);
+
+        YAxis yAxisR = lineChart.getAxisRight();
+        yAxisR.setAxisMinimum(0);
+        yAxisR.setAxisMaximum(14);
 
         Description description = new Description();
-        description.setText("PH Graph");  // กำหนดคำอธิบายของกราฟ
-        description.setTextColor(Color.RED);  // กำหนดสีของคำอธิบาย
-        description.setTextSize(14f);  // กำหนดขนาดตัวอักษรของคำอธิบาย
+        description.setText("PH Graph");
+        description.setTextColor(Color.RED);
+        description.setTextSize(14f);
 
         lineChart.setDescription(description);
-
-//        lineChart.setVisibleXRange(0, 30);
-//        lineChart.setVisibleYRange(0, 14, YAxis.AxisDependency.LEFT);
-//        lineChart.setVisibleYRangeMaximum(14,YAxis.AxisDependency.LEFT);
 
 
         handler.post(new Runnable() {
@@ -130,7 +131,7 @@ public class GraphMeter extends Fragment {
 
     private void update() {
 
-//        float yValue = random.nextFloat() * 10;
+//        float yValue = random.nextInt(140) / 10;
         float yValue = variable.mixtankPH;
 //        variable.extension.printDebug("GraphMeter","float = " + String.valueOf(entries.size()));
 

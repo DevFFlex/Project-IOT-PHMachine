@@ -54,6 +54,9 @@ public class Comunity extends Client{
     public void setInputPH(float value){
         send(H_SET,COMMANS[0],String.valueOf(value));
     }
+    public void setInputPH_STOP(){
+        send(H_SET,COMMANS[0],"stop");
+    }
 
     public void setTimeAutoWork(String value){
         send(H_SET,COMMANS[3],String.valueOf(value));
@@ -109,9 +112,13 @@ public class Comunity extends Client{
                 if(header.equals(H_GET)){
 
                 }else if(header.equals(H_SET)){
-                    try{
-                        var.inputPH = Float.parseFloat(value);
-                    }catch (Exception e){}
+                    if(value.contains("FINISH")){
+                        var.working_ph = false;
+                    }else{
+                        try{
+                            var.inputPH = Float.parseFloat(value);
+                        }catch (Exception e){}
+                    }
                 }
                 break;
 

@@ -33,7 +33,7 @@ public class MonitorFragment extends Fragment {
 
 //    private PH_Meter_Animation ph_meter_animation;
     private TextView monitor_tvPH, monitor_tvPHNeeded,monitor_tvTimeBoard;
-    private Button monitor_btnChangePH, monitor_btnSetTime,monitor_btnMeterBack,monitor_btnMeterNext;
+    private Button monitor_btnChangePH,monitor_btnStopChangePH, monitor_btnSetTime,monitor_btnMeterBack,monitor_btnMeterNext;
     private ImageView monitor_imgUnderBar;
     private LinearLayout monitor_layout_rtctime;
 
@@ -79,6 +79,14 @@ public class MonitorFragment extends Fragment {
         if (var != null){
             monitor_tvPHNeeded.setText(String.valueOf(var.inputPH));
         }
+
+        if(var.working_ph){
+            monitor_btnChangePH.setVisibility(View.GONE);
+            monitor_btnStopChangePH.setVisibility(View.VISIBLE);
+        }else{
+            monitor_btnChangePH.setVisibility(View.VISIBLE);
+            monitor_btnStopChangePH.setVisibility(View.GONE);
+        }
     }
 
 
@@ -91,6 +99,7 @@ public class MonitorFragment extends Fragment {
         monitor_imgUnderBar = monitorFragmentView.findViewById(R.id.monitor_imgUnderBar);
 
         monitor_btnChangePH = monitorFragmentView.findViewById(R.id.monitor_btnChangePH);
+        monitor_btnStopChangePH = monitorFragmentView.findViewById(R.id.monitor_btnStopChangePH);
         monitor_btnSetTime = monitorFragmentView.findViewById(R.id.monitor_btnSetTime);
         monitor_btnMeterBack = monitorFragmentView.findViewById(R.id.monitor_btnMeterBack);
         monitor_btnMeterNext = monitorFragmentView.findViewById(R.id.monitor_btnMeterNext);
@@ -102,6 +111,7 @@ public class MonitorFragment extends Fragment {
         monitor_tvTimeBoard = monitorFragmentView.findViewById(R.id.monitor_tvTimeBoard);
 
         monitor_btnChangePH.setOnClickListener(this::onClickSetPH);
+        monitor_btnStopChangePH.setOnClickListener(this::onClickStopPHWork);
         monitor_btnSetTime.setOnClickListener(this::onClickSetTime);
         monitor_tvTimeBoard.setOnClickListener(this::onClickTimeBoard);
         monitor_btnMeterBack.setOnClickListener(this::onClickMeterBack);
@@ -125,6 +135,11 @@ public class MonitorFragment extends Fragment {
         getChildFragmentManager().beginTransaction().replace(R.id.fragMeter, meterfraglist.get(meterfrag_cursor)).commit();
     }
 
+    private void onClickStopPHWork(View v){
+        var.comunity.setInputPH_STOP();
+        var.working_ph = false;
+    }
+
     private void onClickSetPH(View v){
         var.soundEffect.play_glitch();
         var.animationOption.startAnim(monitor_btnChangePH,R.anim.btnclick_animation);
@@ -136,6 +151,11 @@ public class MonitorFragment extends Fragment {
                 var.inputPH = value;
 
                 var.comunity.setInputPH(value);
+
+
+
+                var.working_ph = true;
+
             }
         });
     }

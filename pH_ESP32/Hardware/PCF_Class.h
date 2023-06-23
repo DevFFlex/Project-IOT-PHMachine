@@ -50,6 +50,7 @@ public:
   void on(int pin);
   void off(int pin);
   void toggle(int pin);
+  void reset();
 };
 
 void POUT::setup() {
@@ -79,3 +80,10 @@ void POUT::toggle(int pin) {
   PCF.digitalWrite(pinlist[pin],status[pin]);
   Serial.println("pin " + String(pin) + "  status = " + String(status[pin]));
 }
+
+
+void POUT::reset(){
+  for(int i = 0;i<8;i++)off(i);
+}
+
+

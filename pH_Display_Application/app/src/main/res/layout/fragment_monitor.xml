@@ -204,6 +204,20 @@
                     android:textStyle="bold" />
 
                 <Button
+                    android:visibility="gone"
+                    android:id="@+id/monitor_btnStopChangePH"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_style3"
+                    android:paddingHorizontal="20dp"
+                    android:shadowColor="@color/white"
+                    android:shadowRadius="55"
+                    android:text="หยุดการปรับ pH"
+                    android:textColor="#FFFF"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+                <Button
                     android:layout_marginTop="20dp"
                     android:id="@+id/monitor_btnSetTime"
                     android:layout_width="200dp"
