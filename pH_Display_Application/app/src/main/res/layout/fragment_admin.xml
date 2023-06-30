@@ -6,297 +6,399 @@
     android:layout_height="match_parent"
     tools:context=".AdminFragment">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:background="@color/bg_simulate"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:columnCount="3"
-            android:rowCount="3"
-            android:padding="20dp"
-            >
-
-            <Button
-                android:layout_margin="2dp"
-                android:id="@+id/admin_btn_relay1"
-                android:text="Toggle\nRelay1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                />
-            <Button
-                android:layout_margin="2dp"
-                android:id="@+id/admin_btn_relay2"
-                android:text="Toggle\nRelay2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"/>
-            <Button
-                android:layout_margin="2dp"
-                android:id="@+id/admin_btn_relay3"
-                android:text="Toggle\nRelay3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"/>
-
-            <Button
-                android:layout_margin="2dp"
-                android:id="@+id/admin_btn_relay4"
-                android:text="Toggle\nRelay4"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                />
-            <Button
-                android:layout_margin="2dp"
-                android:id="@+id/admin_btn_relay5"
-                android:text="Toggle\nRelay5"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"/>
-            <Button
-                android:layout_margin="2dp"
-                android:id="@+id/admin_btn_relay6"
-                android:text="Toggle\nRelay6"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"/>
-
-
-
-        </GridLayout>
-
-        <Button
-            android:layout_gravity="center"
-            android:id="@+id/admin_btnSendTest"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/btn_style1"
-            android:paddingHorizontal="20dp"
-            android:shadowColor="@color/white"
-            android:shadowRadius="55"
-            android:text="Send Data"
-            android:textColor="#FFFF"
-            android:textSize="20dp"
-            android:textStyle="bold" />
-
         <LinearLayout
-            android:layout_marginVertical="20sp"
-            android:background="@drawable/bg_layout3"
             android:orientation="vertical"
-            android:padding="20sp"
+            android:background="#FFFF"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
-            <TextView
+            <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="PH Config"
-                android:textSize="20sp"
-                android:textColor="#45BFCF"
-                android:textAlignment="center"
-                android:textAllCaps="true"
-                android:textStyle="bold"/>
+                android:columnCount="3"
+                android:rowCount="3"
+                android:padding="20dp"
+                >
 
-            <LinearLayout
-                android:layout_marginVertical="10sp"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_weight="1"
-                    android:layout_width="0sp"
+                <Button
+                    android:background="@drawable/btn_style3"
+                    android:layout_margin="2dp"
+                    android:id="@+id/admin_btn_relay1"
+                    android:text="Toggle\nRelay1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Calibration "
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:textColor="#FFFF"/>
-
-                <EditText
-                    android:inputType="numberDecimal"
-                    android:textAlignment="center"
-                    android:id="@+id/admin_et_calibration"
-                    android:textColor="#070707"
-                    android:background="#FFFF"
-                    android:layout_weight="1"
-                    android:layout_width="0sp"
-                    android:layout_height="wrap_content"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginVertical="10sp"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_weight="1"
-                    android:layout_width="0sp"
+                    android:layout_columnWeight="1"
+                    />
+                <Button
+                    android:background="@drawable/btn_style3"
+                    android:layout_margin="2dp"
+                    android:id="@+id/admin_btn_relay2"
+                    android:text="Toggle\nRelay2"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="M "
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:textColor="#FFFF"/>
-
-                <EditText
-                    android:inputType="numberDecimal"
-                    android:textAlignment="center"
-                    android:id="@+id/admin_et_m"
-                    android:textColor="#070707"
-                    android:background="#FFFF"
-                    android:layout_weight="1"
-                    android:layout_width="0sp"
-                    android:layout_height="wrap_content"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginVertical="10sp"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_weight="1"
-                    android:layout_width="0sp"
+                    android:layout_columnWeight="1"/>
+                <Button
+                    android:background="@drawable/btn_style3"
+                    android:layout_margin="2dp"
+                    android:id="@+id/admin_btn_relay3"
+                    android:text="Toggle\nRelay3"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="VoltIn "
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:textColor="#FFFF"/>
+                    android:layout_columnWeight="1"/>
 
-                <EditText
-                    android:inputType="numberDecimal"
-                    android:textAlignment="center"
-                    android:id="@+id/admin_et_voltin"
-                    android:textColor="#070707"
-                    android:background="#FFFF"
-                    android:layout_weight="1"
-                    android:layout_width="0sp"
-                    android:layout_height="wrap_content"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginVertical="10sp"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_weight="1"
-                    android:layout_width="0sp"
+                <Button
+                    android:background="@drawable/btn_style3"
+                    android:layout_margin="2dp"
+                    android:id="@+id/admin_btn_relay4"
+                    android:text="Toggle\nRelay4"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Max Analog "
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:textColor="#FFFF"/>
+                    android:layout_columnWeight="1"
+                    />
+                <Button
+                    android:background="@drawable/btn_style3"
+                    android:layout_margin="2dp"
+                    android:id="@+id/admin_btn_relay5"
+                    android:text="Toggle\nRelay5"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"/>
+                <Button
+                    android:background="@drawable/btn_style3"
+                    android:layout_margin="2dp"
+                    android:id="@+id/admin_btn_relay6"
+                    android:text="Toggle\nRelay6"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"/>
 
-                <EditText
-                    android:inputType="numberDecimal"
-                    android:textAlignment="center"
-                    android:id="@+id/admin_et_maxAnalog"
-                    android:textColor="#070707"
-                    android:background="#FFFF"
-                    android:layout_weight="1"
-                    android:layout_width="0sp"
-                    android:layout_height="wrap_content"/>
 
-            </LinearLayout>
+
+            </GridLayout>
+
+            <Button
+                android:layout_gravity="center"
+                android:id="@+id/admin_btnSendTest"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_style1"
+                android:paddingHorizontal="20dp"
+                android:shadowColor="@color/white"
+                android:shadowRadius="55"
+                android:text="Send Data"
+                android:textColor="#FFFF"
+                android:textSize="20dp"
+                android:textStyle="bold" />
 
             <LinearLayout
-                android:layout_marginVertical="10sp"
+                android:layout_marginVertical="20sp"
+                android:background="@drawable/bg_layout3"
                 android:orientation="vertical"
+                android:padding="20sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:padding="10sp"
-                    android:background="@drawable/bg_layout7"
-                    android:layout_gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Volt = AnalogInAvg * VoltIn / Max_AnalogRead "
-                    android:textAlignment="center"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    android:textColor="#FFFF"/>
-
-                <TextView
-                    android:id="@+id/admin_tv_voltcal"
-                    android:paddingVertical="5sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="0 = 0 * 0 / 0"
+                    android:text="PH Config"
+                    android:textSize="20sp"
+                    android:textColor="#45BFCF"
                     android:textAlignment="center"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    android:textColor="#ACF3A0"/>
+                    android:textAllCaps="true"
+                    android:textStyle="bold"/>
 
-                <TextView
-                    android:background="@drawable/bg_layout7"
-                    android:layout_gravity="center"
-                    android:padding="10sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="pH = (m * Volt) + Calibration"
-                    android:textAlignment="center"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    android:textColor="#FFFF"/>
-
-                <TextView
-                    android:id="@+id/admin_tvPHcal"
-                    android:paddingVertical="5sp"
+                <LinearLayout
+                    android:layout_marginVertical="10sp"
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="0 = (0 * 0) + 0"
-                    android:textAlignment="center"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    android:textColor="#A0F3A1"/>
+                    android:layout_height="wrap_content">
 
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"
+                        android:text="Calibration "
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFF"/>
+
+                    <EditText
+                        android:inputType="numberDecimal"
+                        android:textAlignment="center"
+                        android:id="@+id/admin_et_calibration"
+                        android:textColor="#070707"
+                        android:background="#FFFF"
+                        android:layout_weight="1"
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginVertical="10sp"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"
+                        android:text="M "
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFF"/>
+
+                    <EditText
+                        android:inputType="numberDecimal"
+                        android:textAlignment="center"
+                        android:id="@+id/admin_et_m"
+                        android:textColor="#070707"
+                        android:background="#FFFF"
+                        android:layout_weight="1"
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginVertical="10sp"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"
+                        android:text="VoltIn "
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFF"/>
+
+                    <EditText
+                        android:inputType="numberDecimal"
+                        android:textAlignment="center"
+                        android:id="@+id/admin_et_voltin"
+                        android:textColor="#070707"
+                        android:background="#FFFF"
+                        android:layout_weight="1"
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginVertical="10sp"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"
+                        android:text="Max Analog "
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFF"/>
+
+                    <EditText
+                        android:inputType="numberDecimal"
+                        android:textAlignment="center"
+                        android:id="@+id/admin_et_maxAnalog"
+                        android:textColor="#070707"
+                        android:background="#FFFF"
+                        android:layout_weight="1"
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginVertical="10sp"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:padding="10sp"
+                        android:background="@drawable/bg_layout7"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Volt = AnalogInAvg * VoltIn / Max_AnalogRead "
+                        android:textAlignment="center"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFF"/>
+
+                    <TextView
+                        android:id="@+id/admin_tv_voltcal"
+                        android:paddingVertical="5sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="0 = 0 * 0 / 0"
+                        android:textAlignment="center"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="#ACF3A0"/>
+
+                    <TextView
+                        android:background="@drawable/bg_layout7"
+                        android:layout_gravity="center"
+                        android:padding="10sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="pH = (m * Volt) + Calibration"
+                        android:textAlignment="center"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFF"/>
+
+                    <TextView
+                        android:id="@+id/admin_tvPHcal"
+                        android:paddingVertical="5sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="0 = (0 * 0) + 0"
+                        android:textAlignment="center"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="#A0F3A1"/>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginVertical="10sp"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <Button
+                        android:id="@+id/admin_btn_arduinoSetvalue"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Set Value"/>
+
+                    <Button
+                        android:id="@+id/admin_btn_arduinoGetdefault"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Set Default"/>
+
+                    <Switch
+                        android:text="Realtime Cal"
+                        android:textColor="#FFFF"
+                        android:textStyle="bold"
+                        android:textSize="15sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+
+                </LinearLayout>
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginVertical="10sp"
-                android:gravity="center"
+                android:padding="20sp"
+                android:orientation="vertical"
+                android:background="@drawable/bg_layout3"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="400sp">
 
-                <Button
-                    android:id="@+id/admin_btn_arduinoSetvalue"
-                    android:layout_gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Set Value"/>
+                <LinearLayout
+                    android:layout_marginHorizontal="50sp"
+                    android:background="#011720"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                <Button
-                    android:id="@+id/admin_btn_arduinoGetdefault"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Set Default"/>
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"
+                        android:text="Float Switch Tank"
+                        android:textAlignment="center"
+                        android:textSize="20sp"
+                        android:textColor="#FFF"/>
 
-                <Switch
-                    android:text="Realtime Cal"
-                    android:textColor="#FFFF"
-                    android:textStyle="bold"
-                    android:textSize="15sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"
+                        android:text="True"
+                        android:textAlignment="center"
+                        android:textSize="20sp"
+                        android:textColor="#4CAF50"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginHorizontal="50sp"
+                    android:background="#011720"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"
+                        android:text="Float Switch MixTank"
+                        android:textAlignment="center"
+                        android:textSize="20sp"
+                        android:textColor="#FFF"/>
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"
+                        android:text="True"
+                        android:textAlignment="center"
+                        android:textSize="20sp"
+                        android:textColor="#4CAF50"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginHorizontal="50sp"
+                    android:background="#011720"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"
+                        android:text="Float Switch VPlot"
+                        android:textAlignment="center"
+                        android:textSize="20sp"
+                        android:textColor="#FFF"/>
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"
+                        android:text="True"
+                        android:textAlignment="center"
+                        android:textSize="20sp"
+                        android:textColor="#4CAF50"/>
+
+                </LinearLayout>
 
 
             </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
+
+    </ScrollView>
 
 </FrameLayout>

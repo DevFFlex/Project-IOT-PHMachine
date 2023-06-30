@@ -8,16 +8,12 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.phprojectapp.ClassEx.ComunityListener;
-import com.example.phprojectapp.ClassEx.Variable;
-
-import org.w3c.dom.Text;
+import com.example.phprojectapp.Variable.Variable;
 
 import java.util.ArrayList;
 

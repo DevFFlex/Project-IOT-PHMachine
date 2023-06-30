@@ -41,7 +41,7 @@ public:
   void setup();
   void loop();
 
-  void clearTextNow();
+  void clearBuffer();
 };
 
 void KeypadInput::setup() {
@@ -55,14 +55,8 @@ void KeypadInput::loop() {
   if (key) {
 
     char key_char = key;
-    if (key == 'D') {
-      if (onEnterCallback != NULL)onEnterCallback(text_buffer);
-      text_buffer = "";
-      if (onKeypressCallback != NULL)onKeypressCallback(key,text_buffer);
-      return;
-    } else if (key == '*') key_char = '.';
-
-
+    
+    if (key == '*') key_char = '.';
 
     text_buffer += String(key_char);
 
@@ -70,7 +64,7 @@ void KeypadInput::loop() {
   }
 }
 
-void KeypadInput::clearTextNow() {
+void KeypadInput::clearBuffer() {
   text_buffer = "";
 }
 

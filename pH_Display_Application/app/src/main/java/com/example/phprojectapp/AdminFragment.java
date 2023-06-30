@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,14 +13,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.phprojectapp.ClassEx.OnComunityEventListener;
-import com.example.phprojectapp.ClassEx.Variable;
+import com.example.phprojectapp.Variable.Variable;
 import com.example.phprojectapp.Dialog.DialogEventListener;
 import com.example.phprojectapp.Dialog.TestDialog;
 
 
 public class AdminFragment extends Fragment {
     private Variable var;
-    private Button btn_relay1,btn_relay2,btn_relay3,btn_relay4,btn_relay5,btn_relay6,btn_sendData;
+    private Button btn_relay[] = new Button[6];
+    private Button btn_sendData;
     private Button btn_setArduinoValue,btn_setArduinoDefault;
     private EditText et_calibrate,et_m,et_voltin,et_maxanalog;
     private TextView voltcal,phcal;
@@ -42,12 +44,12 @@ public class AdminFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_admin, container, false);
 
-        btn_relay1 = v.findViewById(R.id.admin_btn_relay1);
-        btn_relay2 = v.findViewById(R.id.admin_btn_relay2);
-        btn_relay3 = v.findViewById(R.id.admin_btn_relay3);
-        btn_relay4 = v.findViewById(R.id.admin_btn_relay4);
-        btn_relay5 = v.findViewById(R.id.admin_btn_relay5);
-        btn_relay6 = v.findViewById(R.id.admin_btn_relay6);
+        btn_relay[0] = v.findViewById(R.id.admin_btn_relay1);
+        btn_relay[1] = v.findViewById(R.id.admin_btn_relay2);
+        btn_relay[2] = v.findViewById(R.id.admin_btn_relay3);
+        btn_relay[3] = v.findViewById(R.id.admin_btn_relay4);
+        btn_relay[4] = v.findViewById(R.id.admin_btn_relay5);
+        btn_relay[5] = v.findViewById(R.id.admin_btn_relay6);
         btn_sendData = v.findViewById(R.id.admin_btnSendTest);
 
         btn_setArduinoValue = v.findViewById(R.id.admin_btn_arduinoSetvalue);
@@ -65,25 +67,27 @@ public class AdminFragment extends Fragment {
         btn_setArduinoDefault.setOnClickListener(this::onClickSetArduinoDefaultValue);
 
 
-        btn_relay1.setOnClickListener(this::onToggleRelay1);
-        btn_relay2.setOnClickListener(this::onToggleRelay2);
-        btn_relay3.setOnClickListener(this::onToggleRelay3);
-        btn_relay4.setOnClickListener(this::onToggleRelay4);
-        btn_relay5.setOnClickListener(this::onToggleRelay5);
-        btn_relay6.setOnClickListener(this::onToggleRelay6);
+        btn_relay[0].setOnClickListener(this::onToggleRelay1);
+        btn_relay[1].setOnClickListener(this::onToggleRelay2);
+        btn_relay[2].setOnClickListener(this::onToggleRelay3);
+        btn_relay[3].setOnClickListener(this::onToggleRelay4);
+        btn_relay[4].setOnClickListener(this::onToggleRelay5);
+        btn_relay[5].setOnClickListener(this::onToggleRelay6);
         btn_sendData.setOnClickListener(this::onSendData);
 
-        var.comunity.setOnComunityEventListener(new OnComunityEventListener() {
+        Handler handler = new Handler();
+        handler.post(new Runnable() {
             @Override
-            public void onCMVM(float clb, float m, float voltin, float max_analog, float analogAvg) {
-                var.cmvmObject.calibration = clb;
-                var.cmvmObject.m = m;
-                var.cmvmObject.voltin = voltin;
-                var.cmvmObject.max_analog = max_analog;
-                var.cmvmObject.analogAvg = analogAvg;
-
+            public void run() {
                 voltcal.setText(var.cmvmObject.calVoltString());
                 phcal.setText(var.cmvmObject.calPHString());
+
+                for(int i = 0;i<6;i++){
+                    if(var.relay_status[i])btn_relay[i].setBackgroundResource(R.drawable.btn_style4);
+                    else btn_relay[i].setBackgroundResource(R.drawable.btn_style3);
+                }
+
+                handler.postDelayed(this,1000);
             }
         });
 

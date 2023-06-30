@@ -63,7 +63,6 @@ public class Extension{
 
         final String CHANNEL_ID = "my_channel_id";
         NotificationCompat.Builder notify_builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.drawable.icon_png1)
                 .setContentTitle(header)
                 .setContentText(description)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);

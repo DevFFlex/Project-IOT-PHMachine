@@ -9,7 +9,7 @@
         android:paddingHorizontal="10sp"
         android:paddingVertical="3sp"
         android:id="@+id/chat_item_layoutL"
-        android:background="@color/background"
+        android:background="@color/bg"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

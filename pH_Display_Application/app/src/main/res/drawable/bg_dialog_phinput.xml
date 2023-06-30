@@ -6,7 +6,7 @@
         android:width="100dp"
         android:height="100dp"/>
 
-    <solid android:color="@color/bg_simulate" />
+    <solid android:color="@color/bg" />
     <corners android:radius="200dp" />
     <stroke
         android:width="10dp"

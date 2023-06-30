@@ -4,10 +4,13 @@
 
 // PCF8574 PCF(0x21);
 
+#define RELAY_ALL_PIN 25
+
 class POUT {
 private:
   PCF8574 PCF;
   bool status_setup = true;
+  Timer t_active;
 
   int pinlist[8] = {
     P0,
@@ -20,6 +23,9 @@ private:
     P7
   };
 
+
+public:
+
   int status[8] = {
     false,
     false,
@@ -30,8 +36,7 @@ private:
     false
   };
 
-public:
-  POUT() : PCF(0x21) {
+  POUT() : PCF(0x21) , t_active(3000) {
 
     PCF.pinMode(pinlist[0], OUTPUT);
     PCF.pinMode(pinlist[1], OUTPUT);
@@ -42,10 +47,15 @@ public:
     PCF.pinMode(pinlist[6], OUTPUT);
     PCF.pinMode(pinlist[7], OUTPUT);
     PCF.begin();
+
+    pinMode(RELAY_ALL_PIN,OUTPUT);
   }
 
   void setup();
   void loop();
+
+  void active();
+  void deactive();
 
   void on(int pin);
   void off(int pin);
@@ -58,7 +68,20 @@ void POUT::setup() {
 }
 
 void POUT::loop() {
-  
+  if(t_active.isExpired() && status_setup){
+    status_setup = false;
+    active();
+  }
+}
+
+void POUT::active(){
+  digitalWrite(RELAY_ALL_PIN,HIGH);
+  Serial.println("Relay Active");
+}
+
+void POUT::deactive(){
+  digitalWrite(RELAY_ALL_PIN,LOW);
+  Serial.println("Relay DeActive");
 }
 
 

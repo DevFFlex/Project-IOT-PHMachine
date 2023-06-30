@@ -7,10 +7,14 @@
 #include "Hardware/WaterSensor_Class.h"
 #include "Hardware/SD_Class.h"
 #include "Hardware/Buzzer.h"
-// #include "Hardware/DHT_Sensor.h"
+#include "Hardware/DHT_Sensor.h"
+#include "Hardware/FloatSwitch.h"
 
+class HardwareIO
+{
+private:
+  Variable *var;
 
-class HardwareIO {
 public:
   LcdOutput *lcdOutput;
   KeypadInput *keypadInput;
@@ -20,9 +24,15 @@ public:
   WaterSensor *waterSensor;
   SDCard *sdcard;
   Buzzer *buzzer;
-  // DHT_Sensor *dht;
+  DTHSensor *dthsensor;
+  FloatSwitch *floatswitch;
 
-  HardwareIO() {
+  Timer t_update;
+
+  HardwareIO(Variable *varIn) : t_update(500)
+  {
+    var = varIn;
+
     lcdOutput = new LcdOutput();
     keypadInput = new KeypadInput();
     rtc = new RTC();
@@ -31,15 +41,16 @@ public:
     waterSensor = new WaterSensor();
     sdcard = new SDCard();
     buzzer = new Buzzer();
-    // dht = new DHT_Sensor();
+    dthsensor = new DTHSensor();
+    floatswitch = new FloatSwitch();
   }
 
   void setup();
-
   void loop();
+  void updateVar();
 
-
-  ~HardwareIO() {
+  ~HardwareIO()
+  {
     delete lcdOutput;
     delete keypadInput;
     delete rtc;
@@ -47,12 +58,13 @@ public:
     delete waterSensor;
     delete sdcard;
     delete buzzer;
-    // delete dht;
+    delete dthsensor;
+    delete floatswitch;
   }
 };
 
-
-void HardwareIO::setup() {
+void HardwareIO::setup()
+{
   lcdOutput->setup();
   keypadInput->setup();
   rtc->setup();
@@ -61,12 +73,12 @@ void HardwareIO::setup() {
   waterSensor->setup();
   sdcard->setup();
   buzzer->setup();
-  // dht->setup();
-  
+  dthsensor->setup();
+  floatswitch->setup();
 }
 
-
-void HardwareIO::loop() {
+void HardwareIO::loop()
+{
   lcdOutput->loop();
   keypadInput->loop();
   rtc->loop();
@@ -75,5 +87,20 @@ void HardwareIO::loop() {
   waterSensor->loop();
   sdcard->loop();
   buzzer->loop();
-  // dht->loop();
+  dthsensor->loop();
+  floatswitch->loop();
+}
+
+void HardwareIO::updateVar()
+{
+  if (t_update.isExpired())
+  {
+    var->mixTank_pH = pHSensor->getPH();
+    var->humidity = dthsensor->getHumidity();
+    var->tempC = dthsensor->getTempC();
+
+    var->floatswitch_status.tank = floatswitch->getF1();
+    var->floatswitch_status.mixtank = floatswitch->getF2();
+    var->floatswitch_status.plot = floatswitch->getF3();
+  }
 }

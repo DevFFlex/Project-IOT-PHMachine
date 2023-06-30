@@ -5,24 +5,18 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.PreferenceManager;
-
-import java.io.IOException;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.example.phprojectapp.ClassEx.*;
-import com.example.phprojectapp.MonitorFragmentObject.MonitorFragment;
+import com.example.phprojectapp.Variable.Variable;
 
 public class MainPage extends AppCompatActivity {
 

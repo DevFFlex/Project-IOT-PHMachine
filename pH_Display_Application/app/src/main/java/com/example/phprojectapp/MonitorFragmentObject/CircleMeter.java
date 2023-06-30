@@ -10,10 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.phprojectapp.ClassEx.Variable;
+import com.example.phprojectapp.Variable.Variable;
 import com.example.phprojectapp.R;
-
-import org.w3c.dom.Text;
 
 public class CircleMeter extends Fragment {
     private View view;

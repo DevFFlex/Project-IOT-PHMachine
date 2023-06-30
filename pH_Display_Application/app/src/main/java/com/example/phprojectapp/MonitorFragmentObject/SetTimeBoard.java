@@ -2,7 +2,6 @@ package com.example.phprojectapp.MonitorFragmentObject;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -10,14 +9,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 
-import com.example.phprojectapp.ClassEx.TimeBoardObject;
+import com.example.phprojectapp.Variable.TimeBoardObject;
 import com.example.phprojectapp.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.TimeZone;
 
 interface SetTimeBoardEvent{
@@ -136,11 +133,11 @@ public class SetTimeBoard extends AlertDialog.Builder {
 
     private void setObjectFormat(int index,Spinner spinner){
         if(spinner.equals(spin_dayofweek)){
-            timeBoardObject.setDayofweek(index + 1);
+            timeBoardObject.dayofweek = index + 1;
         }else if(spinner.equals(spin_month)){
-            timeBoardObject.setMonth(index + 1);
+            timeBoardObject.month = index + 1;
         }else if(spinner.equals(spin_year)){
-            timeBoardObject.setYear(Integer.valueOf(yearString[index]));
+            timeBoardObject.year = Integer.valueOf(yearString[index]);
         }
     }
 
@@ -157,11 +154,11 @@ public class SetTimeBoard extends AlertDialog.Builder {
 
     private void onClickOk(View v){
 
-        timeBoardObject.setHour(Integer.valueOf(et_hour.getText().toString()));
-        timeBoardObject.setMinute(Integer.valueOf(et_minute.getText().toString()));
-        timeBoardObject.setSecond(Integer.valueOf(et_second.getText().toString()));
+        timeBoardObject.hour = Integer.valueOf(et_hour.getText().toString());
+        timeBoardObject.minute = Integer.valueOf(et_minute.getText().toString());
+        timeBoardObject.second = Integer.valueOf(et_second.getText().toString());
 
-        timeBoardObject.setDayofmonth(Integer.valueOf(et_dayofmonth.getText().toString()));
+        timeBoardObject.dayofmonth = Integer.valueOf(et_dayofmonth.getText().toString());
 
         if(timeBoardObject.isEmptyAll())return;
 

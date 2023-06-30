@@ -103,7 +103,7 @@ class CirclePHBall{ //----------------------------------------------------------
         circle1_paint.setColor(color);
 
         Paint circle2_paint = new Paint();
-        circle2_paint.setColor(ContextCompat.getColor(view.getContext(), R.color.bg_simulate));
+        circle2_paint.setColor(ContextCompat.getColor(view.getContext(), R.color.bg));
 
         Paint text_paint = new Paint();
         text_paint.setColor(color);

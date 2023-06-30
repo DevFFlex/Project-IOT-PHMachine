@@ -23,6 +23,8 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:layout_marginVertical="10sp"
+            android:padding="20sp"
             android:orientation="vertical"
             android:id="@+id/listtime_itemView"
             android:background="@drawable/layout_style1"

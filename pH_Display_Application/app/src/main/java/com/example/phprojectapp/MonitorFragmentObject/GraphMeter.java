@@ -9,22 +9,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.phprojectapp.ClassEx.Variable;
+import com.example.phprojectapp.Variable.Variable;
 import com.example.phprojectapp.R;
 
 import android.graphics.Color;
-import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
+
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-import com.github.mikephil.charting.formatter.ValueFormatter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -78,11 +74,15 @@ public class GraphMeter extends Fragment {
 
 
         dataSet = new LineDataSet(entries, "PH");  // อ้างอิงตัวแปร dataSet เดิม
+        dataSet.setFillColor(Color.WHITE);
+        dataSet.setValueTextColor(Color.WHITE);
+
         dataSet.clear();
         lineChart.clear();
         time = 0;
         dataSet.setColors(Color.RED);
         dataSet.setLineWidth(5f);
+        dataSet.setValueTextSize(10f);
         dataSet.setCircleColors(Collections.singletonList(Color.BLUE));
         dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
 
@@ -90,15 +90,16 @@ public class GraphMeter extends Fragment {
         lineData = new LineData(dataSet);  // อ้างอิงตัวแปร lineData เดิม
 
         lineChart.setData(lineData);
-        lineChart.setDrawGridBackground(false);
+//        lineChart.setDrawGridBackground(false);
         lineChart.setScaleEnabled(false);
         lineChart.setDragEnabled(false);
-        lineChart.setGridBackgroundColor(Color.BLACK);
+        lineChart.setGridBackgroundColor(Color.BLUE);
+        lineChart.setBackgroundColor(Color.BLACK);
 
         XAxis xAxis = lineChart.getXAxis();
-        xAxis.setTextColor(Color.BLACK);
         xAxis.setTextSize(12f);
-        xAxis.setAxisLineColor(Color.BLACK);
+        xAxis.setTextColor(Color.YELLOW);
+        xAxis.setEnabled(false);
 
         YAxis yAxis = lineChart.getAxisLeft();
         yAxis.setAxisMinimum(0);
@@ -108,10 +109,11 @@ public class GraphMeter extends Fragment {
         YAxis yAxisR = lineChart.getAxisRight();
         yAxisR.setAxisMinimum(0);
         yAxisR.setAxisMaximum(14);
+        yAxisR.setTextColor(Color.YELLOW);
 
         Description description = new Description();
-        description.setText("PH Graph");
-        description.setTextColor(Color.RED);
+        description.setText("Graph");
+        description.setTextColor(Color.WHITE);
         description.setTextSize(14f);
 
         lineChart.setDescription(description);
@@ -153,9 +155,6 @@ public class GraphMeter extends Fragment {
         data.notifyDataChanged();
 
         lineChart.notifyDataSetChanged();
-//        lineChart.setVisibleXRangeMaximum(MAX_RANGE);
-//        lineChart.moveViewToX(data.getEntryCount());
-
         lineChart.invalidate();
 
 

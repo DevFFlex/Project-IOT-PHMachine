@@ -2,11 +2,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
-        app:title="@string/messages_header">
+        app:title="Header">
 
         <EditTextPreference
             app:key="signature"
-            app:title="@string/signature_title"
+            app:title="title"
             app:useSimpleSummaryProvider="true" />
 
         <ListPreference
@@ -14,23 +14,23 @@
             app:entries="@array/reply_entries"
             app:entryValues="@array/reply_values"
             app:key="reply"
-            app:title="@string/reply_title"
+            app:title="title"
             app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/sync_header">
+    <PreferenceCategory app:title="Header">
 
         <SwitchPreferenceCompat
             app:key="sync"
-            app:title="@string/sync_title" />
+            app:title="text" />
 
         <SwitchPreferenceCompat
             app:dependency="sync"
             app:key="attachment"
-            app:summaryOff="@string/attachment_summary_off"
-            app:summaryOn="@string/attachment_summary_on"
-            app:title="@string/attachment_title" />
+            app:summaryOff="off"
+            app:summaryOn="on"
+            app:title="text" />
 
     </PreferenceCategory>
 

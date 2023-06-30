@@ -1,11 +1,12 @@
 package com.example.phprojectapp.ClassEx;
 
+import com.example.phprojectapp.Variable.Variable;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Random;
 
 
 interface ClientEventListener{
@@ -92,7 +93,7 @@ public class Client{
                             if (c == endKeyword){
                                 var.extension.printDebug("Client","Message = " + message);
                                 if (message != ""){
-                                    if (!message.contains(":"))return;
+                                    if (!message.contains(":") || !message.contains("="))return;
 
                                     String[] data = message.split(":");
                                     String header = data[0].trim();

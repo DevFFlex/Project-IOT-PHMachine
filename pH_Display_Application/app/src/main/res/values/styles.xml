@@ -1,44 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-    <!-- สไตล์สำหรับโหมด Light Mode -->
-    <item name="colorPrimary">@color/colorPrimary_light</item>
-    <item name="colorAccent">@color/colorAccent_light</item>
-</style>
-
-    <style name="AppTheme.Dark" parent="Theme.AppCompat.NoActionBar">
-        <!-- สไตล์สำหรับโหมด Dark Mode -->
-        <item name="colorPrimary">@color/colorPrimary_dark</item>
-        <item name="colorAccent">@color/colorAccent_dark</item>
+    <style name="PH_Theme.Light" parent="Theme.Design.NoActionBar">
+        <!-- สไตล์สำหรับโหมด Light Mode -->
+        <item name="colorPrimary">#FFFF</item>
+        <item name="colorAccent">#FFD500</item>
     </style>
 
-    <style name="AppTheme.Default" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- สไตล์สำหรับโหมด Default (ไม่มีการเปลี่ยนแปลงโหมดสี) -->
-        <item name="colorPrimary">@color/colorPrimary_light</item>
-        <item name="colorAccent">@color/colorAccent_light</item>
-    </style>
-
-
-
-    <style
-        name="MyPreferenceStyle"
-        parent="@style/PreferenceThemeOverlay.v14.Material">
-
-        <item name="android:textAppearance">@style/MyPreferenceStyle</item>
-
-    </style>
-
-    <style
-        name="MyPreferenceTextAppearance"
-        parent="TextAppearance.MaterialComponents.Subtitle1">
-        <item name="android:textColor">#FF0000</item>
-
-    </style>
 
     <style name="MyAlertDialogAnimation">
         <item name="android:windowEnterAnimation">@anim/my_enter_animation</item>
         <item name="android:windowExitAnimation">@anim/my_exit_animation</item>
+    </style>
+    
+    <style name="TEXT">
+        <item name="android:color">#474747</item>
     </style>
 
 

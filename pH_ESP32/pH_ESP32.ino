@@ -10,22 +10,20 @@
 #include "SerialInput.h"
 #include "UserInterface.h"
 
-#include "Work.h"
+#include "PHAdjustmentProcess.h"
 
 
 Variable *var = new Variable();
-HardwareIO *hardwareIO = new HardwareIO();
+HardwareIO *hardwareIO = new HardwareIO(var);
 Database *db = new Database(var, hardwareIO);
 ArduinoComunity *ardunoComunity = new ArduinoComunity(var, hardwareIO);
 
 Comunity *comunity = new Comunity(var, hardwareIO, db, ardunoComunity);
 
-
 SerialInput *sInput = new SerialInput(var, hardwareIO, comunity, ardunoComunity);
 UserInterface *ui = new UserInterface(var, hardwareIO, comunity);
 
-Work *work = new Work(var,hardwareIO,comunity);
-
+PHAdjustmentProcess *phAP = new PHAdjustmentProcess(var,hardwareIO,comunity);
 
 
 void setup() {
@@ -37,7 +35,7 @@ void setup() {
   comunity->setup();
   sInput->setup();
   ui->setup();
-  work->setup();
+  phAP->setup();
 }
 
 void loop() {
@@ -48,8 +46,6 @@ void loop() {
   comunity->loop();
   sInput->loop();
   ui->loop();
-  work->loop();
+  phAP->loop();
 
 }
-
-

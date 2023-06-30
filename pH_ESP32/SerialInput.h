@@ -63,6 +63,20 @@ void SerialInput::loop()
                 data.replace("buzzer", "");
                 hardwareIO->buzzer->freq = data.toInt();
             }
+
+            if (data.indexOf("relay active") != -1)
+            {
+                data.replace("relay active", "");
+                hardwareIO->relay->active();
+                Serial.println("r ac");
+            }
+
+            if (data.indexOf("relay deactive") != -1)
+            {
+                data.replace("relay deactive", "");
+                hardwareIO->relay->deactive();
+                Serial.println("r da");
+            }
         
             if (data.indexOf("sd rem ") != -1){
                 data.replace("sd rem ","");

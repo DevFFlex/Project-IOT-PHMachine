@@ -1,44 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- สีสำหรับโหมด Light Mode -->
-    <color name="colorPrimary_light">#RRGGBB</color>
-    <color name="colorAccent_light">#RRGGBB</color>
-    <!-- สีสำหรับโหมด Dark Mode -->
-    <color name="colorPrimary_dark">#RRGGBB</color>
-    <color name="colorAccent_dark">#RRGGBB</color>
-    <!-- สีสำหรับโหมด Default (ไม่มีการเปลี่ยนแปลงโหมดสี) -->
-    <color name="colorPrimary_default">#RRGGBB</color>
-    <color name="colorAccent_default">#RRGGBB</color>
-
-    <color name="purple_200">#FFFFFFFF</color>
-    <color name="purple_500">#FFFFFFFF</color>
-    <color name="purple_700">#FFFFFFFF</color>
-    <color name="teal_200">#FFFFFFFF</color>
-    <color name="teal_700">#FFFFFFFF</color>
-    <color name="black">#FFFFFFFF</color>
+    <color name="black">#000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="background">#000000</color>
-    <color name="primary">#FFFFFFFF</color>
-    <color name="primaryDark">#FFFFFFFF</color>
-    <color name="accent">#FFFFFFFF</color>
-    <color name="textPrimary">#FFFFFF</color>
-    <color name="textSecondary">#B3B3B3</color>
-
-    <color name="bg_TT">#FFFFFFFF</color>
-    <color name="bg_CC">#FFFFFFFF</color>
-    <color name="bg_IADD">#FFFFFFFF</color>
-        <color name="bg_IADD_SC">#FFFFFFFF</color>
-        <color name="bg_IADD_IP">#FFFFFFFF</color>
-
-
-<!--    mainpage && monitor-->
-    <color name="fg_default">#FFFFFF</color>
-    <color name="bg_simulate">#070707</color>
-    <color name="bg_simulate_bar">#011639</color>
-
-
+    <color name="bg">#00030C</color>
 
 
 </resources>

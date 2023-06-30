@@ -29,7 +29,7 @@
             android:text="0.0"
             android:textAlignment="center"
             android:textSize="100dp"
-            android:textColor="@color/fg_default"
+            android:textColor="#FFFF"
             android:textStyle="bold" />
 
 

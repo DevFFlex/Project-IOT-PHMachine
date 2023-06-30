@@ -11,9 +11,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.phprojectapp.ClassEx.Variable;
-
-import org.w3c.dom.Text;
+import com.example.phprojectapp.Variable.Variable;
 
 
 public class FileFragment extends Fragment {

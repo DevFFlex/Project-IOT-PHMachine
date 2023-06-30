@@ -3,8 +3,6 @@
 #define RX2pin 16
 #define TX2pin 17
 
-// SoftwareSerial arduino(10, 11);
-
 class ArduinoComunity
 {
 private:
@@ -51,14 +49,14 @@ void ArduinoComunity::loop()
   if (data_buffer != "")
   {
     data_buffer.trim();
-    // Serial.println(""); 
+    Serial.println("data_buffer = " + data_buffer ); 
 
-    var->strManager->split(item, data_buffer, ",", 6);
+    /*var->strManager->split(item, data_buffer, ",", 6);
   
     for (int i = 0;i < 6;i++){
       var->strManager->split(c_v,item[i],"=",2);
       onRecv(c_v[0], c_v[1]);
-    }
+    }*/
 
 
     data_buffer = "";
@@ -73,23 +71,23 @@ void ArduinoComunity::onRecv(String command, String value)
   }
 
   if(command.indexOf("SE_CLB") != -1){
-    var->phCalibrateSet->calibrate = value.toFloat();
+    var->phCalibrateSet.calibrate = value.toFloat();
   }
 
   if(command.indexOf("SE_MP")!= -1){
-    var->phCalibrateSet->m = value.toFloat();
+    var->phCalibrateSet.m = value.toFloat();
   }
 
   if(command.indexOf("SE_VOLTIN")!= -1){
-    var->phCalibrateSet->voltin = value.toFloat();
+    var->phCalibrateSet.voltin = value.toFloat();
   }
 
   if(command.indexOf("SE_MAX_ANALOG")!= -1){
-    var->phCalibrateSet->max_analog = value.toFloat();
+    var->phCalibrateSet.max_analog = value.toFloat();
   }
 
   if(command.indexOf("SE_ANALOG_AVG") != -1){
-    var->phCalibrateSet->analogAvg = value.toFloat();
+    var->phCalibrateSet.analogAvg = value.toFloat();
   }
 
 }
@@ -108,8 +106,9 @@ void ArduinoComunity::setValueAll(String clb = "DE",String m = "DE",String voltI
 }
 void ArduinoComunity::displayCMVM(){
   Serial.println("----------------------------------------------");
-  Serial.println("Calibrate : " + String(var->phCalibrateSet->calibrate));
-  Serial.println("M : " + String(var->phCalibrateSet->m));
-  Serial.println("VoltIn : " + String(var->phCalibrateSet->voltin));
-  Serial.println("Max Analog : " + String(var->phCalibrateSet->max_analog));
+  Serial.println("Calibrate : " + String(var->phCalibrateSet.calibrate));
+  Serial.println("M : " + String(var->phCalibrateSet.m));
+  Serial.println("VoltIn : " + String(var->phCalibrateSet.voltin));
+  Serial.println("Max Analog : " + String(var->phCalibrateSet.max_analog));
+  Serial.println("Analog Avg: " + String(var->phCalibrateSet.analogAvg));
 }

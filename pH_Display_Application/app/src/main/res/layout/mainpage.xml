@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="@color/bg_simulate_bar"
+            android:background="@color/bg"
             android:orientation="vertical"
             android:paddingVertical="5sp">
 
@@ -66,7 +66,7 @@
     </LinearLayout>
 
     <FrameLayout
-        android:background="#FFFF"
+        android:background="@color/bg"
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -75,6 +75,8 @@
 
 
     <LinearLayout
+        android:padding="10sp"
+        android:background="@color/bg"
         android:id="@+id/mainpage_chatInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -112,71 +114,64 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:text="NULL"
-            android:textColor="@color/fg_default" />
+            android:textColor="#FFFF" />
     </LinearLayout>
-    <HorizontalScrollView
-        android:background="@color/bg_simulate_bar"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
+        android:gravity="center">
 
-        <LinearLayout
-            android:scrollbarAlwaysDrawHorizontalTrack="true"
-            android:scrollbarAlwaysDrawVerticalTrack="false"
-            android:gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="#252525">
 
-            <Button
-                android:id="@+id/mainpage_btn3"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Admin"
-                />
+                android:background="@color/bg"
+                android:gravity="center"
+                android:scrollbarAlwaysDrawHorizontalTrack="true"
+                android:scrollbarAlwaysDrawVerticalTrack="false">
 
-            <Button
-                android:id="@+id/mainpage_btn2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Setting"
-                />
+                <Button
+                    android:id="@+id/mainpage_btn3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Admin" />
 
-            <Button
-                android:id="@+id/mainpage_btn1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Home" />
+                <Button
+                    android:id="@+id/mainpage_btn2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Setting" />
 
-            <Button
-                android:id="@+id/mainpage_btn4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Chat" />
+                <Button
+                    android:id="@+id/mainpage_btn1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Home" />
 
-            <Button
-                android:id="@+id/mainpage_btn5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="File" />
+                <Button
+                    android:id="@+id/mainpage_btn4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Chat" />
 
-
-
-<!--            <Button-->
-<!--                android:id="@+id/btn_connect2server"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="center_horizontal"-->
-<!--                android:layout_marginTop="20dp"-->
-<!--                android:background="@drawable/bg_btn_ms1"-->
-<!--                android:paddingHorizontal="10dp"-->
-<!--                android:text="เชื่อมต่อบอร์ด"-->
-<!--                android:textColor="#FFFF"-->
-<!--                android:textSize="20dp"-->
-<!--                android:textStyle="bold" />-->
-
-        </LinearLayout>
+                <Button
+                    android:id="@+id/mainpage_btn5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="File" />
 
 
-    </HorizontalScrollView>
+            </LinearLayout>
+
+
+        </HorizontalScrollView>
+
+    </LinearLayout>
 
 </LinearLayout>

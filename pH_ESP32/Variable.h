@@ -1,26 +1,36 @@
 #include "VarObject/TimerAutoWork.h"
 #include "VarObject/PHCalibrateSet.h"
 
-class Work_Variable{
-  public:
+typedef struct WorkVarStruct {
   int step = 0;
   bool working_status = false;
   bool working_status_setup = true;
-  bool change_step = false;
-};
+  bool working_step_setup = false;
+} WorkVar;
+
+typedef struct FloatSwitchStatusStruct {
+  bool tank = false;
+  bool mixtank = false;
+  bool plot = false;
+} FloatSwitchStatus;
+
 
 class Variable {
 
 public:
+  StringManager *strManager = new StringManager();
+
   float input_ph = 0;
   float mixTank_pH = 0;
-  float temp = 0;
-  TimerAutoWork *timerautowork = new TimerAutoWork[4];
-  PHCalibrateSet *phCalibrateSet = new PHCalibrateSet();
+  float tempC = 0;
+  float humidity = 0;
 
-  StringManager *strManager = new StringManager();
-  
-  Work_Variable workVar;
+  FloatSwitchStatus floatswitch_status;
+
+  WorkVar workVar;
+
+  TimerAutoWork *timerautowork = new TimerAutoWork[4];
+  PHCalibrateSet phCalibrateSet;
 
   float onClientRequestStatus = false;
 

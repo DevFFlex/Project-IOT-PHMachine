@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".MonitorFragmentObject.Step1">
+
+    <LinearLayout
+        android:visibility="visible"
+        android:id="@+id/monitor_layout_step1"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="500sp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Step 1"
+            android:textSize="30sp"
+            android:textAlignment="center"/>
+
+        <ImageView
+            android:layout_marginTop="100sp"
+            android:layout_gravity="center"
+            android:layout_width="200sp"
+            android:layout_height="200sp"
+            app:srcCompat="@drawable/bucket_drop"/>
+
+        <TextView
+            android:layout_marginTop="50sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="กำลังดูดนํ้าจากแปลงผักเข้าถังเก็บนํ้า"
+            android:textSize="25sp"
+            android:textAlignment="center"/>
+
+    </LinearLayout>
+
+</FrameLayout>

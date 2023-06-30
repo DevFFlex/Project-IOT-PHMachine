@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.phprojectapp.ClassEx.TimeObject;
-import com.example.phprojectapp.ClassEx.Variable;
+import com.example.phprojectapp.Variable.Variable;
 import com.example.phprojectapp.R;
 
 
