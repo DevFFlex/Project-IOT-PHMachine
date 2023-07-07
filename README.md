@@ -7,6 +7,9 @@ my project iot
 # Arduino Pin
 ![ภาพ](https://github.com/DevFFlex/Project-IOT-PHMachine/assets/113309522/802b80fc-2471-4bc4-a974-1b592593f1d2)
 
+#Circuit
+![Circuit Project](https://github.com/DevFFlex/Project-IOT-PHMachine/assets/113309522/ae015d78-3ecb-476e-8838-04a89c21e5f8)
+
 
 # Android Application Iamge
 
