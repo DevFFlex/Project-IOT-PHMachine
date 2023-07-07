@@ -66,7 +66,7 @@ public class MonitorFragment extends Fragment {
             monitor_btnStopChangePH.setVisibility(View.GONE);
         }
 
-        if(current_step != var.step){
+        /*if(current_step != var.step){
             if(var.step == 0){
                 workingSpaceLayout.removeAllViews();
             }else if(var.step == 1){
@@ -87,7 +87,7 @@ public class MonitorFragment extends Fragment {
             }
             current_step = var.step;
         }
-
+*/
 
         tv_tempC.setText(String.format("%.1f C",var.tempC));
 
@@ -133,7 +133,7 @@ public class MonitorFragment extends Fragment {
 
 //        animationOption.startAnim(monitor_layoutPHmeter,R.anim.fadein);
 
-//        getChildFragmentManager().beginTransaction().replace(R.id.monitor_workingSpace, var).commit();
+        getChildFragmentManager().beginTransaction().replace(R.id.monitor_workingSpace, var.step3).commit();
 
 
         return monitorFragmentView;

@@ -76,6 +76,9 @@ public class MainPage extends AppCompatActivity {
         btn_connectServer.setOnClickListener(this::onClickConnect);
         btn_disonnectServer.setOnClickListener(this::onClickDisconnect);
 
+        btn4.setEnabled(false);
+        btn5.setEnabled(false);
+
 
         Handler handler = new Handler();
         handler.post(new Runnable() {
