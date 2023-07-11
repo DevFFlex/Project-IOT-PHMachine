@@ -70,10 +70,7 @@ public class Variable{
     public FileFragment fileFragment;
 
 
-    public Step1 step1;
-    public Step2 step2;
-    public Step3 step3;
-    public Step4 step4;
+    public MMain step3;
 
     public Variable(Context context){
         this.context = context;
@@ -84,10 +81,8 @@ public class Variable{
         chatFragment = new ChatFragment(this);
         fileFragment = new FileFragment(this);
 
-        step1 = new Step1(this);
-        step2 = new Step2(this);
-        step3 = new Step3(this);
-        step4 = new Step4(this);
+
+        step3 = new MMain(this);
 
 
         this.timeObjectList = new TimeObjectList();

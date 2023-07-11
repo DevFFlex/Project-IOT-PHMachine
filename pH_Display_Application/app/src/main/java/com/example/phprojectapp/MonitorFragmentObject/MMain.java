@@ -17,7 +17,7 @@ import com.example.phprojectapp.Variable.Variable;
 import java.util.ArrayList;
 
 
-public class Step3 extends Fragment {
+public class MMain extends Fragment {
 
     View step3_view;
     Variable var;
@@ -35,7 +35,7 @@ public class Step3 extends Fragment {
     private int meterfrag_cursor = 0;
     private int now_step = 0;
 
-    public Step3(Variable var) {
+    public MMain(Variable var) {
         this.var = var;
 
         circleMeterFragment = new CircleMeter(var);
@@ -57,7 +57,7 @@ public class Step3 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        step3_view = inflater.inflate(R.layout.fragment_step3, container, false);
+        step3_view = inflater.inflate(R.layout.fragment_mmm, container, false);
 
         btn_meterBack = step3_view.findViewById(R.id.step3_btnMeterBack);
         btn_meterForward = step3_view.findViewById(R.id.step3_btnMeterNext);

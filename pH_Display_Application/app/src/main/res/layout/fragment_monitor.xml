@@ -28,13 +28,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="20sp"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="T"
-                        android:textSize="30sp"
+                        android:text="อุณหภูมิ "
+                        android:textSize="25sp"
                         android:textAlignment="center"
                         android:textColor="#FF0C0C"
                         />
@@ -43,7 +43,7 @@
                         android:id="@+id/monitor_tvTemp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="35"
+                        android:text="30"
                         android:textSize="30sp"
                         android:textAlignment="center"
                         android:textColor="#FFD504"
@@ -75,13 +75,13 @@
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="20sp"
                     android:layout_gravity="end"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="EC"
-                        android:textSize="30sp"
+                        android:text="ความชื้น "
+                        android:textSize="25sp"
                         android:textAlignment="center"
                         android:textColor="#0B43EA"
                         />
@@ -93,7 +93,7 @@
                         android:text="00"
                         android:textSize="30sp"
                         android:textAlignment="center"
-                        android:textColor="#1285FF"
+                        android:textColor="#92C7FF"
                         />
                 </LinearLayout>
 
