@@ -2,10 +2,10 @@
 my project iot
 
 # ESP32 Pin
-![ภาพ](https://github.com/DevFFlex/Project-IOT-PHMachine/assets/113309522/936a1476-23f4-4e3b-ab2e-6f6b14215467)
+![ภาพ](https://github.com/DevFFlex/Project-IOT-PHMachine/assets/113309522/6dcc61ba-1fe7-4190-8721-965c67801d06)
 
 # Arduino Pin
-![ภาพ](https://github.com/DevFFlex/Project-IOT-PHMachine/assets/113309522/802b80fc-2471-4bc4-a974-1b592593f1d2)
+![ภาพ](https://github.com/DevFFlex/Project-IOT-PHMachine/assets/113309522/d011731b-f113-408a-b46f-f82907ed20ed)
 
 # Circuit
 ![Circuit Project](https://github.com/DevFFlex/Project-IOT-PHMachine/assets/113309522/ae015d78-3ecb-476e-8838-04a89c21e5f8)
