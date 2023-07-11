@@ -1,10 +1,8 @@
 ## Project-IOT-PHMachine
 my project iot
 
-# ESP32 Pin
-![ภาพ](https://github.com/DevFFlex/Project-IOT-PHMachine/assets/113309522/6dcc61ba-1fe7-4190-8721-965c67801d06)
 
-# Arduino Pin
+![ภาพ](https://github.com/DevFFlex/Project-IOT-PHMachine/assets/113309522/6dcc61ba-1fe7-4190-8721-965c67801d06)
 ![ภาพ](https://github.com/DevFFlex/Project-IOT-PHMachine/assets/113309522/d011731b-f113-408a-b46f-f82907ed20ed)
 
 # Circuit
