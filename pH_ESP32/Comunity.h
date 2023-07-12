@@ -108,6 +108,11 @@ void Comunity::onClientMessage(String str_trim)
   if(str_command.indexOf("INPUT_PH") != -1){
     var->workVar.working_status = true;
   }
+
+  if(str_command.indexOf("TIME_BOARD") != -1){
+    recvTimeBoard(str_value);
+    setC_Output("Server Set RTC Time");
+  }
 }
 
 void Comunity::updateApp()

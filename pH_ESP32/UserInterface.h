@@ -61,7 +61,8 @@ public:
         // Serial.println("setup MAIN Page");
         hardwareIO->lcdOutput->printL("PH = " + String(hardwareIO->pHSensor->getPH()) + " | " + hardwareIO->pHSensor->getPHString(), 0);
         hardwareIO->lcdOutput->printL(String(var->floatswitch_status.tank) + String(var->floatswitch_status.mixtank) + String(var->floatswitch_status.plot), 1);
-        hardwareIO->lcdOutput->printL("H = " + String(var->humidity) + "% T = " + String(var->tempC), 2);
+        if(hardwareIO->dhtsensor->isReady())hardwareIO->lcdOutput->printL("H = " + String(var->humidity) + "% T = " + String(var->tempC), 2);
+        else hardwareIO->lcdOutput->printL("DHT Error", 2);
         hardwareIO->lcdOutput->printL(hardwareIO->rtc->getTimeToString(), 3);
         break;
 

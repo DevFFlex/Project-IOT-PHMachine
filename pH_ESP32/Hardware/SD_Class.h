@@ -6,6 +6,9 @@
 class SDCard
 {
 private:
+
+  bool status_ready = false;
+
 public:
   String listDir(const char *dirname, uint8_t levels);
   void createDir(const char *path);
@@ -16,6 +19,8 @@ public:
   void renameFile(const char *path1, const char *path2);
   void deleteFile(const char *path);
   void testFileIO(const char *path);
+
+  bool isReady();
 
   SDCard()
   {
@@ -30,6 +35,7 @@ void SDCard::setup()
   if (!SD.begin())
   {
     Serial.println("Card Mount Failed");
+    status_ready = false;
     return;
   }
   uint8_t cardType = SD.cardType();
@@ -37,6 +43,7 @@ void SDCard::setup()
   if (cardType == CARD_NONE)
   {
     Serial.println("No SD card attached");
+    status_ready = false;
     return;
   }
 
@@ -75,10 +82,16 @@ void SDCard::setup()
     testFileIO(SD, "/test.txt");*/
   Serial.printf("Total space: %lluMB\n", SD.totalBytes() / (1024 * 1024));
   Serial.printf("Used space: %lluMB\n", SD.usedBytes() / (1024 * 1024));
+
+  status_ready = true;
 }
 
 void SDCard::loop()
 {
+}
+
+bool SDCard::isReady(){
+  return status_ready;
 }
 
 String SDCard::listDir(const char *dirname, uint8_t levels)

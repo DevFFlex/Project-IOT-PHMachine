@@ -191,6 +191,7 @@ public class MonitorFragment extends Fragment {
             public void onClickOk(TimeBoardObject timeBoardObject) {
                 String queryString = var.comunity.timeBoardObjectToQueryString(timeBoardObject);
                 var.comunity.setTimeBoard(queryString);
+                var.extension.printDebug("Monitor","onClickTimeBoard");
             }
         });
     }

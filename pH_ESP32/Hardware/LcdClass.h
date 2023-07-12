@@ -38,13 +38,13 @@ void LcdOutput::setup() {
   lcd1.begin();
   lcd1.backlight();
   lcd1.home();
-  lcd1.print("LCD " + String(HSize1) + "x" + String(VSize1));
-  lcd1.setCursor(0, 1);
-  lcd1.print("PH Monitor");
+  // lcd1.print("LCD " + String(HSize1) + "x" + String(VSize1));
+  // lcd1.setCursor(0, 1);
+  // lcd1.print("PH Monitor");
 
 
-  delay(1000);
-  lcd1.clear();
+  // delay(1000);
+  // lcd1.clear();
 }
 
 void LcdOutput::loop() {

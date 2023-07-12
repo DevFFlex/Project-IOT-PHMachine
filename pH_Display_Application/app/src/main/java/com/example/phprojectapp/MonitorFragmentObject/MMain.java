@@ -97,8 +97,6 @@ public class MMain extends Fragment {
 
     private int count = 0;
     private void step3_update_function(){
-        System.out.println("on step3 update function : " + String.valueOf(count++));
-
 //        if(now_step != var.step){
 //            now_step = var.step;
 //            statusActive(now_step);

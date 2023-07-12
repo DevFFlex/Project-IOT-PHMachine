@@ -24,7 +24,7 @@ public:
   WaterSensor *waterSensor;
   SDCard *sdcard;
   Buzzer *buzzer;
-  DTHSensor *dthsensor;
+  DHTSensor *dhtsensor;
   FloatSwitch *floatswitch;
 
   Timer t_update;
@@ -41,7 +41,7 @@ public:
     waterSensor = new WaterSensor();
     sdcard = new SDCard();
     buzzer = new Buzzer();
-    dthsensor = new DTHSensor();
+    dhtsensor = new DHTSensor();
     floatswitch = new FloatSwitch();
   }
 
@@ -58,7 +58,7 @@ public:
     delete waterSensor;
     delete sdcard;
     delete buzzer;
-    delete dthsensor;
+    delete dhtsensor;
     delete floatswitch;
   }
 };
@@ -73,7 +73,7 @@ void HardwareIO::setup()
   waterSensor->setup();
   sdcard->setup();
   buzzer->setup();
-  dthsensor->setup();
+  dhtsensor->setup();
   floatswitch->setup();
 }
 
@@ -87,7 +87,7 @@ void HardwareIO::loop()
   waterSensor->loop();
   sdcard->loop();
   buzzer->loop();
-  dthsensor->loop();
+  dhtsensor->loop();
   floatswitch->loop();
 }
 
@@ -96,8 +96,8 @@ void HardwareIO::updateVar()
   if (t_update.isExpired())
   {
     var->mixTank_pH = pHSensor->getPH();
-    var->humidity = dthsensor->getHumidity();
-    var->tempC = dthsensor->getTempC();
+    var->humidity = dhtsensor->getHumidity();
+    var->tempC = dhtsensor->getTempC();
 
     var->floatswitch_status.tank = floatswitch->getF1();
     var->floatswitch_status.mixtank = floatswitch->getF2();

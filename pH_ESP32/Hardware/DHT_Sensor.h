@@ -7,15 +7,18 @@
 // #define DHTTYPE DHT21   // DHT 21 (AM2301)
 DHT dht(DHTPIN, DHTTYPE);
 
-class DTHSensor
+class DHTSensor
 {
 private:
     Timer t_update_temp;
     float h = 0;
     float c = 0;
+    float f = 0;
+
+    bool status_ready = false;
 
 public:
-    DTHSensor() : t_update_temp(1000)
+    DHTSensor() : t_update_temp(1000)
     {
     }
 
@@ -24,53 +27,51 @@ public:
 
     float getHumidity();
     float getTempC();
+    bool isReady();
+    void calculator();
 };
 
-float DTHSensor::getHumidity(){
+
+void DHTSensor::calculator(){
+    h = dht.readHumidity();
+    c = dht.readTemperature();
+    f = dht.readTemperature(true);
+
+    if (isnan(h) || isnan(c) || isnan(f))
+    {
+        status_ready = false;
+        Serial.println(F("Failed to read from DHT sensor!"));
+        return;
+    }
+
+    float hif = dht.computeHeatIndex(f, h);
+    float hic = dht.computeHeatIndex(c, h, false);
+    status_ready = true;
+}
+
+
+bool DHTSensor::isReady(){
+    return status_ready;
+}
+
+float DHTSensor::getHumidity(){
     return h;
 }
 
-float DTHSensor::getTempC(){
+float DHTSensor::getTempC(){
     return c;
 }
 
-void DTHSensor::setup()
+void DHTSensor::setup()
 {
     dht.begin();
+    calculator();
 }
 
-void DTHSensor::loop()
+void DHTSensor::loop()
 {
     if (t_update_temp.isExpired())
     {
-        h = dht.readHumidity();
-        // Read temperature as Celsius (the default)
-        c = dht.readTemperature();
-        // Read temperature as Fahrenheit (isFahrenheit = true)
-        float f = dht.readTemperature(true);
-
-        // Check if any reads failed and exit early (to try again).
-        if (isnan(h) || isnan(c) || isnan(f))
-        {
-            Serial.println(F("Failed to read from DHT sensor!"));
-            return;
-        }
-
-        // Compute heat index in Fahrenheit (the default)
-        float hif = dht.computeHeatIndex(f, h);
-        // Compute heat index in Celsius (isFahreheit = false)
-        float hic = dht.computeHeatIndex(c, h, false);
-
-        // Serial.print(F("Humidity: "));
-        // Serial.print(h);
-        // Serial.print(F("%  Temperature: "));
-        // Serial.print(t);
-        // Serial.print(F("°C "));
-        // Serial.print(f);
-        // Serial.print(F("°F  Heat index: "));
-        // Serial.print(hic);
-        // Serial.print(F("°C "));
-        // Serial.print(hif);
-        // Serial.println(F("°F"));
+        calculator();
     }
 }
