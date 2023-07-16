@@ -42,7 +42,7 @@ public class Comunity extends Client{
     }
 
     public void setTimeAutoWork(String value){
-        send("TIME_AUTO_WORK",String.valueOf(value));
+        send("SET_TIME_AUTO_WORK",String.valueOf(value));
     }
 
     public void setTimeBoard(String value){
@@ -57,7 +57,7 @@ public class Comunity extends Client{
     public void setCMVM(String value){sendToServer("SET:CMVM=" + value);}
 
     public void getTimeAutoWork(){
-        sendToServer("GET:TIME_AUTO_WORK=NULL");
+        send("GET_TIME_AUTO_WORK","NULL");
     }
 
     public void getSDDir(String path){
@@ -83,8 +83,13 @@ public class Comunity extends Client{
 
 
     private void onMessangeEvent(String header,String command,String value){
+        //------------------------------------ Client Auto Recv -----------------
+        dataAuto(header,command,value);
+        //------------------------------------ Client Response Recv -----------------
+        dataResponse(header,command,value);
+    }
 
-
+    private void dataAuto(String header,String command,String value){
         if(command.equals("UPDATE")){
             String d1[] = value.split(",");
 
@@ -99,24 +104,36 @@ public class Comunity extends Client{
             var.cmvmObject.analogAvg = Float.valueOf(d1[7]);
 
             var.step = Integer.valueOf(d1[8]);
-            var.work_status = (d1[9].equals("1")) ? false : true;
-        }
+            var.work_status = (d1[9].equals("0")) ? false : true;
 
-        if(command.equals("INPUT_RES")){
-            var.inputPH = Float.parseFloat(value);
-        }
+            var.relay_status[0] = (d1[10].equals("0")) ? false : true;
+            var.relay_status[1] = (d1[11].equals("0")) ? false : true;
+            var.relay_status[2] = (d1[12].equals("0")) ? false : true;
+            var.relay_status[3] = (d1[13].equals("0")) ? false : true;
+            var.relay_status[4] = (d1[14].equals("0")) ? false : true;
+            var.relay_status[5] = (d1[15].equals("0")) ? false : true;
 
-        if(command.equals("RELAY_RES")){
-            String []data = value.split(",");
-            var.relay_status[Integer.valueOf(data[0])] = (data[1].equals("1")) ? false : true;
-            var.outout_text = header + " toggle relay channel " + data[0];
         }
 
         if(command.equals("OUTPUT")){
             var.outout_text = value;
             var.extension.printDebug("Comunity","OUTPUT");
         }
+    }
+
+    private void dataResponse(String header,String command,String value){
+
+        if(command.equals("GET_TIME_AUTO_WORK_RES")){
+            var.extension.printDebug("Comunity","Recv TAW");
+        }
+
+        if(command.equals("INPUT_RES")){
+            var.inputPH = Float.parseFloat(value);
+        }
 
     }
+
+
+
 
 }

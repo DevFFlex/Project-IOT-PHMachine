@@ -12,8 +12,8 @@ public:
     {
         hour = -1;
         minute = -1;
-        ph = -1;
         status = false;
+        ph = -1;
         delete_ = true;
     }
 
@@ -26,23 +26,24 @@ public:
     {
         minute = minuteIn;
     }
-
-
-    void setPH(float phIn)
-    {
-        ph = phIn;
-    }
-
+    
     void setStatus(bool statusIn)
     {
         status = statusIn;
     }
 
+    void setPH(float phIn)
+    {
+        ph = phIn;
+    }
+  
     void setDelete(bool deleteIn)
     {
         delete_ = deleteIn;
     }
 
+    
+    
     int getHour()
     {
         return hour;
@@ -52,7 +53,6 @@ public:
     {
         return minute;
     }
-
 
     float getPH()
     {

@@ -1,5 +1,7 @@
+
 #include "OtherClass/TimerClass.h"
 #include "OtherClass/StringManager.h"
+#include "OtherClass/I2CScanner.h"
 
 #include "Variable.h"
 #include "HardwareIO.h"
@@ -20,7 +22,7 @@ ArduinoComunity *ardunoComunity = new ArduinoComunity(var, hardwareIO);
 
 Comunity *comunity = new Comunity(var, hardwareIO, db, ardunoComunity);
 
-SerialInput *sInput = new SerialInput(var, hardwareIO, comunity, ardunoComunity);
+SerialInput *sInput = new SerialInput(var, hardwareIO, comunity, ardunoComunity,db);
 UserInterface *ui = new UserInterface(var, hardwareIO, comunity);
 
 PHAdjustmentProcess *phAP = new PHAdjustmentProcess(var,hardwareIO,comunity);

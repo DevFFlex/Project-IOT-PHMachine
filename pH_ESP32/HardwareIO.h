@@ -1,14 +1,17 @@
+#include "esp32-hal-gpio.h"
+#include <PCF8574.h>
+
 #include "Hardware/KeypadClass.h"
 #include "Hardware/LcdClass.h"
 
 #include "Hardware/RTC_Class.h"
-#include "Hardware/PCF_Class.h"
 #include "Hardware/PHSensorClass.h"
 #include "Hardware/WaterSensor_Class.h"
 #include "Hardware/SD_Class.h"
 #include "Hardware/Buzzer.h"
 #include "Hardware/DHT_Sensor.h"
 #include "Hardware/FloatSwitch.h"
+#include "Hardware/Relay6CH.h"
 
 class HardwareIO
 {
@@ -19,7 +22,7 @@ public:
   LcdOutput *lcdOutput;
   KeypadInput *keypadInput;
   RTC *rtc;
-  POUT *relay;
+  Relay6CH *relay;
   PHSensor *pHSensor;
   WaterSensor *waterSensor;
   SDCard *sdcard;
@@ -36,7 +39,7 @@ public:
     lcdOutput = new LcdOutput();
     keypadInput = new KeypadInput();
     rtc = new RTC();
-    relay = new POUT();
+    relay = new Relay6CH();
     pHSensor = new PHSensor();
     waterSensor = new WaterSensor();
     sdcard = new SDCard();
@@ -99,8 +102,6 @@ void HardwareIO::updateVar()
     var->humidity = dhtsensor->getHumidity();
     var->tempC = dhtsensor->getTempC();
 
-    var->floatswitch_status.tank = floatswitch->getF1();
-    var->floatswitch_status.mixtank = floatswitch->getF2();
-    var->floatswitch_status.plot = floatswitch->getF3();
+  
   }
 }

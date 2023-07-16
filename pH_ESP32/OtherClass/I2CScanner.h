@@ -3,12 +3,9 @@
 class ScanI2C {
 
 public:
-  void setup() {
+
+  void scan(){
     Wire.begin();
-  }
-
-
-  void loop() {
     byte error, address;
     int nDevices;
     Serial.println("Scanning..."); /*ESP32 starts scanning available I2C devices*/
@@ -36,6 +33,5 @@ public:
     } else {
       Serial.println("done\n");
     }
-    delay(5000); /*Delay given for checking I2C bus every 5 sec*/
   }
 };

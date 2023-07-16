@@ -7,11 +7,22 @@
         <deviceKey>
           <Key>
             <type value="VIRTUAL_DEVICE_PATH" />
-            <value value="C:\Users\FFlex\.android\avd\Redmi_Note_9_Pro_API_29.avd" />
+            <value value="C:\Users\FFlex\.android\avd\Redmi_Note_9_Pro_API_29_2_1.avd" />
           </Key>
         </deviceKey>
       </Target>
     </targetSelectedWithDropDown>
-    <timeTargetWasSelectedWithDropDown value="2023-07-12T06:38:42.868000500Z" />
+    <timeTargetWasSelectedWithDropDown value="2023-07-16T06:10:01.599638200Z" />
+    <targetsSelectedWithDialog>
+      <Target>
+        <type value="QUICK_BOOT_TARGET" />
+        <deviceKey>
+          <Key>
+            <type value="VIRTUAL_DEVICE_PATH" />
+            <value value="C:\Users\FFlex\.android\avd\Redmi_Note_9_Pro_API_29_2_1.avd" />
+          </Key>
+        </deviceKey>
+      </Target>
+    </targetsSelectedWithDialog>
   </component>
 </project>

@@ -40,7 +40,7 @@ void DHTSensor::calculator(){
     if (isnan(h) || isnan(c) || isnan(f))
     {
         status_ready = false;
-        Serial.println(F("Failed to read from DHT sensor!"));
+        // Serial.println(F("Failed to read from DHT sensor!"));
         return;
     }
 

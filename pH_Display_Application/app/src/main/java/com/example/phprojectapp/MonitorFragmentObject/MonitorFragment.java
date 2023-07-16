@@ -58,36 +58,13 @@ public class MonitorFragment extends Fragment {
             monitor_tvPHNeeded.setText(String.valueOf(var.inputPH));
         }
 
-        if(var.working_ph){
+        if(var.work_status){
             monitor_btnChangePH.setVisibility(View.GONE);
             monitor_btnStopChangePH.setVisibility(View.VISIBLE);
         }else{
             monitor_btnChangePH.setVisibility(View.VISIBLE);
             monitor_btnStopChangePH.setVisibility(View.GONE);
         }
-
-        /*if(current_step != var.step){
-            if(var.step == 0){
-                workingSpaceLayout.removeAllViews();
-            }else if(var.step == 1){
-                workingSpaceLayout.setVisibility(View.VISIBLE);
-                getChildFragmentManager().beginTransaction().replace(R.id.monitor_workingSpace, var.step1).commit();
-            }
-            else if(var.step == 2){
-                workingSpaceLayout.setVisibility(View.VISIBLE);
-                getChildFragmentManager().beginTransaction().replace(R.id.monitor_workingSpace, var.step2).commit();
-            }
-            else if(var.step == 3){
-                workingSpaceLayout.setVisibility(View.VISIBLE);
-                getChildFragmentManager().beginTransaction().replace(R.id.monitor_workingSpace, var.step3).commit();
-            }
-            else if(var.step == 4){
-                workingSpaceLayout.setVisibility(View.VISIBLE);
-                getChildFragmentManager().beginTransaction().replace(R.id.monitor_workingSpace, var.step4).commit();
-            }
-            current_step = var.step;
-        }
-*/
 
         tv_tempC.setText(String.format("%.1f C",var.tempC));
 
@@ -141,7 +118,7 @@ public class MonitorFragment extends Fragment {
 
     private void onClickStopPHWork(View v){
         var.comunity.setInputPH_STOP();
-        var.working_ph = false;
+
     }
 
     private void onClickSetPH(View v){
@@ -156,7 +133,6 @@ public class MonitorFragment extends Fragment {
 
                 var.comunity.setInputPH(value);
 
-                var.working_ph = true;
 
             }
         });
@@ -167,7 +143,6 @@ public class MonitorFragment extends Fragment {
         var.animationOption.startAnim(monitor_btnSetTime,R.anim.btnclick_animation);
 
         var.comunity.getTimeAutoWork();
-        var.extension.printAlert("on get time auto work");
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {

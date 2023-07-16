@@ -7,6 +7,7 @@
 #define KEYPAD_ROWS 4
 #define KEYPAD_COLS 4
 
+
 class KeypadInput {
 private:
   Keypad_I2C keypad;
@@ -18,16 +19,15 @@ private:
     { '*', '0', '#', 'D' }
   };
 
+  char enterKey = 'A';
+
   byte rowPins[KEYPAD_ROWS] = { 0, 1, 2, 3 };
   byte colPins[KEYPAD_COLS] = { 4, 5, 6, 7 };
 
   String text_buffer = "";
 
-  void (*onEnterListener)(String) = NULL;
-  void (*onKeypessListener)(char, String) = NULL;
-
-  std::function<void(char,String)> onKeypressCallback;
-  std::function<void(String)> onEnterCallback;
+  std::function<void(char,String)> onKeypressCallback = NULL;
+  std::function<void(char,String)> onEnterCallback = NULL;
 
 public:
 
@@ -35,8 +35,9 @@ public:
     : keypad(makeKeymap(keys), rowPins, colPins, KEYPAD_ROWS, KEYPAD_COLS, I2CADDR, KEYPAD_PCF8574) {
   }
 
-  void setOnKeyEnterListener(std::function<void(String)> callback);
   void setOnKeypressListener(std::function<void(char,String)> callback);
+  void setOnKeyEnterListener(std::function<void(char,String)> callback);
+  
 
   void setup();
   void loop();
@@ -57,6 +58,10 @@ void KeypadInput::loop() {
     char key_char = key;
     
     if (key == '*') key_char = '.';
+    if(key == enterKey){
+      if(onEnterCallback != NULL)onEnterCallback(key,text_buffer);
+      return;
+    }
 
     text_buffer += String(key_char);
 
@@ -68,9 +73,10 @@ void KeypadInput::clearBuffer() {
   text_buffer = "";
 }
 
-void KeypadInput::setOnKeyEnterListener(std::function<void(String)> callback) {
-  onEnterCallback = callback;
-}
 void KeypadInput::setOnKeypressListener(std::function<void(char,String)> callback) {
   onKeypressCallback = callback;
+}
+
+void KeypadInput::setOnKeyEnterListener(std::function<void(char,String)> callback) {
+  onEnterCallback = callback;
 }

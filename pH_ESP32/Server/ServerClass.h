@@ -1,20 +1,14 @@
-// #include "HardwareSerial.h"
-
 #include "ClientList.h"
-
 
 class ServerPH {
 private:
   WiFiServer *server;
   ClientList *clients;
-  AsyncWebServer *aws;
 
 
   String *SSID, *PASS;
 
   bool openWifiStatus = false;
-
-  std::function<void(String)> onMessageCallback;
 
 
 public:
@@ -24,7 +18,6 @@ public:
     PASS = _PASS;
     server = new WiFiServer(80);
     clients = new ClientList(server);
-    aws = new AsyncWebServer(5000);
   }
 
   ~ServerPH() {
@@ -33,11 +26,14 @@ public:
 
   void setup();
   void loop();
-
   void send(String send_str);
 
   void setOnMessageListener(std::function<void(String)> callback) {
-    onMessageCallback = callback;
+    clients->setOnMessageListener(callback);
+  }
+
+  void setOnClientJoinListener(std::function<void(String)> callback) {
+    clients->setOnClientJoinListener(callback);
   }
 
   bool isClient();
@@ -60,26 +56,14 @@ void ServerPH::setup() {
 
   server->begin();
 
-  aws->on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
-    // request->send(200, "text/plain", "Hello, ESP32!");
-    File file = SD.open("/index.html");
-    if (file) {
-      String content = file.readString();
-      file.close();
-      request->send(200, "text/html", content);
-    } else {
-      request->send(404);
-    }
-  });
-
-  aws->begin();
 
   openWifiStatus = true;
 }
 void ServerPH::loop() {
   clients->loop();
-  clients->checkAvailable(onMessageCallback);
+  clients->checkAvailable();
 }
 void ServerPH::send(String send_str) {
   clients->send(send_str);
+  // Serial.println("send --- " + send_str);
 }

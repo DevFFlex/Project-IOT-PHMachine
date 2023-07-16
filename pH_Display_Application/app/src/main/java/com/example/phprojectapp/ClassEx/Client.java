@@ -83,7 +83,7 @@ public class Client{
             private char endKeyword = '$';
             @Override
             public void run() {
-
+                int count = 0;
                 while (true) {
 
                     if (isConnect){
@@ -91,7 +91,7 @@ public class Client{
                             char c = (char) input.read();
 
                             if (c == endKeyword){
-                                var.extension.printDebug("Client","Message = " + message);
+                                var.extension.printDebug("Client","Message From Server "+ String.valueOf(count++) +  " = " + message);
                                 if (message != ""){
                                     if (!message.contains(":") || !message.contains("="))return;
 
@@ -154,6 +154,7 @@ public class Client{
                     try{
                         output.write(message);
                         output.flush();
+                        var.extension.printDebug("Client","Send ---- " + message);
                     }catch (Exception e){
                         isConnect = false;
                         var.extension.printError("Client","send message,fail connected");

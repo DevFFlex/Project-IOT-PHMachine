@@ -24,10 +24,6 @@ public class Variable{
     public float tempC = 0;
     public float humidity = 0;
 
-    public boolean floatswitch_tank = false;
-    public boolean floatswitch_mixtank = false;
-    public boolean floatswitch_plot = false;
-
     public int step = 0;
     public boolean work_status = false;
 
@@ -45,7 +41,7 @@ public class Variable{
 
 
 
-    public boolean working_ph = false;
+//    public boolean working_ph = false;
     public TimeObjectList timeObjectList;
     public String outout_text = "";
 

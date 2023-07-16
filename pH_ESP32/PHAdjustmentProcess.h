@@ -117,28 +117,31 @@ void PHAdjustmentProcess::step1() {
   if (var->workVar.working_step_setup) {
     var->workVar.working_step_setup = false;
     comunity->setC_Output(step_desc[0]);
+    Serial.println("step 1");
   }
-  Serial.println("step 1");
   // hardwareIO->lcdOutput->printL("step 1", 1);
   hardwareIO->relay->on(2);
-  if (var->floatswitch_status.tank) {
+  if (t_step1.isExpired()) {
     hardwareIO->relay->off(2);
     nextStep();
   }
 }
 
 void PHAdjustmentProcess::step2() {
+  bool condition_nextstep = t_step2.isExpired();
+
+
   if (var->workVar.working_step_setup) {
     var->workVar.working_step_setup = false;
     comunity->setC_Output(step_desc[1]);
+    Serial.println("step 2");
   }
-  Serial.println("step 2");
   // hardwareIO->lcdOutput->printL("step 2", 1);
   hardwareIO->relay->on(0);
 
   // hardwareIO->lcdOutput->printL("wf = " + String(hardwareIO->waterSensor->getValue()), 2);
 
-  if (var->floatswitch_status.mixtank) {
+  if (condition_nextstep) {
     hardwareIO->relay->off(0);
     nextStep();
   }
@@ -148,8 +151,8 @@ void PHAdjustmentProcess::step3() {
   if (var->workVar.working_step_setup) {
     var->workVar.working_step_setup = false;
     comunity->setC_Output(step_desc[2]);
+    Serial.println("step 3");
   }
-  Serial.println("step 3");
   // hardwareIO->lcdOutput->printL("step 3", 1);
   hardwareIO->relay->on(5);
 
@@ -163,12 +166,13 @@ void PHAdjustmentProcess::step4() {
   if (var->workVar.working_step_setup) {
     var->workVar.working_step_setup = false;
     comunity->setC_Output(step_desc[3]);
+    Serial.println("step 4");
   }
-  Serial.println("step 4");
+  
   // hardwareIO->lcdOutput->printL("step 4", 1);
   hardwareIO->relay->on(1);
 
-  if (var->floatswitch_status.plot) {
+  if (t_step4.isExpired()) {
     hardwareIO->relay->off(1);
     nextStep();
   }

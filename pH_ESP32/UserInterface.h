@@ -1,5 +1,7 @@
 #include <functional>
 
+typedef void (*fff)();
+
 enum PageName
 {
   MAIN,
@@ -35,7 +37,7 @@ public:
     comunity = comunityIn;
 
     hardwareIO->keypadInput->setOnKeypressListener(std::bind(&UserInterface::onKeypress, this, std::placeholders::_1, std::placeholders::_2));
-    hardwareIO->keypadInput->setOnKeyEnterListener(std::bind(&UserInterface::onEnter, this, std::placeholders::_1));
+    hardwareIO->keypadInput->setOnKeyEnterListener(std::bind(&UserInterface::onEnter, this, std::placeholders::_1,std::placeholders::_2));
   }
 
   void setup()
@@ -49,18 +51,13 @@ public:
     if (update_display.isExpired())
     {
 
-      var->floatswitch_status.tank = hardwareIO->floatswitch->getF1();
-      var->floatswitch_status.mixtank = hardwareIO->floatswitch->getF2();
-      var->floatswitch_status.plot = hardwareIO->floatswitch->getF3();
-
-
       switch (pagename)
       {
 
       case MAIN:
         // Serial.println("setup MAIN Page");
         hardwareIO->lcdOutput->printL("PH = " + String(hardwareIO->pHSensor->getPH()) + " | " + hardwareIO->pHSensor->getPHString(), 0);
-        hardwareIO->lcdOutput->printL(String(var->floatswitch_status.tank) + String(var->floatswitch_status.mixtank) + String(var->floatswitch_status.plot), 1);
+        hardwareIO->lcdOutput->printL(String(hardwareIO->floatswitch->getFSW_MixtankUp()) + String(hardwareIO->floatswitch->getFSW_MixtankDown()) + String(hardwareIO->floatswitch->getFSW_watertankDown()), 1);
         if(hardwareIO->dhtsensor->isReady())hardwareIO->lcdOutput->printL("H = " + String(var->humidity) + "% T = " + String(var->tempC), 2);
         else hardwareIO->lcdOutput->printL("DHT Error", 2);
         hardwareIO->lcdOutput->printL(hardwareIO->rtc->getTimeToString(), 3);
@@ -95,8 +92,8 @@ public:
 
   void changePage(PageName pagenameIn);
 
-  void onEnter(String text);
-  void onKeypress(char c, String textNow);
+  void onEnter(char key, String text_buffer);
+  void onKeypress(char key, String text_buffer);
 };
 
 void UserInterface::changePage(PageName pagenameIn)
@@ -109,7 +106,7 @@ void UserInterface::changePage(PageName pagenameIn)
     function_setup = true;
 }
 
-void UserInterface::onEnter(String text_buffer)
+void UserInterface::onEnter(char key, String text_buffer)
 {
 }
 

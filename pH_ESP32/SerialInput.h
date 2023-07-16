@@ -6,13 +6,15 @@ private:
     HardwareIO *hardwareIO;
     Comunity *comunity;
     ArduinoComunity *ardunoComunity;
+    Database *db;
 public:
-    SerialInput(Variable *varIn,HardwareIO *hardIn,Comunity *comIn,ArduinoComunity *ardunoComunityIn)
+    SerialInput(Variable *varIn,HardwareIO *hardIn,Comunity *comIn,ArduinoComunity *ardunoComunityIn,Database *dbIn)
     {
         var = varIn;
         hardwareIO = hardIn;
         comunity = comIn;
         ardunoComunity = ardunoComunityIn;
+        db = dbIn;
     }
 
     void setup();
@@ -104,6 +106,29 @@ void SerialInput::loop()
             if (data.indexOf("set cmvm") != -1){
               data.replace("set cmvm","");
               ardunoComunity->setValueAll("10", "20", "30", "40");
+            }
+
+            if (data.indexOf("saveTAW") != -1){
+                data.replace("saveTAW","");
+                db->writeTimeAutoWork(var->timerautowork);
+            }
+
+            if (data.indexOf("readTAW") != -1){
+                data.replace("readTAW","");
+                Serial.println(db->readTimeAutoWork(var->timerautowork));
+            }
+
+            if (data.indexOf("showTAW") != -1){
+                String out = "";
+                out += var->timerautowork[0].toString() + "\n";
+                out += var->timerautowork[1].toString() + "\n";
+                out += var->timerautowork[2].toString() + "\n";
+                out += var->timerautowork[3].toString() + "\n";
+                Serial.println(out);
+            }
+
+            if (data.indexOf("scanI2C") != -1){
+                var->i2cScan.scan();
             }
         
         }

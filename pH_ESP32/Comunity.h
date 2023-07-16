@@ -1,3 +1,4 @@
+#include "Server/InterfaceEventListener.h"
 #include "Server.h"
 #include "Server/ServerClass.h"
 
@@ -11,12 +12,21 @@ class Comunity : public ServerPH
   Timer autosendTimer;
 
 private:
-  String SSID_AP = "PH-Project-Controller";
+  String SSID_AP = "PPC";
   String PASS_AP = "12345678";
 
-  void onClientMessage(String message);
+  
+
+
 
 public:
+
+
+
+  void onClientMessageCallback(String message);
+  void onClientJoinCallback(String clientName);
+
+
   Comunity(Variable *varIn, HardwareIO *hardwareIOIn, Database *dbIn, ArduinoComunity *ar_comIn)
       : ServerPH(&SSID_AP, &PASS_AP), autosendTimer(1000)
   {
@@ -24,6 +34,7 @@ public:
     hardwareIO = hardwareIOIn;
     db = dbIn;
     ar_com = ar_comIn;
+    
   }
 
   ~Comunity()
@@ -61,7 +72,8 @@ public:
 void Comunity::setup()
 {
   ServerPH::setup();
-  ServerPH::setOnMessageListener(std::bind(&Comunity::onClientMessage, this, std::placeholders::_1));
+  ServerPH::setOnMessageListener(std::bind(&Comunity::onClientMessageCallback, this, std::placeholders::_1));
+  ServerPH::setOnClientJoinListener(std::bind(&Comunity::onClientJoinCallback, this, std::placeholders::_1));
 }
 
 void Comunity::loop()
@@ -74,8 +86,9 @@ void Comunity::loop()
   }
 }
 
-void Comunity::onClientMessage(String str_trim)
+void Comunity::onClientMessageCallback(String str_trim)
 {
+  Serial.println("Client -------------- Message");
 
   String databox1[2];
   var->strManager->split(databox1, str_trim, ":", 2);
@@ -101,19 +114,39 @@ void Comunity::onClientMessage(String str_trim)
   if (str_command.indexOf("RELAY") != -1)
   {
     hardwareIO->relay->toggle(str_value.toInt());
-    ServerPH::send(str_clientname + ":" + str_command + "_RES=" + str_value + "," + String(hardwareIO->relay->status[str_value.toInt()]));
-    
   }
 
   if(str_command.indexOf("INPUT_PH") != -1){
-    var->workVar.working_status = true;
+    if(str_value != "stop"){
+      var->workVar.working_status = true;
+    }else{
+      var->workVar.working_status = false;
+    }
   }
 
   if(str_command.indexOf("TIME_BOARD") != -1){
     recvTimeBoard(str_value);
     setC_Output("Server Set RTC Time");
   }
+
+  if(str_command.indexOf("SET_TIME_AUTO_WORK") != -1){
+    recvTimerAutoWork(str_value);
+    setC_Output("Server Set TimeAutoWork Success");
+  }
+
+  if(str_command.indexOf("GET_TIME_AUTO_WORK") != -1){
+    ServerPH::send("SERVER:GET_TIME_AUTO_WORK_RES=" + encodeTimeAutoWork());
+    Serial.println("Server Response Request TAW");
+  }
 }
+
+void Comunity::onClientJoinCallback(String clientName){
+  Serial.println("Client ---------------- Join");
+}
+
+
+
+
 
 void Comunity::updateApp()
 {
@@ -133,7 +166,15 @@ void Comunity::updateApp()
 
     // WorkVal
     data += String(var->workVar.step) + ",";
-    data += String(var->workVar.working_status);
+    data += String(var->workVar.working_status) + ",";
+
+    //relay-status
+    data += String(hardwareIO->relay->status[0]) + ",";
+    data += String(hardwareIO->relay->status[1]) + ",";
+    data += String(hardwareIO->relay->status[2]) + ",";
+    data += String(hardwareIO->relay->status[3]) + ",";
+    data += String(hardwareIO->relay->status[4]) + ",";
+    data += String(hardwareIO->relay->status[5]);
 
     ServerPH::send(data);
     // Serial.println(data);
