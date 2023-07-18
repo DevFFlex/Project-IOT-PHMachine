@@ -1,6 +1,9 @@
 #include "esp32-hal-gpio.h"
 #include <PCF8574.h>
 
+
+#include "ParentClass/HardwareObject.h"
+
 #include "Hardware/KeypadClass.h"
 #include "Hardware/LcdClass.h"
 

@@ -105,56 +105,194 @@
                 android:layout_height="500sp"
                 />
 
-            <!--    input and data display-->
+
             <LinearLayout
-                android:layout_marginVertical="20dp"
+                android:id="@+id/monitor_layout_noneWork"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/bg"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
-
-                <!-- STOP & Change -->
+                <Button
+                    android:layout_gravity="center"
+                    android:id="@+id/monitor_btnChangePH"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_style1"
+                    android:paddingHorizontal="20dp"
+                    android:shadowColor="@color/white"
+                    android:shadowRadius="55"
+                    android:text="เลือก pH"
+                    android:textColor="#FFFF"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+                <!--    Display   -->
                 <LinearLayout
-                    android:id="@+id/layout_stopAchange"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="visible">
-                    <!-- pH -->
-                    <LinearLayout
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:orientation="horizontal">
+                        android:autoSizeTextType="uniform"
+                        android:text="pH ที่ต้องการ : "
+                        android:textSize="25sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFF"
+                        android:textAlignment="center"/>
 
-                        <TextView
+                    <TextView
+                        android:layout_weight="1"
+                        android:id="@+id/monitor_tvPHNeeded"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
+                        android:text="_"
+                        android:textColor="#0AA6CD"
+                        android:textSize="30sp"
+                        android:textStyle="bold"
+                        android:textAlignment="center"/>
 
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:autoSizeTextType="uniform"
-                            android:text="pH ที่ต้องการ : "
-                            android:textSize="30dp"
-                            android:textStyle="bold"
-                            android:textColor="#FFFF"/>
 
-                        <TextView
-                            android:id="@+id/monitor_tvPHNeeded"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:autoSizeTextType="uniform"
-                            android:text="12.2"
-                            android:textColor="#0AA6CD"
-                            android:textSize="35dp"
-                            android:textStyle="bold" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
 
-                    </LinearLayout>
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
+                        android:text="pH ของนํ้าที่จะได้รับ"
+                        android:textSize="25sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFF"
+                        android:textAlignment="center"/>
+
+                    <TextView
+                        android:id="@+id/monitor_tvPHNeededOutput"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
+                        android:text="_"
+                        android:textColor="#0AA6CD"
+                        android:textSize="30sp"
+                        android:textStyle="bold"
+                        android:textAlignment="center"/>
 
 
                 </LinearLayout>
 
+                <Button
+                    android:id="@+id/monitor_btnStartWork"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="เริ่มการทำงาน"
+                    android:background="@drawable/btn_style4"
+                    android:textColor="#FFFF"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:paddingHorizontal="20sp"/>
+
 
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/monitor_layout_Working"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <!--    Display   -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
+                        android:text="pH ของนํ้าที่จะได้รับ"
+                        android:textSize="25sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFF"
+                        android:textAlignment="center"/>
+
+                    <TextView
+                        android:id="@+id/monitor_tvPHNeededOutputWorking"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
+                        android:text="_"
+                        android:textColor="#0AA6CD"
+                        android:textSize="30sp"
+                        android:textStyle="bold"
+                        android:textAlignment="center"/>
+
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
+                        android:text="ขั้นตอน"
+                        android:textSize="25sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFF"
+                        android:textAlignment="center"/>
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:id="@+id/monitor_step_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
+                        android:text="_"
+                        android:textColor="#0AA6CD"
+                        android:textSize="30sp"
+                        android:textStyle="bold"
+                        android:textAlignment="center"/>
+
+
+                </LinearLayout>
+
+                <Button
+                    android:layout_gravity="center"
+                    android:visibility="visible"
+                    android:id="@+id/monitor_btnStopChangePH"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_style3"
+                    android:shadowColor="@color/white"
+                    android:shadowRadius="55"
+                    android:text="หยุดการทำงาน"
+                    android:textColor="#FFFF"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:paddingHorizontal="20sp" />
+
+
+            </LinearLayout>
+
+
 
             <!--    Button   -->
             <LinearLayout
@@ -164,32 +302,6 @@
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/monitor_btnChangePH"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/btn_style1"
-                    android:paddingHorizontal="20dp"
-                    android:shadowColor="@color/white"
-                    android:shadowRadius="55"
-                    android:text="เริ่มปรับค่า pH"
-                    android:textColor="#FFFF"
-                    android:textSize="20dp"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:visibility="gone"
-                    android:id="@+id/monitor_btnStopChangePH"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/btn_style3"
-                    android:paddingHorizontal="20dp"
-                    android:shadowColor="@color/white"
-                    android:shadowRadius="55"
-                    android:text="หยุดการปรับ pH"
-                    android:textColor="#FFFF"
-                    android:textSize="20dp"
-                    android:textStyle="bold" />
 
                 <Button
                     android:layout_marginTop="20dp"
@@ -200,19 +312,6 @@
                     android:shadowColor="@color/white"
                     android:shadowRadius="55"
                     android:text=" ตั้งเวลา"
-                    android:textColor="#FFFF"
-                    android:textSize="20dp"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:layout_marginTop="20dp"
-                    android:id="@+id/monitor_btnNextStep"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/btn_style4"
-                    android:shadowColor="@color/white"
-                    android:shadowRadius="55"
-                    android:text="NextStep"
                     android:textColor="#FFFF"
                     android:textSize="20dp"
                     android:textStyle="bold" />

@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="กรอกค่า pH ที่ต้องการ"
+            android:text="ใส่ค่า pH ที่ต้องการ"
             android:textAlignment="center"
             android:textColor="#FFFF"
             android:textSize="30dp"
@@ -40,11 +40,12 @@
             android:orientation="horizontal">
 
             <EditText
+                android:visibility="visible"
                 android:id="@+id/inputPH_et1"
                 android:layout_width="150dp"
                 android:layout_height="match_parent"
                 android:background="@drawable/et_style1"
-                android:hint="ใส่ค่า 0 - 14"
+                android:hint="ใส่ค่า 4 - 10"
                 android:inputType="numberDecimal"
                 android:text=""
                 android:textColor="#FFFF"
@@ -57,7 +58,7 @@
             <Button
                 android:id="@+id/inputPH_btnOk"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:background="@drawable/btn_style2"
                 android:text="ตกลง"
@@ -68,6 +69,7 @@
         </LinearLayout>
 
         <TextView
+            android:visibility="invisible"
             android:id="@+id/inputPH_tvWarning"
             android:gravity="center_horizontal"
             android:layout_width="match_parent"
@@ -77,5 +79,6 @@
 
 
     </LinearLayout>
+
 
 </LinearLayout>

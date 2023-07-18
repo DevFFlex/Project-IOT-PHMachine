@@ -1,5 +1,4 @@
 #include "VarObject/TimerAutoWork.h"
-#include "VarObject/PHCalibrateSet.h"
 
 
 typedef struct WorkVarStruct {
@@ -23,10 +22,7 @@ public:
   WorkVar workVar;
 
   TimerAutoWork *timerautowork = new TimerAutoWork[4];
-  PHCalibrateSet phCalibrateSet;
 
   float onClientRequestStatus = false;
 
-  Variable() {
-  }
 };

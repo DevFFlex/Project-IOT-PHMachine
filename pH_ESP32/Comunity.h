@@ -46,6 +46,7 @@ public:
   void setC_FileDir(String path);
   void setC_CMVM();
   void setC_Output(String output_str);
+  void setStepText(String stepText);
 
   void sendOther(String data_str);
 
@@ -156,14 +157,6 @@ void Comunity::updateApp()
     data += String(var->mixTank_pH) + ",";
     data += String(var->tempC) + ",";
     data += String(var->humidity) + ",";
-
-    // pHCalibreteVal
-    data += String(var->phCalibrateSet.calibrate) + ",";
-    data += String(var->phCalibrateSet.m) + ",";
-    data += String(var->phCalibrateSet.voltin) + ",";
-    data += String(var->phCalibrateSet.max_analog) + ",";
-    data += String(var->phCalibrateSet.analogAvg) + ",";
-
     // WorkVal
     data += String(var->workVar.step) + ",";
     data += String(var->workVar.working_status) + ",";
@@ -187,8 +180,16 @@ void Comunity::setC_FileDir(String path)
 
 void Comunity::setC_Output(String output_text)
 {
-  ServerPH::send("SET:OUTPUT=" + output_text);
+  ServerPH::send("SERVER:OUTPUT=" + output_text);
 }
+
+
+void Comunity::setStepText(String step_text){
+  ServerPH::send("SERVER:SETSTEPTEXT=" + step_text);
+}
+
+
+
 
 void Comunity::sendOther(String data_str)
 {
@@ -248,25 +249,7 @@ void Comunity::recvToggleRelay(String value)
   hardwareIO->relay->toggle(value.toInt());
 }
 
-void Comunity::recvCMVM(String value)
-{
-  String data[4];
-  var->strManager->split(data, value, ",", 4);
-  Serial.println(data[0]);
 
-  if (data[0] == "-9999" && data[1] == "-9999" && data[2] == "-9999" && data[3] == "-9999")
-  {
-    ar_com->setValueAllDefault();
-    return;
-  }
-
-  String clb = (data[0] == "") ? String(var->phCalibrateSet.calibrate) : data[0];
-  String m = (data[1] == "") ? String(var->phCalibrateSet.m) : data[1];
-  String vi = (data[2] == "") ? String(var->phCalibrateSet.voltin) : data[2];
-  String ma = (data[3] == "") ? String(var->phCalibrateSet.max_analog) : data[3];
-
-  ar_com->setValueAll(clb, m, vi, ma);
-}
 
 String Comunity::encodeTimeAutoWork()
 {

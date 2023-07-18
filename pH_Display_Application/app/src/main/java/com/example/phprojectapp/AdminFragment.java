@@ -22,9 +22,6 @@ public class AdminFragment extends Fragment {
     private Variable var;
     private Button btn_relay[] = new Button[6];
     private Button btn_sendData;
-    private Button btn_setArduinoValue,btn_setArduinoDefault;
-    private EditText et_calibrate,et_m,et_voltin,et_maxanalog;
-    private TextView voltcal,phcal;
 
 
     public AdminFragment(Variable variable) {
@@ -52,19 +49,6 @@ public class AdminFragment extends Fragment {
         btn_relay[5] = v.findViewById(R.id.admin_btn_relay6);
         btn_sendData = v.findViewById(R.id.admin_btnSendTest);
 
-        btn_setArduinoValue = v.findViewById(R.id.admin_btn_arduinoSetvalue);
-        btn_setArduinoDefault = v.findViewById(R.id.admin_btn_arduinoGetdefault);
-
-        et_calibrate = v.findViewById(R.id.admin_et_calibration);
-        et_m = v.findViewById(R.id.admin_et_m);
-        et_voltin = v.findViewById(R.id.admin_et_voltin);
-        et_maxanalog = v.findViewById(R.id.admin_et_maxAnalog);
-
-        voltcal = v.findViewById(R.id.admin_tv_voltcal);
-        phcal   = v.findViewById(R.id.admin_tvPHcal);
-
-        btn_setArduinoValue.setOnClickListener(this::onClickSetArduinoValue);
-        btn_setArduinoDefault.setOnClickListener(this::onClickSetArduinoDefaultValue);
 
 
         btn_relay[0].setOnClickListener(this::onToggleRelay1);
@@ -79,11 +63,9 @@ public class AdminFragment extends Fragment {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                voltcal.setText(var.cmvmObject.calVoltString());
-                phcal.setText(var.cmvmObject.calPHString());
 
                 for(int i = 0;i<6;i++){
-                    if(var.relay_status[i])btn_relay[i].setBackgroundResource(R.drawable.btn_style4);
+                    if(!var.relay_status[i])btn_relay[i].setBackgroundResource(R.drawable.btn_style4);
                     else btn_relay[i].setBackgroundResource(R.drawable.btn_style3);
                 }
 
@@ -128,35 +110,5 @@ public class AdminFragment extends Fragment {
         });
     }
 
-    public void onClickSetArduinoValue(View v){
-        String clb = et_calibrate.getText().toString();
-        String m   = et_m.getText().toString();
-        String voltin = et_voltin.getText().toString();
-        String max_analog = et_maxanalog.getText().toString();
-
-        String clb_s = (clb.equals("")) ? String.valueOf(var.cmvmObject.calibration) : clb;
-        String m_s = (m.equals("")) ? String.valueOf(var.cmvmObject.m) : m;
-        String voltin_s = (voltin.equals("")) ? String.valueOf(var.cmvmObject.voltin) : voltin;
-        String ma_s = (max_analog.equals("")) ? String.valueOf(var.cmvmObject.max_analog) : max_analog;
-
-        String format = "";
-        format += clb_s + ",";
-        format += m_s + ",";
-        format += voltin_s + ",";
-        format += ma_s;
-
-        var.comunity.setCMVM(format);
-    }
-
-    public void onClickSetArduinoDefaultValue(View v){
-
-        String format = "";
-        format += "-9999,";
-        format += "-9999,";
-        format += "-9999,";
-        format += "-9999";
-
-        var.comunity.setCMVM(format);
-    }
 
 }

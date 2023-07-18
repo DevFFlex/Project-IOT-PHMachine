@@ -35,24 +35,32 @@ void SerialInput::loop()
 
         if (data != "")
         {
-            if (data.indexOf("on") != -1)
+            if (data.indexOf("relayall active") != -1)
             {
-                data.replace("on", "");
-
+                data.replace("relayall active", "");
+            }
+            if (data.indexOf("relayall deactive") != -1)
+            {
+                data.replace("relayall deactive", "");
+                hardwareIO->relay->deactive();
+            }
+            if (data.indexOf("relay on") != -1)
+            {
+                data.replace("relay on", "");
                 hardwareIO->relay->on(data.toInt());
             }
-
-            if (data.indexOf("off") != -1)
+            if (data.indexOf("relay off") != -1)
             {
-                data.replace("off", "");
+                data.replace("relay off", "");
                 hardwareIO->relay->off(data.toInt());
             }
-
-            if (data.indexOf("toggle") != -1)
+            if (data.indexOf("relay toggle") != -1)
             {
-                data.replace("toggle", "");
+                data.replace("relay toggle", "");
                 hardwareIO->relay->toggle(data.toInt());
             }
+
+
 
             if (data.indexOf("send_") != -1)
             {
@@ -66,19 +74,6 @@ void SerialInput::loop()
                 hardwareIO->buzzer->freq = data.toInt();
             }
 
-            if (data.indexOf("relay active") != -1)
-            {
-                data.replace("relay active", "");
-                hardwareIO->relay->active();
-                Serial.println("r ac");
-            }
-
-            if (data.indexOf("relay deactive") != -1)
-            {
-                data.replace("relay deactive", "");
-                hardwareIO->relay->deactive();
-                Serial.println("r da");
-            }
         
             if (data.indexOf("sd rem ") != -1){
                 data.replace("sd rem ","");
@@ -103,11 +98,6 @@ void SerialInput::loop()
                 hardwareIO->sdcard->deleteFile(data.c_str());
             }
 
-            if (data.indexOf("set cmvm") != -1){
-              data.replace("set cmvm","");
-              ardunoComunity->setValueAll("10", "20", "30", "40");
-            }
-
             if (data.indexOf("saveTAW") != -1){
                 data.replace("saveTAW","");
                 db->writeTimeAutoWork(var->timerautowork);
@@ -129,6 +119,19 @@ void SerialInput::loop()
 
             if (data.indexOf("scanI2C") != -1){
                 var->i2cScan.scan();
+            }
+
+            if (data.indexOf("debugServerData") != -1){
+                comunity->setDisplayDataTranfer(!comunity->getDisplayDataTranfer());
+            }
+
+
+            if(data.indexOf("debugArduinoData") != -1){
+                ardunoComunity->setDisplayDataTranfer(!ardunoComunity->getDisplayDataTranfer());
+            }
+
+            if(data.indexOf("debubFloatSwitch") != -1){
+                hardwareIO->floatswitch->debugDisplayDataStatus = !hardwareIO->floatswitch->debugDisplayDataStatus;
             }
         
         }

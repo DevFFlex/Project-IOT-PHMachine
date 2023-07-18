@@ -41,12 +41,20 @@ public class SetPHDialog extends AlertDialog.Builder {
             @Override
             public void onClick(View v) {
                 String value = inputPH_et1.getText().toString();
+
+                if(value.equals("")){
+                    inputPH_tvWarning.setText("กรุณาใส่ pH");
+                    inputPH_tvWarning.setVisibility(View.VISIBLE);
+                    return;
+                }
+
                 try {
 
                     final float value_float = Float.parseFloat(value);
 
-                    if (value_float < 0 || value_float > 14) {
-                        inputPH_tvWarning.setText("ใส่ได้ตั้งเเต่ค่า 0 ถึง 14");
+                    if (value_float < 4 || value_float > 10) {
+                        inputPH_tvWarning.setText("ใส่ได้ตั้งเเต่ค่า 4 ถึง 10 เท่านั้น");
+                        inputPH_tvWarning.setVisibility(View.VISIBLE);
                         return;
                     }
                     setPHDialogEvent.onClickOk(value_float);

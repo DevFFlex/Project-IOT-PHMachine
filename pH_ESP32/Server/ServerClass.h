@@ -9,6 +9,7 @@ private:
   String *SSID, *PASS;
 
   bool openWifiStatus = false;
+  bool displayDataTranfer = false;
 
 
 public:
@@ -26,6 +27,8 @@ public:
 
   void setup();
   void loop();
+  void setDisplayDataTranfer(bool status);
+  bool getDisplayDataTranfer();
   void send(String send_str);
 
   void setOnMessageListener(std::function<void(String)> callback) {
@@ -39,6 +42,15 @@ public:
   bool isClient();
   String getClientString();
 };
+
+
+void ServerPH::setDisplayDataTranfer(bool status){
+  displayDataTranfer = status;
+}
+
+bool ServerPH::getDisplayDataTranfer(){
+  return displayDataTranfer;
+}
 
 String ServerPH::getClientString(){
   return clients->getClientString();
@@ -65,5 +77,5 @@ void ServerPH::loop() {
 }
 void ServerPH::send(String send_str) {
   clients->send(send_str);
-  // Serial.println("send --- " + send_str);
+  if(displayDataTranfer)Serial.println("ESP32 To Client ---> " + send_str);
 }

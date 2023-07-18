@@ -19,13 +19,14 @@ import java.util.ArrayList;
 public class Variable{
     public Context context;
 
-    public float inputPH = 0;
+    public float inputPH = -1;
     public float mixtankPH = 0;
     public float tempC = 0;
     public float humidity = 0;
 
     public int step = 0;
     public boolean work_status = false;
+    public String stepText = "";
 
     public boolean relay_status[] = {
             false,

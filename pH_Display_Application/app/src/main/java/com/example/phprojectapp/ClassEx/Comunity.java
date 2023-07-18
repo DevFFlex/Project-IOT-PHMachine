@@ -54,8 +54,6 @@ public class Comunity extends Client{
         send("RELAY",String.valueOf(index));
     }
 
-    public void setCMVM(String value){sendToServer("SET:CMVM=" + value);}
-
     public void getTimeAutoWork(){
         send("GET_TIME_AUTO_WORK","NULL");
     }
@@ -97,27 +95,25 @@ public class Comunity extends Client{
             if(!d1[1].equals("nan"))var.tempC = Float.valueOf(d1[1]);
             if(!d1[2].equals("nan"))var.humidity = Float.valueOf(d1[2]);
 
-            var.cmvmObject.calibration = Float.valueOf(d1[3]);
-            var.cmvmObject.m = Float.valueOf(d1[4]);
-            var.cmvmObject.voltin = Float.valueOf(d1[5]);
-            var.cmvmObject.max_analog = Float.valueOf(d1[6]);
-            var.cmvmObject.analogAvg = Float.valueOf(d1[7]);
+            var.step = Integer.valueOf(d1[3]);
+            var.work_status = (d1[4].equals("0")) ? false : true;
 
-            var.step = Integer.valueOf(d1[8]);
-            var.work_status = (d1[9].equals("0")) ? false : true;
-
-            var.relay_status[0] = (d1[10].equals("0")) ? false : true;
-            var.relay_status[1] = (d1[11].equals("0")) ? false : true;
-            var.relay_status[2] = (d1[12].equals("0")) ? false : true;
-            var.relay_status[3] = (d1[13].equals("0")) ? false : true;
-            var.relay_status[4] = (d1[14].equals("0")) ? false : true;
-            var.relay_status[5] = (d1[15].equals("0")) ? false : true;
+            var.relay_status[0] = (d1[5].equals("0")) ? false : true;
+            var.relay_status[1] = (d1[6].equals("0")) ? false : true;
+            var.relay_status[2] = (d1[7].equals("0")) ? false : true;
+            var.relay_status[3] = (d1[8].equals("0")) ? false : true;
+            var.relay_status[4] = (d1[9].equals("0")) ? false : true;
+            var.relay_status[5] = (d1[10].equals("0")) ? false : true;
 
         }
 
         if(command.equals("OUTPUT")){
             var.outout_text = value;
             var.extension.printDebug("Comunity","OUTPUT");
+        }
+
+        if(command.equals("SETSTEPTEXT")){
+            var.stepText = value;
         }
     }
 

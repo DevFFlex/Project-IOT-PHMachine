@@ -12,9 +12,9 @@ private:
   Timer t_step4;
 
   String step_desc[MAX_STEP]{
-    "S1 ดูดนํ้าจากแปลงผักเข้าถังเก็บนํ้า",
-    "S2 ดูดนํ้าจากถังเก็บนํ้าเข้าถังผสม",
-    "S3 ปรับนํ้า-วนนํ้า",
+    "S1 ดูดนํ้าจากแปลงผักเข้าถังผสม",
+    "S2 ปรับนํ้า-วนนํ้า",
+    "S3 ดูดนํ้าที่ปรับเสร็จเเล้วเข้าถังเก็บนํ้า",
     "S4 ได้ค่า pH ที่ต้องการเเล้ว,ดูดนํ้าออกจากถังผสมไปแปลงผัก"
   };
 
@@ -117,6 +117,7 @@ void PHAdjustmentProcess::step1() {
   if (var->workVar.working_step_setup) {
     var->workVar.working_step_setup = false;
     comunity->setC_Output(step_desc[0]);
+    comunity->setStepText(step_desc[0]);
     Serial.println("step 1");
   }
   // hardwareIO->lcdOutput->printL("step 1", 1);
@@ -134,6 +135,7 @@ void PHAdjustmentProcess::step2() {
   if (var->workVar.working_step_setup) {
     var->workVar.working_step_setup = false;
     comunity->setC_Output(step_desc[1]);
+    comunity->setStepText(step_desc[1]);
     Serial.println("step 2");
   }
   // hardwareIO->lcdOutput->printL("step 2", 1);
@@ -151,6 +153,7 @@ void PHAdjustmentProcess::step3() {
   if (var->workVar.working_step_setup) {
     var->workVar.working_step_setup = false;
     comunity->setC_Output(step_desc[2]);
+    comunity->setStepText(step_desc[2]);
     Serial.println("step 3");
   }
   // hardwareIO->lcdOutput->printL("step 3", 1);
@@ -166,6 +169,7 @@ void PHAdjustmentProcess::step4() {
   if (var->workVar.working_step_setup) {
     var->workVar.working_step_setup = false;
     comunity->setC_Output(step_desc[3]);
+    comunity->setStepText(step_desc[3]);
     Serial.println("step 4");
   }
   
