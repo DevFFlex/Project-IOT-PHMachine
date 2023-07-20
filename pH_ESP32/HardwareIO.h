@@ -13,7 +13,6 @@
 #include "Hardware/SD_Class.h"
 #include "Hardware/Buzzer.h"
 #include "Hardware/DHT_Sensor.h"
-#include "Hardware/FloatSwitch.h"
 #include "Hardware/Relay6CH.h"
 
 class HardwareIO
@@ -31,7 +30,6 @@ public:
   SDCard *sdcard;
   Buzzer *buzzer;
   DHTSensor *dhtsensor;
-  FloatSwitch *floatswitch;
 
   Timer t_update;
 
@@ -48,7 +46,6 @@ public:
     sdcard = new SDCard();
     buzzer = new Buzzer();
     dhtsensor = new DHTSensor();
-    floatswitch = new FloatSwitch();
   }
 
   void setup();
@@ -65,7 +62,6 @@ public:
     delete sdcard;
     delete buzzer;
     delete dhtsensor;
-    delete floatswitch;
   }
 };
 
@@ -80,7 +76,6 @@ void HardwareIO::setup()
   sdcard->setup();
   buzzer->setup();
   dhtsensor->setup();
-  floatswitch->setup();
 }
 
 void HardwareIO::loop()
@@ -94,7 +89,6 @@ void HardwareIO::loop()
   sdcard->loop();
   buzzer->loop();
   dhtsensor->loop();
-  floatswitch->loop();
 }
 
 void HardwareIO::updateVar()
@@ -104,7 +98,5 @@ void HardwareIO::updateVar()
     var->mixTank_pH = pHSensor->getPH();
     var->humidity = dhtsensor->getHumidity();
     var->tempC = dhtsensor->getTempC();
-
-  
   }
 }

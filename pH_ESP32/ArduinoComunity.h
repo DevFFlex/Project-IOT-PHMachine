@@ -10,7 +10,7 @@ private:
   HardwareIO *hardwareIO;
 
   String data_buffer = "";
-  String *item = new String[3];
+  String *item = new String[6];
   String *c_v = new String[2];
 
   bool displayDataTranfer = false;
@@ -50,11 +50,11 @@ void ArduinoComunity::loop()
     if(displayDataTranfer)Serial.println("Data From Arduino ---> " + data_buffer ); 
 
 
-    var->strManager->split(item, data_buffer, ",", 3);
-    //item[0] = pH Value
-    //item[1] = pH Voltage
-    //item[2] = pH Temperature
+    var->strManager->split(item, data_buffer, ",", 6);
     var->mixTank_pH = item[0].toFloat();
+    var->fsw_mixTank_Up = (item[3] == "1") ? true : false;
+    var->fsw_mixtank_Down = (item[4] == "1") ? true : false;
+    var->fsw_waterTank_Down = (item[5] == "1") ? true : false;
 
 
     data_buffer = "";

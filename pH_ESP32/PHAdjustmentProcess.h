@@ -12,10 +12,10 @@ private:
   Timer t_step4;
 
   String step_desc[MAX_STEP]{
-    "S1 ดูดนํ้าจากแปลงผักเข้าถังผสม",
-    "S2 ปรับนํ้า-วนนํ้า",
-    "S3 ดูดนํ้าที่ปรับเสร็จเเล้วเข้าถังเก็บนํ้า",
-    "S4 ได้ค่า pH ที่ต้องการเเล้ว,ดูดนํ้าออกจากถังผสมไปแปลงผัก"
+    "ดูดนํ้าจากแปลงผักเข้าถังผสม",
+    "ปรับนํ้า-วนนํ้า",
+    "ดูดนํ้าที่ปรับเสร็จเเล้วเข้าถังเก็บนํ้า",
+    "ได้ค่า pH ที่ต้องการเเล้ว,ดูดนํ้าออกจากถังผสมไปแปลงผัก"
   };
 
   void step1();
@@ -25,7 +25,7 @@ private:
 
 public:
   PHAdjustmentProcess(Variable *varIn, HardwareIO *hardwareIOIn, Comunity *comunityIn)
-    : t_step1(10000), t_step2(10000), t_step3(10000), t_step4(10000) {
+    : t_step1(10000), t_step2(30000), t_step3(10000), t_step4(10000) {
     var = varIn;
     hardwareIO = hardwareIOIn;
     comunity = comunityIn;
@@ -67,6 +67,12 @@ void PHAdjustmentProcess::loop() {
     }
   } else if (!var->workVar.working_status && !var->workVar.working_status_setup) {
     Serial.println("stop------");
+    hardwareIO->relay->off(0);
+    hardwareIO->relay->off(1);
+    hardwareIO->relay->off(2);
+    hardwareIO->relay->off(3);
+    hardwareIO->relay->off(4);
+    hardwareIO->relay->off(5);
     stop();
   }
 }
@@ -114,16 +120,19 @@ bool PHAdjustmentProcess::timerAutoWork_Compare_Rtctime(int index) {
 
 
 void PHAdjustmentProcess::step1() {
+  // bool condition_nextstep = t_step1.isExpired();
+  bool condition_nextstep = !var->fsw_mixTank_Up;
+
   if (var->workVar.working_step_setup) {
     var->workVar.working_step_setup = false;
     comunity->setC_Output(step_desc[0]);
     comunity->setStepText(step_desc[0]);
     Serial.println("step 1");
   }
-  // hardwareIO->lcdOutput->printL("step 1", 1);
-  hardwareIO->relay->on(2);
-  if (t_step1.isExpired()) {
-    hardwareIO->relay->off(2);
+
+  hardwareIO->relay->on(0);
+  if (condition_nextstep) {
+    hardwareIO->relay->off(0);
     nextStep();
   }
 }
@@ -138,46 +147,48 @@ void PHAdjustmentProcess::step2() {
     comunity->setStepText(step_desc[1]);
     Serial.println("step 2");
   }
-  // hardwareIO->lcdOutput->printL("step 2", 1);
-  hardwareIO->relay->on(0);
 
-  // hardwareIO->lcdOutput->printL("wf = " + String(hardwareIO->waterSensor->getValue()), 2);
+  hardwareIO->relay->on(5);
 
   if (condition_nextstep) {
-    hardwareIO->relay->off(0);
+    hardwareIO->relay->off(5);
     nextStep();
   }
 }
 
 void PHAdjustmentProcess::step3() {
+  bool condition_nextstep = var->fsw_mixtank_Down;
+
+
   if (var->workVar.working_step_setup) {
     var->workVar.working_step_setup = false;
     comunity->setC_Output(step_desc[2]);
     comunity->setStepText(step_desc[2]);
     Serial.println("step 3");
   }
-  // hardwareIO->lcdOutput->printL("step 3", 1);
-  hardwareIO->relay->on(5);
 
-  if (t_step3.isExpired()) {
-    hardwareIO->relay->off(5);
+  hardwareIO->relay->on(1);
+
+  if (condition_nextstep) {
+    hardwareIO->relay->off(1);
     nextStep();
   }
 }
 
 void PHAdjustmentProcess::step4() {
+  bool condition_nextstep = !var->fsw_waterTank_Down;
+
   if (var->workVar.working_step_setup) {
     var->workVar.working_step_setup = false;
     comunity->setC_Output(step_desc[3]);
     comunity->setStepText(step_desc[3]);
     Serial.println("step 4");
   }
-  
-  // hardwareIO->lcdOutput->printL("step 4", 1);
-  hardwareIO->relay->on(1);
 
-  if (t_step4.isExpired()) {
-    hardwareIO->relay->off(1);
+  hardwareIO->relay->on(2);
+
+  if (condition_nextstep) {
+    hardwareIO->relay->off(2);
     nextStep();
   }
 }

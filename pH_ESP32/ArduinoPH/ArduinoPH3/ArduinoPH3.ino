@@ -9,6 +9,10 @@ SoftwareSerial esp32(10, 11);
 float voltage, phValue, temperature = 25;
 DFRobot_PH ph;
 
+int fsw_r = 5;
+int fsw_g = 6;
+int fsw_b = 7;
+
 void setup() {
   Serial.begin(115200);
   ph.begin();
@@ -27,7 +31,7 @@ void loop() {
     Serial.print("^C  pH:");
     Serial.println(phValue, 2);
 
-    String data_str = String(phValue) + "," + String(voltage) + "," + String(temperature);
+    String data_str = String(phValue) + "," + String(voltage) + "," + String(temperature) + "," + String(digitalRead(fsw_r)) + "," + String(digitalRead(fsw_g)) + "," + String(digitalRead(fsw_b));
     esp32.write(data_str.c_str());
   }
 

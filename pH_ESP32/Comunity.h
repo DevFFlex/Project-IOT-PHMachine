@@ -11,16 +11,17 @@ class Comunity : public ServerPH
 
   Timer autosendTimer;
 
+  
+
 private:
   String SSID_AP = "PPC";
   String PASS_AP = "12345678";
 
-  
-
+  String *item_parameter = new String[6];
 
 
 public:
-
+  bool debugDisplayDataRecv = false;
 
 
   void onClientMessageCallback(String message);
@@ -89,7 +90,7 @@ void Comunity::loop()
 
 void Comunity::onClientMessageCallback(String str_trim)
 {
-  Serial.println("Client -------------- Message");
+  // Serial.println("Client -------------- Message");
 
   String databox1[2];
   var->strManager->split(databox1, str_trim, ":", 2);
@@ -105,6 +106,8 @@ void Comunity::onClientMessageCallback(String str_trim)
   String str_command = command;
   String str_value = value;
 
+  if(debugDisplayDataRecv)Serial.println(str_clientname + ":" + str_command + ":" + str_value);
+
   if (str_command.indexOf("MESSAGE") != -1)
   {
     String data = str_clientname + ":" + str_command + "=" + value;
@@ -114,7 +117,8 @@ void Comunity::onClientMessageCallback(String str_trim)
 
   if (str_command.indexOf("RELAY") != -1)
   {
-    hardwareIO->relay->toggle(str_value.toInt());
+    var->strManager->split(item_parameter,str_value,",",2);
+    hardwareIO->relay->onTimeout(item_parameter[0].toInt(),item_parameter[1].toFloat());
   }
 
   if(str_command.indexOf("INPUT_PH") != -1){
@@ -133,6 +137,7 @@ void Comunity::onClientMessageCallback(String str_trim)
   if(str_command.indexOf("SET_TIME_AUTO_WORK") != -1){
     recvTimerAutoWork(str_value);
     setC_Output("Server Set TimeAutoWork Success");
+    db->writeTimeAutoWork(var->timerautowork);
   }
 
   if(str_command.indexOf("GET_TIME_AUTO_WORK") != -1){
@@ -167,7 +172,17 @@ void Comunity::updateApp()
     data += String(hardwareIO->relay->status[2]) + ",";
     data += String(hardwareIO->relay->status[3]) + ",";
     data += String(hardwareIO->relay->status[4]) + ",";
-    data += String(hardwareIO->relay->status[5]);
+    data += String(hardwareIO->relay->status[5]) + ",";
+
+    //timeBoard
+    data += String(hardwareIO->rtc->getHour()) + ",";
+    data += String(hardwareIO->rtc->getMinute()) + ",";
+    data += String(hardwareIO->rtc->getSecond()) + ",";
+
+    //FloatSwitch
+    data += String(var->fsw_mixTank_Up) + ",";
+    data += String(var->fsw_mixtank_Down) + ",";
+    data += String(var->fsw_waterTank_Down);
 
     ServerPH::send(data);
     // Serial.println(data);

@@ -21,6 +21,6 @@ public class SoundEffect {
     }
 
     public void play_glitch(){
-        sound_glitch.start();
+//        sound_glitch.start();
     }
 }

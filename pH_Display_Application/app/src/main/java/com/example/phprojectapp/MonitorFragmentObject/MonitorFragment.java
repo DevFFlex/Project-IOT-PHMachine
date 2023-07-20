@@ -9,9 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.example.phprojectapp.Variable.TimeBoardObject;
@@ -24,6 +27,14 @@ public class MonitorFragment extends Fragment {
     private TextView monitor_tvPHNeeded,monitor_tvPHNeededOutput,monitor_tvPHNeededOutputWorking,monitor_stepText,monitor_tvTimeBoard,tv_tempC,tv_ec;
     private Button monitor_btnChangePH,monitor_btnStopChangePH,monitor_btnStartWork, monitor_btnSetTime;
     private LinearLayout nonWorkLayout,workingLayout;
+
+
+    private EditText manualETTime;
+    private Button btn_relay[] = new Button[6];
+
+    private RadioGroup radioGroupMode;
+
+    private LinearLayout layoutManualMode,layoutAutoMode;
 
     View monitorFragmentView;
     int current_step = 0;
@@ -58,6 +69,13 @@ public class MonitorFragment extends Fragment {
             monitor_tvPHNeededOutput.setText((var.inputPH == -1) ? "_" : String.format("%.1f - %.1f",var.inputPH - 0.5,var.inputPH + 0.5));
             monitor_tvPHNeededOutputWorking.setText((var.inputPH == -1) ? "_" : String.format("%.1f - %.1f",var.inputPH - 0.5,var.inputPH + 0.5));
             monitor_stepText.setText(var.stepText);
+            monitor_tvTimeBoard.setText(String.format("%01d:%01d:%01d",var.timeBoardObject.hour,var.timeBoardObject.minute,var.timeBoardObject.second));
+
+            for(int i = 0;i<6;i++){
+                if(!var.relay_status[i])btn_relay[i].setBackgroundResource(R.drawable.btn_style4);
+                else btn_relay[i].setBackgroundResource(R.drawable.btn_style3);
+            }
+
             if ((var.inputPH == -1 || var.inputPH < 4 || var.inputPH > 10)) {
                 monitor_btnStartWork.setVisibility(View.INVISIBLE);
             } else {
@@ -103,11 +121,47 @@ public class MonitorFragment extends Fragment {
         nonWorkLayout = monitorFragmentView.findViewById(R.id.monitor_layout_noneWork);
         workingLayout = monitorFragmentView.findViewById(R.id.monitor_layout_Working);
 
+        layoutManualMode = monitorFragmentView.findViewById(R.id.monitor_layout_FunctionManual);
+        layoutAutoMode = monitorFragmentView.findViewById(R.id.monitor_layout_FunctionAuto);
+
+
+        manualETTime = monitorFragmentView.findViewById(R.id.monitor_manualEtTime);
+        btn_relay[0] = monitorFragmentView.findViewById(R.id.monitor_manualBtnR1);
+        btn_relay[1] = monitorFragmentView.findViewById(R.id.monitor_manualBtnR2);
+        btn_relay[2] = monitorFragmentView.findViewById(R.id.monitor_manualBtnR3);
+        btn_relay[3] = monitorFragmentView.findViewById(R.id.monitor_manualBtnR4);
+        btn_relay[4] = monitorFragmentView.findViewById(R.id.monitor_manualBtnR5);
+        btn_relay[5] = monitorFragmentView.findViewById(R.id.monitor_manualBtnR6);
+
+        radioGroupMode = monitorFragmentView.findViewById(R.id.monitor_radioGroupMode);
+        radioGroupMode.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
+                RadioButton radioButton = monitorFragmentView.findViewById(checkedId);
+
+                if(radioButton.getText().toString().equals("Manual")){
+                    layoutManualMode.setVisibility(View.VISIBLE);
+                    layoutAutoMode.setVisibility(View.GONE);
+                }else if(radioButton.getText().toString().equals("Auto")){
+                    layoutManualMode.setVisibility(View.GONE);
+                    layoutAutoMode.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
         monitor_btnChangePH.setOnClickListener(this::onClickSetPH);
         monitor_btnStopChangePH.setOnClickListener(this::onClickStopPHWork);
         monitor_btnStartWork.setOnClickListener(this::onClickStartPHWork);
         monitor_btnSetTime.setOnClickListener(this::onClickSetTime);
         monitor_tvTimeBoard.setOnClickListener(this::onClickTimeBoard);
+
+        btn_relay[0].setOnClickListener(this::onToggleRelay1);
+        btn_relay[1].setOnClickListener(this::onToggleRelay2);
+        btn_relay[2].setOnClickListener(this::onToggleRelay3);
+        btn_relay[3].setOnClickListener(this::onToggleRelay4);
+        btn_relay[4].setOnClickListener(this::onToggleRelay5);
+        btn_relay[5].setOnClickListener(this::onToggleRelay6);
+
 
 
 //        animationOption.startShuffleSlideIn(new ArrayList<View>(Arrays.asList(monitor_btnChangePH,monitor_btnSetTime)));
@@ -175,6 +229,39 @@ public class MonitorFragment extends Fragment {
                 var.extension.printDebug("Monitor","onClickTimeBoard");
             }
         });
+    }
+
+
+
+
+    private void toggleRelay(int index){
+        String time_str = manualETTime.getText().toString();
+        manualETTime.setText("");
+        if(time_str.equals("")){
+
+        }else{
+            double time = Double.parseDouble(time_str);
+            var.comunity.setToggleRelay(index,time);
+        }
+    }
+
+    public void onToggleRelay1(View v){
+        toggleRelay(0);
+    }
+    public void onToggleRelay2(View v){
+        toggleRelay(1);
+    }
+    public void onToggleRelay3(View v){
+        toggleRelay(2);
+    }
+    public void onToggleRelay4(View v){
+        toggleRelay(3);
+    }
+    public void onToggleRelay5(View v){
+        toggleRelay(4);
+    }
+    public void onToggleRelay6(View v){
+        toggleRelay(5);
     }
 
 

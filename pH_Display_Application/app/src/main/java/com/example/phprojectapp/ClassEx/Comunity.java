@@ -49,10 +49,11 @@ public class Comunity extends Client{
         send("TIME_BOARD",String.valueOf(value));
     }
 
-    public void setToggleRelay(int index){
+    public void setToggleRelay(int index,double time){
         if (index < 0 || index > 6)return;
-        send("RELAY",String.valueOf(index));
+        send("RELAY",String.format("%d,%.1f",index,time));
     }
+
 
     public void getTimeAutoWork(){
         send("GET_TIME_AUTO_WORK","NULL");
@@ -105,6 +106,14 @@ public class Comunity extends Client{
             var.relay_status[4] = (d1[9].equals("0")) ? false : true;
             var.relay_status[5] = (d1[10].equals("0")) ? false : true;
 
+            var.timeBoardObject.hour = Integer.parseInt(d1[11]);
+            var.timeBoardObject.minute = Integer.parseInt(d1[12]);
+            var.timeBoardObject.second = Integer.parseInt(d1[13]);
+
+            var.fsw[0] = Integer.parseInt(d1[14]);
+            var.fsw[1] = Integer.parseInt(d1[15]);
+            var.fsw[2] = Integer.parseInt(d1[16]);
+
         }
 
         if(command.equals("OUTPUT")){
@@ -121,6 +130,25 @@ public class Comunity extends Client{
 
         if(command.equals("GET_TIME_AUTO_WORK_RES")){
             var.extension.printDebug("Comunity","Recv TAW");
+
+            String[] data1 = value.split("#");
+
+            var.timeObjectList.clearAllItem();
+            for(int i = 0;i<4;i++){
+                String[] data2 = data1[i].split(",");
+
+                if(data2[4].equals("false")){
+
+                    var.timeObjectList.addItem(Integer.parseInt(data2[0]),Integer.parseInt(data2[1]),(data2[2].equals("false")) ? false : true,Float.parseFloat(data2[3]));
+//                    var.timeObjectList.data.get(i).setHour();
+//                    var.timeObjectList.data.get(i).setMinute();
+//                    var.timeObjectList.data.get(i).setStatus( );
+//                    var.timeObjectList.data.get(i).setPh();
+
+                }
+                System.out.println(data1[i]);
+
+            }
         }
 
         if(command.equals("INPUT_RES")){

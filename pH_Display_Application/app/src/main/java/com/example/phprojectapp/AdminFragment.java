@@ -22,7 +22,7 @@ public class AdminFragment extends Fragment {
     private Variable var;
     private Button btn_relay[] = new Button[6];
     private Button btn_sendData;
-
+    private TextView[] tv_fsw = new TextView[3];
 
     public AdminFragment(Variable variable) {
         this.var = variable;
@@ -49,6 +49,10 @@ public class AdminFragment extends Fragment {
         btn_relay[5] = v.findViewById(R.id.admin_btn_relay6);
         btn_sendData = v.findViewById(R.id.admin_btnSendTest);
 
+        tv_fsw[0] = v.findViewById(R.id.admin_tvFSW1);
+        tv_fsw[1] = v.findViewById(R.id.admin_tvFSW2);
+        tv_fsw[2] = v.findViewById(R.id.admin_tvFSW3);
+
 
 
         btn_relay[0].setOnClickListener(this::onToggleRelay1);
@@ -58,6 +62,8 @@ public class AdminFragment extends Fragment {
         btn_relay[4].setOnClickListener(this::onToggleRelay5);
         btn_relay[5].setOnClickListener(this::onToggleRelay6);
         btn_sendData.setOnClickListener(this::onSendData);
+
+
 
         Handler handler = new Handler();
         handler.post(new Runnable() {
@@ -69,6 +75,10 @@ public class AdminFragment extends Fragment {
                     else btn_relay[i].setBackgroundResource(R.drawable.btn_style3);
                 }
 
+                tv_fsw[0].setText(String.valueOf(var.fsw[0]));
+                tv_fsw[1].setText(String.valueOf(var.fsw[1]));
+                tv_fsw[2].setText(String.valueOf(var.fsw[2]));
+
                 handler.postDelayed(this,1000);
             }
         });
@@ -78,7 +88,7 @@ public class AdminFragment extends Fragment {
     }
 
     private void toggleRelay(int index){
-        var.comunity.setToggleRelay(index);
+        var.comunity.setToggleRelay(index,-1);
     }
 
     public void onToggleRelay1(View v){

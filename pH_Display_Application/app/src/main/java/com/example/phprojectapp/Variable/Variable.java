@@ -28,6 +28,8 @@ public class Variable{
     public boolean work_status = false;
     public String stepText = "";
 
+    public int[] fsw = new int[3];
+
     public boolean relay_status[] = {
             false,
             false,
@@ -84,6 +86,8 @@ public class Variable{
 
         this.timeObjectList = new TimeObjectList();
         this.cmvmObject = new CMVMObject();
+
+        timeBoardObject = new TimeBoardObject();
 
 
         animationOption = new AnimationOption(context);

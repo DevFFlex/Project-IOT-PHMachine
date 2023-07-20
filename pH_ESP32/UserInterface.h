@@ -23,9 +23,10 @@ private:
   bool function_setup = true;
   String function_item[4] = {
       "start adjusting pH",
-      "Function1",
-      "pH Calaurate",
-      "Relay Status"};
+      "_...",
+      "_...",
+      "_..."
+  };
 
   String data_buffer = "";
 
@@ -53,11 +54,9 @@ public:
 
       switch (pagename)
       {
-
       case MAIN:
-        // Serial.println("setup MAIN Page");
-        hardwareIO->lcdOutput->printL("PH = " + String(hardwareIO->pHSensor->getPH()) + " | " + hardwareIO->pHSensor->getPHString(), 0);
-        hardwareIO->lcdOutput->printL(String(hardwareIO->floatswitch->getFSW_MixtankUp()) + String(hardwareIO->floatswitch->getFSW_MixtankDown()) + String(hardwareIO->floatswitch->getFSW_watertankDown()), 1);
+        hardwareIO->lcdOutput->printL("PH = " + String(var->mixTank_pH) + " | " + hardwareIO->pHSensor->getPHString(), 0);
+        hardwareIO->lcdOutput->printL(String(var->fsw_mixTank_Up) + String(var->fsw_mixtank_Down) + String(var->fsw_waterTank_Down), 1);
         if(hardwareIO->dhtsensor->isReady())hardwareIO->lcdOutput->printL("H = " + String(var->humidity) + "% T = " + String(var->tempC), 2);
         else hardwareIO->lcdOutput->printL("DHT Error", 2);
         hardwareIO->lcdOutput->printL(hardwareIO->rtc->getTimeToString(), 3);

@@ -37,24 +37,23 @@ void SerialInput::loop()
         {
             if (data.indexOf("relayall active") != -1)
             {
-                data.replace("relayall active", "");
+                hardwareIO->relay->active();
             }
-            if (data.indexOf("relayall deactive") != -1)
+            else if (data.indexOf("relayall deactive") != -1)
             {
-                data.replace("relayall deactive", "");
                 hardwareIO->relay->deactive();
             }
-            if (data.indexOf("relay on") != -1)
+            else if (data.indexOf("relay on") != -1)
             {
                 data.replace("relay on", "");
                 hardwareIO->relay->on(data.toInt());
             }
-            if (data.indexOf("relay off") != -1)
+            else if (data.indexOf("relay off") != -1)
             {
                 data.replace("relay off", "");
                 hardwareIO->relay->off(data.toInt());
             }
-            if (data.indexOf("relay toggle") != -1)
+            else if (data.indexOf("relay toggle") != -1)
             {
                 data.replace("relay toggle", "");
                 hardwareIO->relay->toggle(data.toInt());
@@ -80,7 +79,7 @@ void SerialInput::loop()
                 hardwareIO->sdcard->removeDir(data.c_str());
             }
 
-            if (data.indexOf("sd dir ") != -1){
+            else if (data.indexOf("sd dir ") != -1){
                 data.replace("sd dir ","");
                 String path = data;
                 String data2 = data.substring(data.indexOf(" "),data.length());
@@ -88,12 +87,12 @@ void SerialInput::loop()
                 hardwareIO->sdcard->listDir(data.c_str(),0);
             }
 
-            if (data.indexOf("sd mkdir ") != -1){
+            else if (data.indexOf("sd mkdir ") != -1){
                 data.replace("sd mkdir ","");
                 hardwareIO->sdcard->createDir(data.c_str());
             }
 
-            if (data.indexOf("sd del ") != -1){
+            else if (data.indexOf("sd del ") != -1){
                 data.replace("sd del ","");
                 hardwareIO->sdcard->deleteFile(data.c_str());
             }
@@ -103,12 +102,12 @@ void SerialInput::loop()
                 db->writeTimeAutoWork(var->timerautowork);
             }
 
-            if (data.indexOf("readTAW") != -1){
+            else if (data.indexOf("readTAW") != -1){
                 data.replace("readTAW","");
                 Serial.println(db->readTimeAutoWork(var->timerautowork));
             }
 
-            if (data.indexOf("showTAW") != -1){
+            else if (data.indexOf("showTAW") != -1){
                 String out = "";
                 out += var->timerautowork[0].toString() + "\n";
                 out += var->timerautowork[1].toString() + "\n";
@@ -123,15 +122,16 @@ void SerialInput::loop()
 
             if (data.indexOf("debugServerData") != -1){
                 comunity->setDisplayDataTranfer(!comunity->getDisplayDataTranfer());
+                
+            }
+
+            else if (data.indexOf("debugServerDataRecv") != -1){
+                comunity->debugDisplayDataRecv = !comunity->debugDisplayDataRecv;
             }
 
 
             if(data.indexOf("debugArduinoData") != -1){
                 ardunoComunity->setDisplayDataTranfer(!ardunoComunity->getDisplayDataTranfer());
-            }
-
-            if(data.indexOf("debubFloatSwitch") != -1){
-                hardwareIO->floatswitch->debugDisplayDataStatus = !hardwareIO->floatswitch->debugDisplayDataStatus;
             }
         
         }

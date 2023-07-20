@@ -19,6 +19,10 @@ public:
   float tempC = 0;
   float humidity = 0;
 
+  bool fsw_mixTank_Up = false;
+  bool fsw_mixtank_Down = false;
+  bool fsw_waterTank_Down = false;
+
   WorkVar workVar;
 
   TimerAutoWork *timerautowork = new TimerAutoWork[4];
