@@ -15,11 +15,7 @@
 #include "Hardware/DHT_Sensor.h"
 #include "Hardware/Relay6CH.h"
 
-class HardwareIO
-{
-private:
-  Variable *var;
-
+class HardwareIO : public System{
 public:
   LcdOutput *lcdOutput;
   KeypadInput *keypadInput;
@@ -31,11 +27,8 @@ public:
   Buzzer *buzzer;
   DHTSensor *dhtsensor;
 
-  Timer t_update;
-
-  HardwareIO(Variable *varIn) : t_update(500)
+  HardwareIO()
   {
-    var = varIn;
 
     lcdOutput = new LcdOutput();
     keypadInput = new KeypadInput();
@@ -48,10 +41,6 @@ public:
     dhtsensor = new DHTSensor();
   }
 
-  void setup();
-  void loop();
-  void updateVar();
-
   ~HardwareIO()
   {
     delete lcdOutput;
@@ -63,40 +52,31 @@ public:
     delete buzzer;
     delete dhtsensor;
   }
+
+  void setup() override {
+    lcdOutput->setup();
+    keypadInput->setup();
+    rtc->setup();
+    relay->setup();
+    pHSensor->setup();
+    waterSensor->setup();
+    sdcard->setup();
+    buzzer->setup();
+    dhtsensor->setup();
+  }
+
+  void loop() override {
+    lcdOutput->loop();
+    keypadInput->loop();
+    rtc->loop();
+    relay->loop();
+    pHSensor->loop();
+    waterSensor->loop();
+    sdcard->loop();
+    buzzer->loop();
+    dhtsensor->loop();
+  }
+
+  
 };
 
-void HardwareIO::setup()
-{
-  lcdOutput->setup();
-  keypadInput->setup();
-  rtc->setup();
-  relay->setup();
-  pHSensor->setup();
-  waterSensor->setup();
-  sdcard->setup();
-  buzzer->setup();
-  dhtsensor->setup();
-}
-
-void HardwareIO::loop()
-{
-  lcdOutput->loop();
-  keypadInput->loop();
-  rtc->loop();
-  relay->loop();
-  pHSensor->loop();
-  waterSensor->loop();
-  sdcard->loop();
-  buzzer->loop();
-  dhtsensor->loop();
-}
-
-void HardwareIO::updateVar()
-{
-  if (t_update.isExpired())
-  {
-    var->mixTank_pH = pHSensor->getPH();
-    var->humidity = dhtsensor->getHumidity();
-    var->tempC = dhtsensor->getTempC();
-  }
-}

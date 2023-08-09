@@ -1,18 +1,14 @@
-#include "WString.h"
+String intergerToText(int integer, int zeroforward){
+  String zero = "";
+  if (zeroforward <= 0 || integer < 0 || integer > 9) return String(integer);
 
-class StringManager {
-private:
-public:
+  for (int i = 0; i < zeroforward - 1; i++) zero += "0";
+  return zero + String(integer);
+}
 
-  StringManager() {
-  }
 
-  void split(String* databox, String text, String symbol, int size);
-  String intToText(int integer, int zeroforward);
-};
 
-void StringManager::split(String* databox, String text, String symbol, int size) {
-
+void splitString(String* databox, String text, String symbol, int size){
   char charArrayText[text.length() + 1];
   text.toCharArray(charArrayText, text.length() + 1);
 
@@ -27,12 +23,4 @@ void StringManager::split(String* databox, String text, String symbol, int size)
 
     part = strtok(NULL, symbol1);
   }
-}
-
-String StringManager::intToText(int integer, int zeroforward) {
-  String zero = "";
-  if (zeroforward <= 0 || integer < 0 || integer > 9) return String(integer);
-
-  for (int i = 0; i < zeroforward - 1; i++) zero += "0";
-  return zero + String(integer);
 }

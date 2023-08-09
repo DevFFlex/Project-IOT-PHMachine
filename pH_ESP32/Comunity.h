@@ -1,274 +1,166 @@
-#include "Server/InterfaceEventListener.h"
-#include "Server.h"
-#include "Server/ServerClass.h"
+#include "Comunity/WiFiControll.h"
 
-class Comunity : public ServerPH
+#include "Comunity/ArduinoComunity.h"
+#include "Comunity/ClientComunity.h"
+#include "Comunity/CouldComunity.h"
+
+
+class Comunity : public System
 {
+  private:
+  WiFiControll *wifi_controll;
   Variable *var;
-  HardwareIO *hardwareIO;
-  Database *db;
-  ArduinoComunity *ar_com;
-
-  Timer autosendTimer;
-
-  
-
-private:
-  String SSID_AP = "PPC";
-  String PASS_AP = "12345678";
-
   String *item_parameter = new String[6];
-
-
-public:
-  bool debugDisplayDataRecv = false;
-
-
-  void onClientMessageCallback(String message);
-  void onClientJoinCallback(String clientName);
-
-
-  Comunity(Variable *varIn, HardwareIO *hardwareIOIn, Database *dbIn, ArduinoComunity *ar_comIn)
-      : ServerPH(&SSID_AP, &PASS_AP), autosendTimer(1000)
-  {
-    var = varIn;
-    hardwareIO = hardwareIOIn;
-    db = dbIn;
-    ar_com = ar_comIn;
-    
-  }
-
-  ~Comunity()
-  {
-  }
-
-  //------------ send to client function ------------------
-
-  void setC_FileDir(String path);
-  void setC_CMVM();
-  void setC_Output(String output_str);
-  void setStepText(String stepText);
-
-  void sendOther(String data_str);
 
   String encodeTimeAutoWork();
   String encodeTimeBoard();
   String encodeFileDir(String path);
-  String encodeCMVM();
 
-  //------------ get value from client and set variable server function ----------------
-  void recvInputPH(String value);
-  void recvTimeBoard(String value);
-  void recvTimerAutoWork(String value);
-  void recvToggleRelay(String value);
-  void recvCMVM(String value);
+  void onTimeUpdateAPP(){
+    String queryData = "";
+    queryData += String(var->mixTank_pH) + ",";
+    queryData += String(var->tempC) + ",";
+    queryData += String(var->humidity) + ",";
+    // WorkVal
+    queryData += String(var->workVar.step) + ",";
+    queryData += String(var->workVar.working_status) + ",";
 
-  void setup();
-  void loop();
+    // relay-status
+    queryData += String(var->hardwareIO->relay->status[0]) + ",";
+    queryData += String(var->hardwareIO->relay->status[1]) + ",";
+    queryData += String(var->hardwareIO->relay->status[2]) + ",";
+    queryData += String(var->hardwareIO->relay->status[3]) + ",";
+    queryData += String(var->hardwareIO->relay->status[4]) + ",";
+    queryData += String(var->hardwareIO->relay->status[5]) + ",";
 
-  void updateApp();
+    // timeBoard
+    queryData += String(var->hardwareIO->rtc->getHour()) + ",";
+    queryData += String(var->hardwareIO->rtc->getMinute()) + ",";
+    queryData += String(var->hardwareIO->rtc->getSecond()) + ",";
 
-  void H_MessageProcess(String command_arg, String value);
-};
+    // FloatSwitch
+    queryData += String(var->fsw_mixTank_Up) + ",";
+    queryData += String(var->fsw_mixtank_Down) + ",";
+    queryData += String(var->fsw_waterTank_Down);
 
-void Comunity::setup()
-{
-  ServerPH::setup();
-  ServerPH::setOnMessageListener(std::bind(&Comunity::onClientMessageCallback, this, std::placeholders::_1));
-  ServerPH::setOnClientJoinListener(std::bind(&Comunity::onClientJoinCallback, this, std::placeholders::_1));
-}
-
-void Comunity::loop()
-{
-  ServerPH::loop();
-
-  if (autosendTimer.isExpired())
-  {
-    updateApp();
-  }
-}
-
-void Comunity::onClientMessageCallback(String str_trim)
-{
-  // Serial.println("Client -------------- Message");
-
-  String databox1[2];
-  var->strManager->split(databox1, str_trim, ":", 2);
-  String header = databox1[0];
-  String commands = databox1[1];
-
-  String databox2[2];
-  var->strManager->split(databox2, commands, "=", 2);
-  String command = databox2[0];
-  String value = databox2[1];
-
-  String str_clientname = header;
-  String str_command = command;
-  String str_value = value;
-
-  if(debugDisplayDataRecv)Serial.println(str_clientname + ":" + str_command + ":" + str_value);
-
-  if (str_command.indexOf("MESSAGE") != -1)
-  {
-    String data = str_clientname + ":" + str_command + "=" + value;
-    Serial.println("Comunity : " + data);
-    ServerPH::send(data);
+    clientComunity->sendUpdateApp(queryData);
   }
 
-  if (str_command.indexOf("RELAY") != -1)
-  {
-    var->strManager->split(item_parameter,str_value,",",2);
-    hardwareIO->relay->onTimeout(item_parameter[0].toInt(),item_parameter[1].toFloat());
-  }
 
-  if(str_command.indexOf("INPUT_PH") != -1){
-    if(str_value != "stop"){
-      var->workVar.working_status = true;
-    }else{
+
+
+  void onClientAdjPH(String data){
+    if (data.indexOf("stop") != -1)
+    {
       var->workVar.working_status = false;
     }
+    else
+    {
+      var->input_ph = data.toFloat();
+      var->workVar.working_status = true;
+    }
+  } 
+
+  void onClientSetTimeAutoWork(String data){
+    String datalayer1[4];
+    splitString(datalayer1, data, "|", 4);
+
+    for (int i = 0; i < 4; i++)
+    {
+      String datalayer2[4];
+      splitString(datalayer2, datalayer1[i], ",", 4);
+
+      var->timerautowork[i].setHour(datalayer2[0].toInt());
+      var->timerautowork[i].setMinute(datalayer2[1].toInt());
+      var->timerautowork[i].setStatus((datalayer2[2] == "true") ? true : false);
+      var->timerautowork[i].setPH(datalayer2[3].toFloat());
+      var->timerautowork[i].setDelete((datalayer2[0].toInt() == -1) ? true : false);
+    }
+
+    var->db->writeTimeAutoWork(var->timerautowork);
+    clientComunity->sendOutput("Server Set TimeAutoWork Success");
+  
   }
 
-  if(str_command.indexOf("TIME_BOARD") != -1){
-    recvTimeBoard(str_value);
-    setC_Output("Server Set RTC Time");
+  void onClientGetTimeAutoWork(String data){
+    clientComunity->sendTimeAutoWork(encodeTimeAutoWork());
   }
 
-  if(str_command.indexOf("SET_TIME_AUTO_WORK") != -1){
-    recvTimerAutoWork(str_value);
-    setC_Output("Server Set TimeAutoWork Success");
-    db->writeTimeAutoWork(var->timerautowork);
+  void onClientSetTimeBoard(String data){
+    byte numsize = 7;
+    String *item = new String[numsize];
+    splitString(item, data, ",", 7);
+
+    byte hour = byte(item[0].toInt());
+    byte minute = byte(item[1].toInt());
+    byte second = byte(item[2].toInt());
+    byte dayofweek = byte(item[3].toInt());
+    byte dayofmonth = byte(item[4].toInt());
+    byte month = byte(item[5].toInt());
+    byte year = byte(item[6].toInt());
+
+    var->hardwareIO->rtc->setTime(hour, minute, second, dayofweek, dayofmonth, month, year);
   }
 
-  if(str_command.indexOf("GET_TIME_AUTO_WORK") != -1){
-    ServerPH::send("SERVER:GET_TIME_AUTO_WORK_RES=" + encodeTimeAutoWork());
-    Serial.println("Server Response Request TAW");
+  void onClientToggleRelay(String data){
+
+    splitString(item_parameter,data,",",2);
+    var->hardwareIO->relay->onTimeout(item_parameter[0].toInt(),item_parameter[1].toFloat());
+
+    var->hardwareIO->relay->toggle(data.toInt());
   }
-}
 
-void Comunity::onClientJoinCallback(String clientName){
-  Serial.println("Client ---------------- Join");
-}
+  public:
+  ArduinoComunity *ardunoComunity;
+  ClientComunity *clientComunity;
+  CouldComunity *couldComunity;
 
+  Comunity(Variable *var){
+    this->var = var;
 
-
-
-
-void Comunity::updateApp()
-{
-  String data = "SERVER:UPDATE=";
-
-  // MainVal
-    data += String(var->mixTank_pH) + ",";
-    data += String(var->tempC) + ",";
-    data += String(var->humidity) + ",";
-    // WorkVal
-    data += String(var->workVar.step) + ",";
-    data += String(var->workVar.working_status) + ",";
-
-    //relay-status
-    data += String(hardwareIO->relay->status[0]) + ",";
-    data += String(hardwareIO->relay->status[1]) + ",";
-    data += String(hardwareIO->relay->status[2]) + ",";
-    data += String(hardwareIO->relay->status[3]) + ",";
-    data += String(hardwareIO->relay->status[4]) + ",";
-    data += String(hardwareIO->relay->status[5]) + ",";
-
-    //timeBoard
-    data += String(hardwareIO->rtc->getHour()) + ",";
-    data += String(hardwareIO->rtc->getMinute()) + ",";
-    data += String(hardwareIO->rtc->getSecond()) + ",";
-
-    //FloatSwitch
-    data += String(var->fsw_mixTank_Up) + ",";
-    data += String(var->fsw_mixtank_Down) + ",";
-    data += String(var->fsw_waterTank_Down);
-
-    ServerPH::send(data);
-    // Serial.println(data);
-}
-
-void Comunity::setC_FileDir(String path)
-{
-  ServerPH::send("SET:FILE_DIR=" + encodeFileDir(path));
-}
-
-void Comunity::setC_Output(String output_text)
-{
-  ServerPH::send("SERVER:OUTPUT=" + output_text);
-}
+    wifi_controll = new WiFiControll();
+    ardunoComunity = new ArduinoComunity();
+    clientComunity = new ClientComunity(wifi_controll);
+    couldComunity = new CouldComunity(wifi_controll);
 
 
-void Comunity::setStepText(String step_text){
-  ServerPH::send("SERVER:SETSTEPTEXT=" + step_text);
-}
-
-
-
-
-void Comunity::sendOther(String data_str)
-{
-  ServerPH::send(data_str);
-}
-
-void Comunity::recvInputPH(String value)
-{
-  if (value.indexOf("stop") != -1)
-  {
-    var->workVar.working_status = false;
+    clientComunity->clientComunityCallback.onTimeUpdateAPP = std::bind(&Comunity::onTimeUpdateAPP,this);
+    clientComunity->clientComunityCallback.onClientToggleRelay = std::bind(&Comunity::onClientToggleRelay,this,std::placeholders::_1);
+    clientComunity->clientComunityCallback.onClientAdjPHStart = std::bind(&Comunity::onClientAdjPH,this,std::placeholders::_1);
+    clientComunity->clientComunityCallback.onClientSetTimeBoard = std::bind(&Comunity::onClientSetTimeBoard,this,std::placeholders::_1);
+    clientComunity->clientComunityCallback.onClientSetTimeAutoWork = std::bind(&Comunity::onClientSetTimeAutoWork,this,std::placeholders::_1);
+    clientComunity->clientComunityCallback.onClientGetTimeAutoWork = std::bind(&Comunity::onClientGetTimeAutoWork,this,std::placeholders::_1);
   }
-  else
-  {
-    var->input_ph = value.toFloat();
-    var->workVar.working_status = true;
+
+
+  void setup() override{
+    wifi_controll->setup();
+
+    ardunoComunity->setup();
+    clientComunity->setup();
+    couldComunity->setup();
   }
-}
 
-void Comunity::recvTimerAutoWork(String value)
-{
-  String datalayer1[4];
-  var->strManager->split(datalayer1, value, "|", 4);
+  void loop() override{
+    wifi_controll->loop();
 
-  for (int i = 0; i < 4; i++)
-  {
-    String datalayer2[4];
-    var->strManager->split(datalayer2, datalayer1[i], ",", 4);
+    ardunoComunity->loop();
+    clientComunity->loop();
+    couldComunity->loop();
 
-    var->timerautowork[i].setHour(datalayer2[0].toInt());
-    var->timerautowork[i].setMinute(datalayer2[1].toInt());
-    var->timerautowork[i].setStatus((datalayer2[2] == "true") ? true : false);
-    var->timerautowork[i].setPH(datalayer2[3].toFloat());
-    var->timerautowork[i].setDelete((datalayer2[0].toInt() == -1) ? true : false);
   }
-}
 
-void Comunity::recvTimeBoard(String queryStringFromClient)
-{
-  byte numsize = 7;
-  String *item = new String[numsize];
-  var->strManager->split(item, queryStringFromClient, ",", 7);
 
-  byte hour = byte(item[0].toInt());
-  byte minute = byte(item[1].toInt());
-  byte second = byte(item[2].toInt());
-  byte dayofweek = byte(item[3].toInt());
-  byte dayofmonth = byte(item[4].toInt());
-  byte month = byte(item[5].toInt());
-  byte year = byte(item[6].toInt());
+};
 
-  hardwareIO->rtc->setTime(hour, minute, second, dayofweek, dayofmonth, month, year);
-}
 
-void Comunity::recvToggleRelay(String value)
-{
-  hardwareIO->relay->toggle(value.toInt());
-}
+
+
 
 
 
 String Comunity::encodeTimeAutoWork()
 {
-
   String format = "";
   for (int i = 0; i < 4; i++)
   {
@@ -285,5 +177,5 @@ String Comunity::encodeTimeAutoWork()
 
 String Comunity::encodeFileDir(String path)
 {
-  return hardwareIO->sdcard->listDir(path.c_str(), 0);
+  return var->hardwareIO->sdcard->listDir(path.c_str(), 0);
 }

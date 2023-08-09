@@ -1,11 +1,3 @@
-#include "WiFiClient.h"
-#include "WiFiServer.h"
-#include <WiFi.h>
-#include <functional>
-#include <SD.h>
-#include <AsyncTCP.h>
-#include <ESPAsyncWebServer.h>
-
 #define CLIENT_LIMITE 4
 #define CLIENT_TIMEOUT 3000
 

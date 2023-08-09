@@ -1,5 +1,7 @@
 #include "VarObject/TimerAutoWork.h"
 
+#include "HardwareIO.h"
+#include "Database.h"
 
 typedef struct WorkVarStruct {
   int step = 0;
@@ -8,11 +10,13 @@ typedef struct WorkVarStruct {
   bool working_step_setup = false;
 } WorkVar;
 
-class Variable {
+class Variable : public System{
 
 public:
-  StringManager *strManager = new StringManager();
   ScanI2C i2cScan;
+
+  HardwareIO *hardwareIO = new HardwareIO();
+  Database *db = new Database();
 
   float input_ph = 0;
   float mixTank_pH = 0;
@@ -28,5 +32,16 @@ public:
   TimerAutoWork *timerautowork = new TimerAutoWork[4];
 
   float onClientRequestStatus = false;
+
+
+  void setup() override {
+    hardwareIO->setup();
+    db->setup();
+  }
+
+  void loop() override {
+    hardwareIO->loop();
+    db->loop();
+  }
 
 };

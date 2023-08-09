@@ -9,12 +9,11 @@ enum PageName
   FUNCTION_SELECT
 };
 
-class UserInterface
-{
+class UserInterface : public System{
 private:
   Variable *var;
   HardwareIO *hardwareIO;
-  Comunity *comunity;
+
   Timer update_display;
 
   PageName pagename;
@@ -31,22 +30,21 @@ private:
   String data_buffer = "";
 
 public:
-  UserInterface(Variable *varObjectIn, HardwareIO *hardwareIOIn, Comunity *comunityIn) : update_display(1000)
+  UserInterface(Variable *varObjectIn) : update_display(1000)
   {
     var = varObjectIn;
-    hardwareIO = hardwareIOIn;
-    comunity = comunityIn;
+    hardwareIO = var->hardwareIO;
 
     hardwareIO->keypadInput->setOnKeypressListener(std::bind(&UserInterface::onKeypress, this, std::placeholders::_1, std::placeholders::_2));
     hardwareIO->keypadInput->setOnKeyEnterListener(std::bind(&UserInterface::onEnter, this, std::placeholders::_1,std::placeholders::_2));
   }
 
-  void setup()
+  void setup() override
   {
     pagename = MAIN;
   }
 
-  void loop()
+  void loop() override
   {
 
     if (update_display.isExpired())

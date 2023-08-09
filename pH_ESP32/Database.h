@@ -3,27 +3,27 @@
 #define DB_ADDR_TIMEAUTOWORK 0
 
 
-class Database
-{
-
-private:
-  Variable *var;
-  HardwareIO *hardwareIO;
-  Timer t1;
-
+class Database : public System{
 public:
-  Database(Variable *varIn, HardwareIO *hardware) : t1(3000)
+  Database()
   {
-    var = varIn;
-    hardwareIO = hardware;
+    EEPROM.begin(512);
   }
 
-  void setup();
-  void loop();
+  void setup() override{
+    
+  }
+
+  void loop() override{
+
+  }
+
   void writeTimeAutoWork(TimerAutoWork *timerautowork);
   String readTimeAutoWork(TimerAutoWork *timerAutoWork);
 
 };
+
+
 
 void Database::writeTimeAutoWork(TimerAutoWork *timerautowork){
   
@@ -78,26 +78,5 @@ String Database::readTimeAutoWork(TimerAutoWork *timerAutoWork = NULL){
   }
 
   return data;
-}
-
-void Database::setup()
-{
-  //ESP32 Storage
-  EEPROM.begin(512);
-
-  //SDCard Storage
-
-
-  //load database to variable
-  readTimeAutoWork(var->timerautowork);
-
-}
-
-void Database::loop()
-{
-
-  if (t1.isExpired())
-  {
-  }
 }
 

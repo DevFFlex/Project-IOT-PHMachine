@@ -24,10 +24,10 @@ private:
   void step4();
 
 public:
-  PHAdjustmentProcess(Variable *varIn, HardwareIO *hardwareIOIn, Comunity *comunityIn)
+  PHAdjustmentProcess(Variable *varIn,Comunity *comunityIn)
     : t_step1(10000), t_step2(30000), t_step3(10000), t_step4(10000) {
     var = varIn;
-    hardwareIO = hardwareIOIn;
+    hardwareIO = var->hardwareIO;
     comunity = comunityIn;
   }
 
@@ -41,8 +41,8 @@ public:
 void PHAdjustmentProcess::setup() {
 }
 
-void PHAdjustmentProcess::loop() {
 
+void PHAdjustmentProcess::loop() {
   if (var->workVar.working_status) {
     if (var->workVar.working_status_setup) {
       var->workVar.working_status_setup = false;
@@ -87,7 +87,7 @@ void PHAdjustmentProcess::nextStep() {
     var->workVar.working_status_setup = true;
     hardwareIO->buzzer->on(200);
 
-    comunity->setC_Output("ปรับค่า pH, สิ้นสุดการทำงาน");
+    // comunity->clientComunity->setC_Output("ปรับค่า pH, สิ้นสุดการทำงาน");
     return;
   }
 
@@ -121,12 +121,12 @@ bool PHAdjustmentProcess::timerAutoWork_Compare_Rtctime(int index) {
 
 void PHAdjustmentProcess::step1() {
   // bool condition_nextstep = t_step1.isExpired();
-  bool condition_nextstep = !var->fsw_mixTank_Up;
+  bool condition_nextstep = var->fsw_mixTank_Up;
 
   if (var->workVar.working_step_setup) {
     var->workVar.working_step_setup = false;
-    comunity->setC_Output(step_desc[0]);
-    comunity->setStepText(step_desc[0]);
+    // comunity->clientComunity->setC_Output(step_desc[0]);
+    // comunity->clientComunity->setStepText(step_desc[0]);
     Serial.println("step 1");
   }
 
@@ -143,12 +143,13 @@ void PHAdjustmentProcess::step2() {
 
   if (var->workVar.working_step_setup) {
     var->workVar.working_step_setup = false;
-    comunity->setC_Output(step_desc[1]);
-    comunity->setStepText(step_desc[1]);
+    // comunity->clientComunity->setC_Output(step_desc[1]);
+    // comunity->clientComunity->setStepText(step_desc[1]);
     Serial.println("step 2");
   }
 
   hardwareIO->relay->on(5);
+
 
   if (condition_nextstep) {
     hardwareIO->relay->off(5);
@@ -162,8 +163,8 @@ void PHAdjustmentProcess::step3() {
 
   if (var->workVar.working_step_setup) {
     var->workVar.working_step_setup = false;
-    comunity->setC_Output(step_desc[2]);
-    comunity->setStepText(step_desc[2]);
+    // comunity->clientComunity->setC_Output(step_desc[2]);
+    // comunity->clientComunity->setStepText(step_desc[2]);
     Serial.println("step 3");
   }
 
@@ -176,19 +177,19 @@ void PHAdjustmentProcess::step3() {
 }
 
 void PHAdjustmentProcess::step4() {
-  bool condition_nextstep = !var->fsw_waterTank_Down;
+  bool condition_nextstep = t_step4.isExpired();
 
   if (var->workVar.working_step_setup) {
     var->workVar.working_step_setup = false;
-    comunity->setC_Output(step_desc[3]);
-    comunity->setStepText(step_desc[3]);
+    // comunity->clientComunity->setC_Output(step_desc[3]);
+    // comunity->clientComunity->setStepText(step_desc[3]);
     Serial.println("step 4");
   }
 
-  hardwareIO->relay->on(2);
+  // hardwareIO->relay->on(2);
 
   if (condition_nextstep) {
-    hardwareIO->relay->off(2);
+    // hardwareIO->relay->off(2);
     nextStep();
   }
 }
