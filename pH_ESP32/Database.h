@@ -21,6 +21,9 @@ public:
   void writeTimeAutoWork(TimerAutoWork *timerautowork);
   String readTimeAutoWork(TimerAutoWork *timerAutoWork);
 
+  void writeWifiData(String ssid,String pass);
+  void readWifiData(String *ssidBuffer,String *passBuffer);
+
 };
 
 
@@ -79,4 +82,72 @@ String Database::readTimeAutoWork(TimerAutoWork *timerAutoWork = NULL){
 
   return data;
 }
+
+
+
+void Database::writeWifiData(String ssid,String pass){
+  int indexstart_ssid_addr = 50;
+  int indexstart_pass_addr = indexstart_ssid_addr + 30;
+  
+  if(ssid != ""){
+    for(int i = 0;i<30;i++){
+      if(i >= ssid.length()){
+        EEPROM.write(indexstart_ssid_addr + i,0);
+      }else{
+        EEPROM.write(indexstart_ssid_addr + i,ssid[i]);
+      }
+      Serial.print(String((int)ssid[i]) + " ");
+    }
+    Serial.println("");
+  }
+
+
+
+
+  if(pass != ""){
+    for(int i = 0;i<30;i++){
+      if(i >= pass.length()){
+        EEPROM.write(indexstart_pass_addr + i,0);
+      }else{
+        EEPROM.write(indexstart_pass_addr + i,pass[i]);
+      }
+      Serial.print(String((int)pass[i]) + " ");
+    }
+    Serial.println("");
+  }
+
+  EEPROM.commit();
+}
+
+void Database::readWifiData(String *ssidBuffer,String *passBuffer){
+  int indexstart_ssid_addr = 50;
+  int indexstart_pass_addr = indexstart_ssid_addr + 30;
+  
+  String ssid_str = "";
+  for(int i = 0;i<30;i++){
+    String key = String((char)EEPROM.read(indexstart_ssid_addr + i));
+    ssid_str += key;
+    Serial.print(key + " ");    
+  }
+  Serial.println("");
+  // ssid_str.trim();
+  *ssidBuffer = ssid_str;
+
+  String pass_str = "";
+  for(int i = 0;i<30;i++){
+    String key = String((char)EEPROM.read(indexstart_pass_addr + i));
+    pass_str += key;
+    Serial.print(key + " ");
+  }
+  // pass_str.trim();
+  Serial.println("");
+  *passBuffer = pass_str;
+  
+
+  Serial.println("ssid = " + ssid_str);
+  Serial.println("pass = " + pass_str);
+
+
+}
+
 

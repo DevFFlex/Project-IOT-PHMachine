@@ -50,7 +50,7 @@ public class ChatFragment extends Fragment {
                             String client_name = chat[0];
                             String message = chat[1];
 
-                            if (client_name.equals(var.comunity.USERNAME)) {
+                            if (client_name.equals(var.preferences.getString("username",var.comunity.DEFAULT_USERNAME))) {
                                 View message_item_viwe = LayoutInflater.from(variable.context).inflate(R.layout.chat_message_item_r, null);
                                 TextView tr = message_item_viwe.findViewById(R.id.chat_item_tvR);
                                 tr.setText(message);

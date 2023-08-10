@@ -19,10 +19,12 @@ private:
   String AP_SSID = "PPC";
   String AP_PASS = "12345678";
 
-  String STA_SSID = "MEE1";
-  String STA_PASS = "43854953";
+  String STA_SSID = "eduroam";
+  String STA_USER = "pitsanu.th";
+  String STA_PASS = "0933287751g";
 
   bool displayDataTranfer = false;
+  bool wifiConnected = false;
 
 
   void APMode_Start();
@@ -56,7 +58,11 @@ public:
 
 
   bool getSTAWifiStatusConnected(){
-    return WiFi.status() != WL_CONNECTED;
+    return WiFi.status() == WL_CONNECTED;
+  }
+
+  void connectWiFi(){
+    STAMode_Start();
   }
 };
 
@@ -65,10 +71,10 @@ void WiFiControll::setup() {
   WiFi.mode(WIFI_AP_STA);
 
   APMode_Start();
-  STAMode_Start();
+  // STAMode_Start();
 }
 void WiFiControll::loop() {
-  
+  wifiConnected = getSTAWifiStatusConnected();
 }
 
 
@@ -86,17 +92,16 @@ void WiFiControll::APMode_Start(){
 
 
 void WiFiControll::STAMode_Start(){
-  WiFi.begin(STA_SSID.c_str(),STA_PASS.c_str());
-  while(WiFi.status() != WL_CONNECTED)
-  {
-        Serial.print(".");
-        delay(100);
-  }
-  IPAddress STA_IP = WiFi.localIP();
-  Serial.print("STA IP address: ");
-  Serial.println(STA_IP);
-  Serial.println("------------------------------------");
-
+  if(STA_USER == "" || STA_USER == NULL)WiFi.begin(STA_SSID.c_str(),STA_USER.c_str(),0);
+  // else WiFi.begin(STA_SSID.c_str(),STA_USER.c_str(),STA_PASS.c_str());
+  // while(WiFi.status() != WL_CONNECTED)
+  // {
+  //       Serial.print(".");
+  //       delay(100);
+  // }
+  // IPAddress STA_IP = WiFi.localIP();
+  // Serial.print("STA IP address: ");
+  // Serial.println(STA_IP);
+  // Serial.println("------------------------------------");
   
-
 }

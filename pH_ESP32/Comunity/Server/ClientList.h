@@ -102,7 +102,7 @@ void ClientList::add(WiFiClient *client, String IPAddress){
         Serial.println("new device connect --- IP: " + IPAddress + "   NAME: " + name);
 
         if (onClientJoinCallback != NULL)
-          onClientJoinCallback("hello");
+          onClientJoinCallback(name);
 
         *client = NULL;
         break;

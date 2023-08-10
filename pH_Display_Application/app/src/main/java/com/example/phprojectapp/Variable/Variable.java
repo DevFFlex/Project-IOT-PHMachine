@@ -1,11 +1,13 @@
 package com.example.phprojectapp.Variable;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+
+import androidx.preference.PreferenceManager;
 
 import com.example.phprojectapp.AdminFragment;
 import com.example.phprojectapp.AnimationOption;
 import com.example.phprojectapp.ChatFragment;
-import com.example.phprojectapp.ClassEx.CMVMObject;
 import com.example.phprojectapp.ClassEx.Comunity;
 import com.example.phprojectapp.ClassEx.Extension;
 import com.example.phprojectapp.ClassEx.SoundEffect;
@@ -18,6 +20,7 @@ import java.util.ArrayList;
 
 public class Variable{
     public Context context;
+    public SharedPreferences preferences;
 
     public float inputPH = -1;
     public float mixtankPH = 0;
@@ -27,6 +30,8 @@ public class Variable{
     public int step = 0;
     public boolean work_status = false;
     public String stepText = "";
+
+    public boolean wifi_board_connected = false;
 
     public int[] fsw = new int[3];
 
@@ -39,7 +44,6 @@ public class Variable{
             false
     };
 
-    public CMVMObject cmvmObject;
     public TimeBoardObject timeBoardObject;
 
 
@@ -47,6 +51,7 @@ public class Variable{
 //    public boolean working_ph = false;
     public TimeObjectList timeObjectList;
     public String outout_text = "";
+    public boolean output_text_isShowing = false;
 
     public ArrayList<String[]> chat_his = new ArrayList<String[]>();
     public ArrayList<String[]> file_list = new ArrayList<>();
@@ -74,6 +79,8 @@ public class Variable{
     public Variable(Context context){
         this.context = context;
 
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
+
         monitorFragment = new MonitorFragment(this);
         settingsFragment = new SettingsFragment();
         adminFragment = new AdminFragment(this);
@@ -85,7 +92,6 @@ public class Variable{
 
 
         this.timeObjectList = new TimeObjectList();
-        this.cmvmObject = new CMVMObject();
 
         timeBoardObject = new TimeBoardObject();
 

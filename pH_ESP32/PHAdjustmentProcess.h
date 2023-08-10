@@ -130,16 +130,17 @@ void PHAdjustmentProcess::step1() {
     Serial.println("step 1");
   }
 
-  hardwareIO->relay->on(0);
+  hardwareIO->relay->on(2);
   if (condition_nextstep) {
-    hardwareIO->relay->off(0);
+    hardwareIO->relay->off(2);
     nextStep();
   }
 }
 
 void PHAdjustmentProcess::step2() {
-  bool condition_nextstep = t_step2.isExpired();
+  bool condition_nextstep = var->mixTank_pH > var->input_ph + 0.5 && var->mixTank_pH < var->input_ph - 0.5;
 
+  static Timer timeCheck(5000);
 
   if (var->workVar.working_step_setup) {
     var->workVar.working_step_setup = false;
@@ -150,6 +151,9 @@ void PHAdjustmentProcess::step2() {
 
   hardwareIO->relay->on(5);
 
+  if(timeCheck.isExpired()){
+    hardwareIO->relay->toggle(0);
+  }
 
   if (condition_nextstep) {
     hardwareIO->relay->off(5);

@@ -24,32 +24,47 @@ public class Client{
     }
 
     private Socket socket;
-    public String USERNAME = "PEOPLE";
+    public String DEFAULT_IP = "192.168.4.1";
+    public int DEFAULT_PORT = 80;
+    public String DEFAULT_USERNAME = "PEOPLE";
 
-    private boolean isConnect = false;
-    public boolean getConnected(){
-        return this.isConnect;
-    }
+    private boolean thread_loop = false;
+    private boolean activeDisconnect = false;
+    public boolean isConnect = false;
+
 
     public Client(Variable v){
         this.var = v;
+
+        TimerMillis timerReconnect = new TimerMillis(1000, new TimerMillisInterface() {
+            @Override
+            public void isExpired() {
+                if(!isConnect)reconnect();
+            }
+        });
     }
-    public void connect(String SERVER_IP,int SERVER_PORT,String name){
+    public void connect(){
         new Thread(new Runnable() {
             @Override
             public void run() {
+                String USE_IP = var.preferences.getString("ip",DEFAULT_IP);
+                int USE_PORT = var.preferences.getInt("port",DEFAULT_PORT);
+                String USE_USERNAME = var.preferences.getString("username",DEFAULT_USERNAME);
+
                 try {
-                    socket = new Socket(SERVER_IP, SERVER_PORT);
+                    socket = new Socket(USE_IP, USE_PORT);
+
                     output = new PrintWriter(socket.getOutputStream());
                     input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-                    sendToServer("SET:CLIENT_NAME=" + name);
-                    USERNAME = name;
+                    sendToServer("SET:CLIENT_NAME=" + USE_USERNAME);
                     isConnect = true;
 
                     if(isConnect){
-//                        checkServer();
+                        thread_loop = true;
                         recv();
+                        var.outout_text = "เชื่อมต่อบอร์ดสำเร็จ";
+                        return;
                     }
 
                     var.extension.printDebug("Client","isConnect = True");
@@ -57,21 +72,14 @@ public class Client{
 
 
                 } catch (IOException e) {
-                    var.extension.printError("Client","Socket Connect Fail");
+                    var.extension.printDebug("Client","Socket Connect Fail");
                 }
+
+                var.outout_text = "เชื่อมต่อบอร์ดไม่สำเร็จ";
             }
         }).start();
     }
 
-    public void disconnect() {
-        try {
-            socket.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        socket = null;
-        isConnect = false;
-    }
 
     private void recv(){
 
@@ -83,18 +91,13 @@ public class Client{
             private char endKeyword = '$';
             @Override
             public void run() {
-                int count = 0;
-                while (true) {
-
+                while (thread_loop) {
                     if (isConnect){
                         try {
                             char c = (char) input.read();
-
                             if (c == endKeyword){
-                                var.extension.printDebug("Client","Message From Server "+ String.valueOf(count++) +  " = " + message);
                                 if (message != ""){
-                                    if (!message.contains(":") || !message.contains("="))return;
-
+                                    if(!message.contains(":"))return;
                                     String[] data = message.split(":");
                                     String header = data[0].trim();
                                     String commands = data[1];
@@ -102,16 +105,14 @@ public class Client{
                                     if(!commands.contains("="))return;
                                     String[] data2 = commands.split("=");
                                     String command = data2[0];
-                                    String value = data[1];
+                                    String value = data2[1];
 
-                                    if(value.contains("="))value = value.split("=")[1];
-
-                                    listener.onMessage(header,command,value);
+                                    var.extension.printDebug("CCC",value);
+                                    if(listener != null)listener.onMessage(header,command,value);
                                 }
                                 message = "";
-                            }else{
-                                message += String.valueOf(c);
-                            }
+                            }else message += String.valueOf(c);
+
                             Thread.sleep(10);
                         } catch (IOException | InterruptedException e) {
                             isConnect = false;
@@ -121,24 +122,6 @@ public class Client{
                 }
 
 
-            }
-        }).start();
-    }
-
-    private void checkServer(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true){
-
-                    sendToServer("CHECK:SERVER=NULL");
-
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
             }
         }).start();
     }
@@ -154,7 +137,7 @@ public class Client{
                     try{
                         output.write(message);
                         output.flush();
-                        var.extension.printDebug("Client","Send ---- " + message);
+//                        var.extension.printDebug("Client","Send ---- " + message);
                     }catch (Exception e){
                         isConnect = false;
                         var.extension.printError("Client","send message,fail connected");
@@ -162,6 +145,36 @@ public class Client{
                 }
             }
         }).start();
+    }
+
+    public void disconnect() {
+        if(activeDisconnect){
+            var.extension.printDebug("Client","activeDisconnect");
+            return;
+        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                activeDisconnect = true;
+                try {
+                    thread_loop = false;
+                    Thread.sleep(2000);
+                    if(socket != null)socket.close();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                socket = null;
+                isConnect = false;
+                activeDisconnect = false;
+            }
+        }).start();
+    }
+
+    public void reconnect(){
+//        disconnect();
+        connect();
     }
 
 }

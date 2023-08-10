@@ -13,6 +13,7 @@ class UserInterface : public System{
 private:
   Variable *var;
   HardwareIO *hardwareIO;
+  Comunity *comunity;
 
   Timer update_display;
 
@@ -30,10 +31,11 @@ private:
   String data_buffer = "";
 
 public:
-  UserInterface(Variable *varObjectIn) : update_display(1000)
+  UserInterface(Variable *varObjectIn,Comunity *comunity) : update_display(1000)
   {
     var = varObjectIn;
     hardwareIO = var->hardwareIO;
+    this->comunity = comunity;
 
     hardwareIO->keypadInput->setOnKeypressListener(std::bind(&UserInterface::onKeypress, this, std::placeholders::_1, std::placeholders::_2));
     hardwareIO->keypadInput->setOnKeyEnterListener(std::bind(&UserInterface::onEnter, this, std::placeholders::_1,std::placeholders::_2));
@@ -49,14 +51,30 @@ public:
 
     if (update_display.isExpired())
     {
+      String pHText = "";
+      if(var->mixTank_pH > 7)pHText = "Base";
+      else if(var->mixTank_pH > 6) pHText = "Mid";
+      else if(var->mixTank_pH > 0) pHText = "Acid";
+
+      String DTHText = "";
+      if(hardwareIO->dhtsensor->isReady())DTHText = "R";
+      else DTHText = "E";
+
+      String WIFIText = "";
+      if(comunity->wifi_controll->getSTAWifiStatusConnected())WIFIText = "R";
+      else WIFIText = "E";
+
+      String StepText = "";
+      StepText = String(var->workVar.step);
+
 
       switch (pagename)
       {
       case MAIN:
-        hardwareIO->lcdOutput->printL("PH = " + String(var->mixTank_pH) + " | " + hardwareIO->pHSensor->getPHString(), 0);
-        hardwareIO->lcdOutput->printL(String(var->fsw_mixTank_Up) + String(var->fsw_mixtank_Down) + String(var->fsw_waterTank_Down), 1);
-        if(hardwareIO->dhtsensor->isReady())hardwareIO->lcdOutput->printL("H = " + String(var->humidity) + "% T = " + String(var->tempC), 2);
-        else hardwareIO->lcdOutput->printL("DHT Error", 2);
+        
+        hardwareIO->lcdOutput->printL("PH = " + String(var->mixTank_pH) + " | " + pHText, 0);
+        hardwareIO->lcdOutput->printL("FSW_U = " + String(var->fsw_mixTank_Up) + "  FSW_D = " + String(var->fsw_mixtank_Down),1);
+        hardwareIO->lcdOutput->printL("DTH:" + DTHText + " WIFI:" + WIFIText + " ST:" + StepText, 2);
         hardwareIO->lcdOutput->printL(hardwareIO->rtc->getTimeToString(), 3);
         break;
 

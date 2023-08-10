@@ -1,8 +1,12 @@
 package com.example.phprojectapp.ClassEx;
 
 
+import android.os.Handler;
+
 import com.example.phprojectapp.Variable.TimeBoardObject;
 import com.example.phprojectapp.Variable.Variable;
+
+
 
 public class Comunity extends Client{
 
@@ -12,33 +16,28 @@ public class Comunity extends Client{
     }
 
     private Variable var;
-    final public String SERVER_IP = "192.168.4.1"; //192.168.4.1
-    final public int SERVER_PORT = 80; //80
-
-
-    private ComunityListener listener;
-    public void setListener(ComunityListener listener) {
-        this.listener = listener;
-    }
+    private Handler handler;
 
     public Comunity(Variable var){
         super(var);
         this.var = var;
+
         this.setListener(this::onMessangeEvent);
+
     }
 
     private void send(String command,String value){
-        String string = String.format("%s%s%s%s%s",USERNAME,":",command,"=",value);
+        String string = String.format("%s%s%s%s%s",DEFAULT_USERNAME,":",command,"=",value);
         sendToServer(string);
-        var.extension.printDebug("Comunity",string);
+//        var.extension.printDebug("Comunity",string);
     }
 
     public void setInputPH(float value){
-        send("INPUT_PH",String.valueOf(value));
+        send("ADJ_PH",String.valueOf(value));
     }
 
     public void setInputPH_STOP(){
-        send("INPUT_PH","stop");
+        send("ADJ_PH","stop");
     }
 
     public void setTimeAutoWork(String value){
@@ -53,7 +52,6 @@ public class Comunity extends Client{
         if (index < 0 || index > 6)return;
         send("RELAY",String.format("%d,%.1f",index,time));
     }
-
 
     public void getTimeAutoWork(){
         send("GET_TIME_AUTO_WORK","NULL");
@@ -113,6 +111,8 @@ public class Comunity extends Client{
             var.fsw[0] = Integer.parseInt(d1[14]);
             var.fsw[1] = Integer.parseInt(d1[15]);
             var.fsw[2] = Integer.parseInt(d1[16]);
+
+            var.wifi_board_connected = (d1[17].equals("0")) ? false : true;
 
         }
 

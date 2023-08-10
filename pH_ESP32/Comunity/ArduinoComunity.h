@@ -6,6 +6,7 @@
 
 class ArduinoComunity : public System{
 private:
+  Variable *var;
   String data_buffer = "";
   String *item = new String[6];
   String *c_v = new String[2];
@@ -14,8 +15,9 @@ private:
 
 public:
 
-  ArduinoComunity()
+  ArduinoComunity(Variable *var)
   {
+    this->var = var;
   }
 
   void setup() override {
@@ -36,11 +38,11 @@ public:
       if(displayDataTranfer)Serial.println("Data From Arduino ---> " + data_buffer ); 
 
 
-      // splitString(item, data_buffer, ",", 6);
-      // var->mixTank_pH = item[0].toFloat();
-      // var->fsw_mixTank_Up = (item[3] == "1") ? true : false;
-      // var->fsw_mixtank_Down = (item[4] == "1") ? true : false;
-      // var->fsw_waterTank_Down = (item[5] == "1") ? true : false;
+      splitString(item, data_buffer, ",", 6);
+      var->mixTank_pH = item[0].toFloat();
+      var->fsw_mixTank_Up = (item[3] == "1") ? true : false;
+      var->fsw_mixtank_Down = (item[4] == "1") ? true : false;
+      var->fsw_waterTank_Down = (item[5] == "1") ? true : false;
 
 
       data_buffer = "";

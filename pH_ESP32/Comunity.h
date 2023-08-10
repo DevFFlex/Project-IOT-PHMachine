@@ -8,7 +8,6 @@
 class Comunity : public System
 {
   private:
-  WiFiControll *wifi_controll;
   Variable *var;
   String *item_parameter = new String[6];
 
@@ -41,7 +40,10 @@ class Comunity : public System
     // FloatSwitch
     queryData += String(var->fsw_mixTank_Up) + ",";
     queryData += String(var->fsw_mixtank_Down) + ",";
-    queryData += String(var->fsw_waterTank_Down);
+    queryData += String(var->fsw_waterTank_Down) + ",";
+
+    // Wifi Connected
+    queryData += String(wifi_controll->getSTAWifiStatusConnected());
 
     clientComunity->sendUpdateApp(queryData);
   }
@@ -52,12 +54,15 @@ class Comunity : public System
   void onClientAdjPH(String data){
     if (data.indexOf("stop") != -1)
     {
+      Serial.println("หยุดปรับ");
       var->workVar.working_status = false;
     }
     else
     {
+      Serial.println("เริ่มปรับ");
       var->input_ph = data.toFloat();
       var->workVar.working_status = true;
+
     }
   } 
 
@@ -105,12 +110,12 @@ class Comunity : public System
   void onClientToggleRelay(String data){
 
     splitString(item_parameter,data,",",2);
-    var->hardwareIO->relay->onTimeout(item_parameter[0].toInt(),item_parameter[1].toFloat());
-
-    var->hardwareIO->relay->toggle(data.toInt());
+    if(item_parameter[1] == "-1") var->hardwareIO->relay->onTimeout(item_parameter[0].toInt(),item_parameter[1].toFloat());
+    else var->hardwareIO->relay->toggle(data.toInt());
   }
 
   public:
+  WiFiControll *wifi_controll;
   ArduinoComunity *ardunoComunity;
   ClientComunity *clientComunity;
   CouldComunity *couldComunity;
@@ -119,7 +124,7 @@ class Comunity : public System
     this->var = var;
 
     wifi_controll = new WiFiControll();
-    ardunoComunity = new ArduinoComunity();
+    ardunoComunity = new ArduinoComunity(var);
     clientComunity = new ClientComunity(wifi_controll);
     couldComunity = new CouldComunity(wifi_controll);
 

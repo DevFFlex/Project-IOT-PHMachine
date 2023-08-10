@@ -24,45 +24,77 @@
 
             <LinearLayout
                 android:background="@color/bg"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center">
+                android:layout_height="wrap_content">
 
-                <Button
-                    android:id="@+id/mainpage_btnConnect"
-                    android:background="@drawable/btn_style4"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:textColor="#FFFF"
-                    android:text="con"/>
-                <Button
-                    android:id="@+id/mainpage_btnDisonnect"
-                    android:background="@drawable/btn_style3"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:textColor="#FFFF"
-                    android:text="Dis"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:background="@color/bg"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingHorizontal="5dp"
-                    android:text="สถานะการเชื่อมต่อ :"
-                    android:textColor="#FFFF"
-                    android:textSize="15dp"
-                    android:textStyle="bold" />
+                    android:gravity="center">
 
-                <TextView
-                    android:id="@+id/mainpage_tvStatusConnected"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingHorizontal="5dp"
-                    android:text="ยังไม่ได้เชื่อมต่อ"
-                    android:textColor="#FFF200"
-                    android:textSize="15dp"
-                    android:textStyle="bold" />
+
+
+                    <Button
+                        android:visibility="gone"
+                        android:id="@+id/mainpage_btnConnect"
+                        android:background="@drawable/btn_style4"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:textColor="#FFFF"
+                        android:text="con"/>
+                    <Button
+                        android:visibility="gone"
+                        android:id="@+id/mainpage_btnDisonnect"
+                        android:background="@drawable/btn_style3"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:textColor="#FFFF"
+                        android:text="Dis"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="5dp"
+                        android:text="สถานะการเชื่อมต่อ :"
+                        android:textColor="#FFFF"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/mainpage_tvStatusConnected"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="5dp"
+                        android:text="ยังไม่ได้เชื่อมต่อ"
+                        android:textColor="#FFF200"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="3sp"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="สถานะการเชื่อม Wifi  "
+                        android:textColor="#FFFF"/>
+
+                    <ImageView
+                        android:layout_width="30sp"
+                        android:layout_height="20sp"
+                        android:src="@drawable/wifi_red"/>
+
+                </LinearLayout>
 
             </LinearLayout>
+
 
         </LinearLayout>
 
@@ -141,34 +173,43 @@
                 android:scrollbarAlwaysDrawVerticalTrack="false">
 
                 <Button
-                    android:id="@+id/mainpage_btn3"
+                    android:id="@+id/mainpage_btnAdmin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Admin" />
 
                 <Button
-                    android:id="@+id/mainpage_btn2"
+                    android:id="@+id/mainpage_btnSetting"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Setting" />
 
                 <Button
-                    android:id="@+id/mainpage_btn1"
+                    android:id="@+id/mainpage_btnHome"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Home" />
 
                 <Button
-                    android:id="@+id/mainpage_btn4"
+                    android:id="@+id/mainpage_btnWifiSet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="WiFi Manager" />
+
+                <Button
+                    android:id="@+id/mainpage_btnChat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Chat" />
 
+
                 <Button
-                    android:id="@+id/mainpage_btn5"
+                    android:id="@+id/mainpage_btnFile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="File" />
+
+
 
 
             </LinearLayout>

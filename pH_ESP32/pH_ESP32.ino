@@ -1,5 +1,3 @@
-
-
 #include "ParentClass/System.h"
 
 #include "OtherClass/TimerClass.h"
@@ -15,7 +13,7 @@
 Variable *var = new Variable();
 Comunity *comunity = new Comunity(var);
 SerialInput *sInput = new SerialInput(var,comunity);
-UserInterface *ui = new UserInterface(var);
+UserInterface *ui = new UserInterface(var,comunity);
 PHAdjustmentProcess *phAP = new PHAdjustmentProcess(var,comunity);
 
 

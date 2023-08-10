@@ -119,6 +119,32 @@ void SerialInput::onInputAvailable()
                 var->i2cScan.scan();
             }
 
+            if (data.indexOf("connectWifi") != -1){
+                comunity->wifi_controll->connectWiFi();
+            }
+
+            if (data.indexOf("writeWifiSSID ") != -1){
+                data.replace("writeWifiSSID ","");
+
+                var->db->writeWifiData(data,"");
+            }
+
+            if (data.indexOf("writeWifiPASS ") != -1){
+                data.replace("writeWifiPASS ","");
+
+                var->db->writeWifiData("",data);
+            }
+
+            if (data.indexOf("readWifi") != -1){
+                String ssid_read,pass_read;
+
+                var->db->readWifiData(&ssid_read,&pass_read);
+
+                Serial.println("ssid:" + ssid_read + "     pass:" + pass_read);
+            }
+
+            
+
             if (data.indexOf(DEBUG_KEY1) != -1){
                 
             }

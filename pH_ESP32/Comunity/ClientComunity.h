@@ -42,8 +42,8 @@ public:
 
     void setup()
     {
-      clientlist->setOnClientJoinListener(std::bind(&ClientComunity::onClientMessageCallback, this, std::placeholders::_1));
-      clientlist->setOnMessageListener(std::bind(&ClientComunity::onClientJoinCallback, this, std::placeholders::_1));
+      clientlist->setOnClientJoinListener(std::bind(&ClientComunity::onClientJoinCallback, this, std::placeholders::_1));
+      clientlist->setOnMessageListener(std::bind(&ClientComunity::onClientMessageCallback, this, std::placeholders::_1));
     }
 
     void loop()
@@ -95,7 +95,8 @@ void ClientComunity::onClientMessageCallback(String str_trim)
   String str_command = command;
   String str_value = value;
 
-  if(debugDisplayDataRecv)Serial.println(str_clientname + ":" + str_command + ":" + str_value);
+  // if(debugDisplayDataRecv)Serial.println(str_clientname + ":" + str_command + ":" + str_value);
+  Serial.println(str_clientname + ":" + str_command + ":" + str_value);
 
   if (condition_req(str_command,"MESSAGE"))
   {
@@ -121,7 +122,7 @@ void ClientComunity::onClientMessageCallback(String str_trim)
 }
 
 void ClientComunity::onClientJoinCallback(String clientName){
-  Serial.println("Client ---------------- Join");
+  Serial.println("Client '"+ clientName +"' ---------------- Join");
 }
 
 
