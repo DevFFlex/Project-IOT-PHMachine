@@ -30,33 +30,17 @@ public:
   void printL(String text, byte l);
   void clear();
 
-  void setPage(byte page);
-  byte getPage();
 };
 
 void LcdOutput::setup() {
   lcd1.begin();
   lcd1.backlight();
   lcd1.home();
-  // lcd1.print("LCD " + String(HSize1) + "x" + String(VSize1));
-  // lcd1.setCursor(0, 1);
-  // lcd1.print("PH Monitor");
-
-
-  // delay(1000);
-  // lcd1.clear();
 }
 
 void LcdOutput::loop() {
 }
 
-void LcdOutput::setPage(byte pageIn) {
-  page = pageIn;
-}
-
-byte LcdOutput::getPage() {
-  return page;
-}
 
 void LcdOutput::printL(String text, byte l) {
   lcd1.setCursor(0, l);

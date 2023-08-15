@@ -1,6 +1,6 @@
 class Timer {
   public:
-    Timer(unsigned long interval);
+    Timer(unsigned long interval = 100000);
     boolean isExpired();
     void reset();
     void setInterval(unsigned long interval);

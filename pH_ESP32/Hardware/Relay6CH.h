@@ -2,6 +2,9 @@
 #define ADDR_RELAY      0x21
 #define RELAY_ALL_PIN 25
 
+#define ON_STATUS false
+#define OFF_STATUS true
+
 class Relay6CH {
 private:
   PCF8574 RELAY;
@@ -9,35 +12,22 @@ private:
   bool status_setup = true;
   Timer t_active;
 
-  Timer timelife1,timelife2,timelife3,timelife4,timelife5,timelife6;
+  Timer timelife_on[6];
+  Timer timelife_off[6];
+  Timer timelife_toggle[6];
 
-  int relayPinList[6] = {
-    P0,
-    P1,
-    P2,
-    P3,
-    P4,
-    P5,
-  };
+  bool timelife_on_status[6] = {false,false,false,false,false,false};
+  bool timelife_off_status[6] = {false,false,false,false,false,false};
+  bool timelife_toggle_status[6] = {false,false,false,false,false,false};
 
-  int status_onTimeout[6] = {
-    0,0,0,0,0,0
-  };
+  int relayPinList[6] = {P0,P1,P2,P3,P4,P5,};
 
-  
 
 public:
 
-  int status[6] = {
-    false,
-    false,
-    false,
-    false,
-    false,
-    false
-  };
+  int status[6] = {false,false,false,false,false,false};
 
-  Relay6CH() : RELAY(ADDR_RELAY) , t_active(3000), timelife1(5000000), timelife2(5000000), timelife3(5000000), timelife4(5000000), timelife5(5000000), timelife6(5000000){
+  Relay6CH() : RELAY(ADDR_RELAY) , t_active(3000){
 
     RELAY.pinMode(relayPinList[0], OUTPUT);
     RELAY.pinMode(relayPinList[1], OUTPUT);
@@ -57,10 +47,12 @@ public:
   void active();
   void deactive();
 
-  void onTimeout(int pin,float time);
   void on(int pin);
+  void on(int pin,int time_millis);
   void off(int pin);
+  void off(int pin,int time_millis);
   void toggle(int pin);
+  void toggle(int pin,int time_millis);
   void reset();
 };
 
@@ -74,32 +66,22 @@ void Relay6CH::loop() {
     active();
   }
 
+  for(int i = 0;i<6;i++){
+    if(timelife_on[i].isExpired() && timelife_on_status[i]){
+      timelife_on_status[i] = false;
+      off(i);
+    }
 
-  if(timelife1.isExpired() && status_onTimeout[0]){
-    off(0);
-    status_onTimeout[0] = 0;
+    if(timelife_off[i].isExpired() && timelife_off_status[i]){
+      timelife_off_status[i] = false;
+      on(i);
+    }
+
+    if(timelife_toggle[i].isExpired() && timelife_toggle_status[i]){
+      timelife_toggle_status[i] = false;
+      toggle(i);
+    }
   }
-  if(timelife2.isExpired() && status_onTimeout[1]){
-    off(1);
-    status_onTimeout[1] = 0;
-  }
-  if(timelife3.isExpired() && status_onTimeout[2]){
-    off(2);
-    status_onTimeout[2] = 0;
-  }
-  if(timelife4.isExpired() && status_onTimeout[3]){
-    off(3);
-    status_onTimeout[3] = 0;
-  }
-  if(timelife5.isExpired() && status_onTimeout[4]){
-    off(4);
-    status_onTimeout[4] = 0;
-  }
-  if(timelife6.isExpired() && status_onTimeout[5]){
-    off(5);
-    status_onTimeout[5] = 0;
-  }
-\
   
 }
 
@@ -113,69 +95,49 @@ void Relay6CH::deactive(){
   Serial.println("Relay DeActive");
 }
 
-void Relay6CH::onTimeout(int pin,float time){
-
-  if(time == -1){
-    toggle(pin);
-    return;
-  }
-
-  status[pin] = false;
+void Relay6CH::on(int pin) {
+  status[pin] = ON_STATUS;
   RELAY.digitalWrite(relayPinList[pin], status[pin]);
-
-  switch (pin)
-  {
-  case 0:
-    timelife1.setInterval((int)time * 1000);
-    timelife1.reset();
-    status_onTimeout[pin] = 1;
-    break;
-  case 1:
-    timelife2.setInterval((int)time * 1000);
-    timelife2.reset();
-    break;
-  case 2:
-    timelife3.setInterval((int)time * 1000);
-    timelife3.reset();
-    break;
-  case 3:
-    timelife4.setInterval((int)time * 1000);
-    timelife4.reset();
-    break;
-  case 4:
-    timelife5.setInterval((int)time * 1000);
-    timelife5.reset();
-    break;
-  case 5:
-    timelife6.setInterval((int)time * 1000);
-    timelife6.reset();
-    break;
-  
-  default:
-    break;
-  }
-
-  status_onTimeout[pin] = 1;
-
 }
 
-void Relay6CH::on(int pin) {
-  status[pin] = false;
+void Relay6CH::on(int pin,int time_millis){
+  timelife_on_status[pin] = true;
+  timelife_on[pin].setInterval(time_millis);
+  timelife_on[pin].reset();
+  Serial.println("timelife_on["+String(pin)+"].setInterval("+String(time_millis)+")");
+  status[pin] = ON_STATUS;
   RELAY.digitalWrite(relayPinList[pin], status[pin]);
 }
 
 
 void Relay6CH::off(int pin) {
-  status[pin] = true;
+  status[pin] = OFF_STATUS;
   RELAY.digitalWrite(relayPinList[pin], status[pin]);
-  
 }
 
+void Relay6CH::off(int pin,int time_millis){
+  timelife_off_status[pin] = true;
+  timelife_off[pin].setInterval(time_millis);
+  timelife_off[pin].reset();
+  Serial.println("timelife_off["+String(pin)+"].setInterval("+String(time_millis)+")");
+  status[pin] = OFF_STATUS;
+  RELAY.digitalWrite(relayPinList[pin], status[pin]);
+}
+
+
 void Relay6CH::toggle(int pin) {
-  
   status[pin] = !status[pin];
   RELAY.digitalWrite(relayPinList[pin],status[pin]);
   Serial.println("pin " + String(pin) + "  status = " + String(status[pin]));
+}
+
+void Relay6CH::toggle(int pin,int time_millis){
+  timelife_toggle_status[pin] = true;
+  timelife_toggle[pin].setInterval(time_millis);
+  timelife_toggle[pin].reset();
+  Serial.println("timelife_toggle["+String(pin)+"].setInterval("+String(time_millis)+")");
+  status[pin] = !status[pin];
+  RELAY.digitalWrite(relayPinList[pin], status[pin]);
 }
 
 

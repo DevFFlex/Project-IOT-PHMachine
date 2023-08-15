@@ -51,8 +51,10 @@ void SerialInput::onInputAvailable()
             }
             else if (data.indexOf("relay on") != -1)
             {
+                
                 data.replace("relay on", "");
-                var->hardwareIO->relay->on(data.toInt());
+                var->hardwareIO->relay->on(0,data.toInt());
+                // var->hardwareIO->relay->on(data.toInt());
             }
             else if (data.indexOf("relay off") != -1)
             {

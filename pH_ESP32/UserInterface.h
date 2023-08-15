@@ -1,7 +1,5 @@
 #include <functional>
 
-typedef void (*fff)();
-
 enum PageName
 {
   MAIN,
@@ -22,8 +20,8 @@ private:
   byte function_item_cursor = 0;
   bool function_setup = true;
   String function_item[4] = {
-      "start adjusting pH",
-      "_...",
+      "Home",
+      "Start Adjusting pH",
       "_...",
       "_..."
   };
@@ -67,14 +65,17 @@ public:
       String StepText = "";
       StepText = String(var->workVar.step);
 
+      String SDCardText = "";
+      SDCardText = (var->hardwareIO->sdcard->isReady()) ? "R" : "E";
+
 
       switch (pagename)
       {
       case MAIN:
         
         hardwareIO->lcdOutput->printL("PH = " + String(var->mixTank_pH) + " | " + pHText, 0);
-        hardwareIO->lcdOutput->printL("FSW_U = " + String(var->fsw_mixTank_Up) + "  FSW_D = " + String(var->fsw_mixtank_Down),1);
-        hardwareIO->lcdOutput->printL("DTH:" + DTHText + " WIFI:" + WIFIText + " ST:" + StepText, 2);
+        hardwareIO->lcdOutput->printL("FSW_U=" + String(var->fsw_mixTank_Up) + " FSW_D=" + String(var->fsw_mixtank_Down),1);
+        hardwareIO->lcdOutput->printL("DTH:" + DTHText + " WIFI:" + WIFIText + " SD:" + SDCardText, 2);
         hardwareIO->lcdOutput->printL(hardwareIO->rtc->getTimeToString(), 3);
         break;
 
@@ -114,8 +115,8 @@ public:
 void UserInterface::changePage(PageName pagenameIn)
 {
   hardwareIO->lcdOutput->clear();
-  pagename = pagenameIn;
   hardwareIO->keypadInput->clearBuffer();
+  pagename = pagenameIn;
 
   if (pagenameIn == FUNCTION_SELECT)
     function_setup = true;
@@ -123,55 +124,55 @@ void UserInterface::changePage(PageName pagenameIn)
 
 void UserInterface::onEnter(char key, String text_buffer)
 {
+  switch(pagename){
+    case MAIN:
+      changePage(FUNCTION_SELECT);
+      break;
+    case FUNCTION_SELECT:
+      if(function_item_cursor == 0)changePage(MAIN);
+      else if(function_item_cursor == 1)changePage(INPUT_PH);
+      break;
+    case INPUT_PH:
+      data_buffer.replace(String(key), "");
+      var->input_ph = data_buffer.toFloat();
+      var->workVar.working_status = true;
+      changePage(MAIN);
+      break;
+  }
 }
 
 void UserInterface::onKeypress(char key, String text_buffer)
 {
-  if (pagename == MAIN)
-  {
-    if (key == 'D')
-      changePage(FUNCTION_SELECT);
-  }
-  else if (pagename == FUNCTION_SELECT)
-  {
-    if (key == 'D')
-      changePage(MAIN);
-    else if (key == 'C' && function_item_cursor < 3)
-    {
-      function_item_cursor++;
-      function_setup = true;
 
-    }
-    else if (key == 'B' && function_item_cursor > 0){
-      function_item_cursor--;
-      function_setup = true;
-    }
-
-    else if (key == 'A'){
-      if(function_item_cursor == 0)changePage(INPUT_PH);
-    }
-      
-  }
-  else if (pagename == INPUT_PH)
-  {
-    if (key == 'D')
-      changePage(FUNCTION_SELECT);
-
-    if (key == 'A')
-    {
-      data_buffer.replace("A", "");
-      var->input_ph = data_buffer.toFloat();
-      var->workVar.working_status = true;
-    }
-
-    if (key == 'C')
-    {
-      hardwareIO->keypadInput->clearBuffer();
-      data_buffer = text_buffer;
-      return;
-    }
-
-    data_buffer = text_buffer;
+  switch(pagename){
+    case MAIN:
+      break;
+    case FUNCTION_SELECT:
+      if (key == 'C' && function_item_cursor < 3)
+      {
+        function_item_cursor++;
+        function_setup = true;
+        Serial.println("FunctionSelect : Click C = down");
+      }
+      else if (key == 'B' && function_item_cursor > 0){
+        function_item_cursor--;
+        function_setup = true;
+        Serial.println("FunctionSelect : Click B = up");
+      }
+      break;
+    case INPUT_PH:
+      if (key == 'B'){
+        changePage(FUNCTION_SELECT);
+      }  
+      else if (key == 'C')
+      {
+        hardwareIO->keypadInput->clearBuffer();
+        data_buffer = "";
+        return;
+      }else{
+        data_buffer = text_buffer;
+      }
+      break;
   }
 
 }

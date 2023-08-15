@@ -14,7 +14,6 @@ class Variable : public System{
 
 public:
   ScanI2C i2cScan;
-
   HardwareIO *hardwareIO = new HardwareIO();
   Database *db = new Database();
 
@@ -25,14 +24,10 @@ public:
 
   bool fsw_mixTank_Up = false;
   bool fsw_mixtank_Down = false;
-  bool fsw_waterTank_Down = false;
 
   WorkVar workVar;
 
   TimerAutoWork *timerautowork = new TimerAutoWork[4];
-
-  float onClientRequestStatus = false;
-
 
   void setup() override {
     hardwareIO->setup();

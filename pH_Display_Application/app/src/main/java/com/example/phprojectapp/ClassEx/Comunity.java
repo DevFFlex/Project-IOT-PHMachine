@@ -48,9 +48,9 @@ public class Comunity extends Client{
         send("TIME_BOARD",String.valueOf(value));
     }
 
-    public void setToggleRelay(int index,double time){
+    public void setRelay(String header,int index,double time){
         if (index < 0 || index > 6)return;
-        send("RELAY",String.format("%d,%.1f",index,time));
+        send("RELAY",String.format("%s,%d,%.1f",header,index,time));
     }
 
     public void getTimeAutoWork(){
@@ -110,9 +110,8 @@ public class Comunity extends Client{
 
             var.fsw[0] = Integer.parseInt(d1[14]);
             var.fsw[1] = Integer.parseInt(d1[15]);
-            var.fsw[2] = Integer.parseInt(d1[16]);
 
-            var.wifi_board_connected = (d1[17].equals("0")) ? false : true;
+            var.wifi_board_connected = (d1[16].equals("0")) ? false : true;
 
         }
 

@@ -40,7 +40,6 @@ class Comunity : public System
     // FloatSwitch
     queryData += String(var->fsw_mixTank_Up) + ",";
     queryData += String(var->fsw_mixtank_Down) + ",";
-    queryData += String(var->fsw_waterTank_Down) + ",";
 
     // Wifi Connected
     queryData += String(wifi_controll->getSTAWifiStatusConnected());
@@ -107,11 +106,24 @@ class Comunity : public System
     var->hardwareIO->rtc->setTime(hour, minute, second, dayofweek, dayofmonth, month, year);
   }
 
-  void onClientToggleRelay(String data){
+  void onClientRelayControll(String data){
 
-    splitString(item_parameter,data,",",2);
-    if(item_parameter[1] == "-1") var->hardwareIO->relay->onTimeout(item_parameter[0].toInt(),item_parameter[1].toFloat());
-    else var->hardwareIO->relay->toggle(data.toInt());
+    splitString(item_parameter,data,",",3);
+    String header = item_parameter[0];
+    String pin = item_parameter[1];
+    String time = item_parameter[2];
+
+    if(header == "on"){
+      if(time == "-1")var->hardwareIO->relay->on(pin.toInt());
+      else var->hardwareIO->relay->on(pin.toInt(),time.toInt());
+    }else if(header == "off"){
+      if(time == "-1")var->hardwareIO->relay->off(pin.toInt());
+      else var->hardwareIO->relay->off(pin.toInt(),time.toInt());
+    }else if(header == "toggle"){
+      if(time == "-1")var->hardwareIO->relay->toggle(pin.toInt());
+      else var->hardwareIO->relay->toggle(pin.toInt(),time.toInt());
+    }
+    
   }
 
   public:
@@ -130,7 +142,7 @@ class Comunity : public System
 
 
     clientComunity->clientComunityCallback.onTimeUpdateAPP = std::bind(&Comunity::onTimeUpdateAPP,this);
-    clientComunity->clientComunityCallback.onClientToggleRelay = std::bind(&Comunity::onClientToggleRelay,this,std::placeholders::_1);
+    clientComunity->clientComunityCallback.onClientRelayControll = std::bind(&Comunity::onClientRelayControll,this,std::placeholders::_1);
     clientComunity->clientComunityCallback.onClientAdjPHStart = std::bind(&Comunity::onClientAdjPH,this,std::placeholders::_1);
     clientComunity->clientComunityCallback.onClientSetTimeBoard = std::bind(&Comunity::onClientSetTimeBoard,this,std::placeholders::_1);
     clientComunity->clientComunityCallback.onClientSetTimeAutoWork = std::bind(&Comunity::onClientSetTimeAutoWork,this,std::placeholders::_1);

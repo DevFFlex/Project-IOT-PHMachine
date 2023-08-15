@@ -88,7 +88,7 @@ public class AdminFragment extends Fragment {
     }
 
     private void toggleRelay(int index){
-        var.comunity.setToggleRelay(index,-1);
+        var.comunity.setRelay("toggle",index,-1);
     }
 
     public void onToggleRelay1(View v){

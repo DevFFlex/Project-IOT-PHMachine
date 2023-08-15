@@ -9,7 +9,7 @@ typedef struct InterfaceEvent_ClientComunity{
   std::function<void(String)> onClientSetTimeAutoWork = NULL;
   std::function<void(String)> onClientGetTimeAutoWork = NULL;
   std::function<void(String)> onClientSetTimeBoard = NULL;
-  std::function<void(String)> onClientToggleRelay = NULL;
+  std::function<void(String)> onClientRelayControll = NULL;
 
 
 }ClientComunityCallback;
@@ -36,8 +36,6 @@ public:
 
     ClientComunity(WiFiControll *wifiC) : autosendTimer(1000){
       clientlist = new ClientList(wifiC->getServer());
-
-    
     }
 
     void setup()
@@ -79,8 +77,6 @@ bool ClientComunity::condition_req(String clientDataReq,String target){
 
 void ClientComunity::onClientMessageCallback(String str_trim)
 {
-  // Serial.println("Client -------------- Message");
-
   String databox1[2];
   splitString(databox1, str_trim, ":", 2);
   String header = databox1[0];
@@ -104,7 +100,7 @@ void ClientComunity::onClientMessageCallback(String str_trim)
   }
 
   if (condition_req(str_command,"RELAY"))
-    if(clientComunityCallback.onClientToggleRelay != NULL)clientComunityCallback.onClientToggleRelay(str_value);
+    if(clientComunityCallback.onClientRelayControll != NULL)clientComunityCallback.onClientRelayControll(str_value);
 
   if(condition_req(str_command,"ADJ_PH"))
     if(clientComunityCallback.onClientAdjPHStart != NULL)clientComunityCallback.onClientAdjPHStart(str_value);

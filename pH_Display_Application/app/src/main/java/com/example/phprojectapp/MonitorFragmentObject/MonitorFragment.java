@@ -155,12 +155,12 @@ public class MonitorFragment extends Fragment {
         monitor_btnSetTime.setOnClickListener(this::onClickSetTime);
         monitor_tvTimeBoard.setOnClickListener(this::onClickTimeBoard);
 
-        btn_relay[0].setOnClickListener(this::onToggleRelay1);
-        btn_relay[1].setOnClickListener(this::onToggleRelay2);
-        btn_relay[2].setOnClickListener(this::onToggleRelay3);
-        btn_relay[3].setOnClickListener(this::onToggleRelay4);
-        btn_relay[4].setOnClickListener(this::onToggleRelay5);
-        btn_relay[5].setOnClickListener(this::onToggleRelay6);
+        btn_relay[0].setOnClickListener(this::onOnRelay1);
+        btn_relay[1].setOnClickListener(this::onOnRelay2);
+        btn_relay[2].setOnClickListener(this::onOnRelay3);
+        btn_relay[3].setOnClickListener(this::onOnRelay4);
+        btn_relay[4].setOnClickListener(this::onOnRelay5);
+        btn_relay[5].setOnClickListener(this::onOnRelay6);
 
 
 
@@ -234,34 +234,34 @@ public class MonitorFragment extends Fragment {
 
 
 
-    private void toggleRelay(int index){
+    private void onRelay(int index){
         String time_str = manualETTime.getText().toString();
         manualETTime.setText("");
         if(time_str.equals("")){
 
         }else{
             double time = Double.parseDouble(time_str);
-            var.comunity.setToggleRelay(index,time);
+            var.comunity.setRelay("on",index,time);
         }
     }
 
-    public void onToggleRelay1(View v){
-        toggleRelay(0);
+    public void onOnRelay1(View v){
+        onRelay(0);
     }
-    public void onToggleRelay2(View v){
-        toggleRelay(1);
+    public void onOnRelay2(View v){
+        onRelay(1);
     }
-    public void onToggleRelay3(View v){
-        toggleRelay(2);
+    public void onOnRelay3(View v){
+        onRelay(2);
     }
-    public void onToggleRelay4(View v){
-        toggleRelay(3);
+    public void onOnRelay4(View v){
+        onRelay(3);
     }
-    public void onToggleRelay5(View v){
-        toggleRelay(4);
+    public void onOnRelay5(View v){
+        onRelay(4);
     }
-    public void onToggleRelay6(View v){
-        toggleRelay(5);
+    public void onOnRelay6(View v){
+        onRelay(5);
     }
 
 

@@ -42,7 +42,6 @@ public:
       var->mixTank_pH = item[0].toFloat();
       var->fsw_mixTank_Up = (item[3] == "1") ? true : false;
       var->fsw_mixtank_Down = (item[4] == "1") ? true : false;
-      var->fsw_waterTank_Down = (item[5] == "1") ? true : false;
 
 
       data_buffer = "";

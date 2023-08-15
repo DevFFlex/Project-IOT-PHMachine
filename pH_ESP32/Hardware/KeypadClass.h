@@ -19,7 +19,8 @@ private:
     { '*', '0', '#', 'D' }
   };
 
-  char enterKey = 'A';
+  char enterKey = 'D';
+  
 
   byte rowPins[KEYPAD_ROWS] = { 0, 1, 2, 3 };
   byte colPins[KEYPAD_COLS] = { 4, 5, 6, 7 };
