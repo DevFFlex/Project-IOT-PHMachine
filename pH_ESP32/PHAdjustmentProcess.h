@@ -1,5 +1,11 @@
 #define MAX_STEP 4
 
+enum Substance{
+  ACID,
+  BASS
+};
+
+
 class PHAdjustmentProcess {
 private:
   Variable *var;
@@ -9,6 +15,7 @@ private:
   void step2();
   void step3();
   void step4();
+  void stepAddSubstance(Substance sub);
 
 public:
   PHAdjustmentProcess(Variable *varIn) {
@@ -20,6 +27,7 @@ public:
   void loop();
   
   void nextStep();
+  void goStep(int step);
   void stop();
   bool timerAutoWork_Compare_Rtctime(int index);
 };
@@ -56,6 +64,23 @@ void PHAdjustmentProcess::loop() {
 
 void PHAdjustmentProcess::nextStep() {
   var->workVar.step += 1;
+
+  if (var->workVar.step > MAX_STEP) {
+    var->workVar.step = 0;
+    var->workVar.working_status = false;
+    var->workVar.working_status_setup = true;
+    hardwareIO->buzzer->on(200);
+    Serial.println("adjust process success,you need = " + String(var->input_ph) + "    pH now = " + String(var->mixTank_pH));
+    return;
+  }
+
+  hardwareIO->buzzer->on(300);
+
+  var->workVar.working_step_setup = true;
+}
+
+void PHAdjustmentProcess::goStep(int step){
+  var->workVar.step = step;
 
   if (var->workVar.step > MAX_STEP) {
     var->workVar.step = 0;
@@ -102,7 +127,7 @@ void PHAdjustmentProcess::step1() {
 
   if (var->workVar.working_step_setup) {
     var->workVar.working_step_setup = false;
-    Serial.println("step 1");
+    Serial.println("step 1 : water in");
   }
 
   hardwareIO->relay->on(2);
@@ -113,54 +138,98 @@ void PHAdjustmentProcess::step1() {
 }
 
 void PHAdjustmentProcess::step2() {
-  bool condition_nextstep = var->mixTank_pH > var->input_ph + 0.5 && var->mixTank_pH < var->input_ph - 0.5;
-
-  static Timer timeCheck(5000);
+  static Timer step2_wait(20000);
+  
+  bool condition_nextstep = step2_wait.isExpired();
 
   if (var->workVar.working_step_setup) {
     var->workVar.working_step_setup = false;
-    Serial.println("step 2");
+    Serial.println("step 2 : suck water to phsensor");
+    
+    step2_wait.reset();
   }
 
+  hardwareIO->relay->on(0);
   hardwareIO->relay->on(5);
 
-  if(timeCheck.isExpired()){
-    hardwareIO->relay->toggle(0);
-  }
-
   if (condition_nextstep) {
+    hardwareIO->relay->off(0);
     hardwareIO->relay->off(5);
     nextStep();
   }
 }
 
 void PHAdjustmentProcess::step3() {
-  bool condition_nextstep = var->fsw_mixtank_Down;
-
+  static Timer step3_wait(90000);
+  bool condition_nextstep = step3_wait.isExpired();
 
   if (var->workVar.working_step_setup) {
     var->workVar.working_step_setup = false;
-    Serial.println("step 3");
+    Serial.println("step 3 : wait 1.30 , measure ph");
+
+    step3_wait.reset();
+  }
+
+  if(condition_nextstep){
+    
+    if(var->mixTank_pH <= var->input_ph + 0.5 && var->mixTank_pH >= var->input_ph - 0.5){
+        nextStep();
+    }else{
+      
+      float phDiff = var->input_ph - var->mixTank_pH;
+
+      Serial.println("---------------------------------------------------");
+      Serial.println("input - current = pHDiff");
+      Serial.println( String(var->input_ph) + " - " + String(var->mixTank_pH) + " = " + String(phDiff));
+    
+      if(phDiff > 0){
+        Serial.println("Add Bass");
+        stepAddSubstance(BASS);
+      }else if (phDiff < 0){
+        Serial.println("Add Acid");
+        stepAddSubstance(ACID);
+      }
+      Serial.println("---------------------------------------------------");
+    }
+      
+  }
+
+}
+
+void PHAdjustmentProcess::stepAddSubstance(Substance sub){
+  static Timer wait_Addsubstance(2000);
+
+  bool condition_nextstep = wait_Addsubstance.isExpired();
+
+  if (var->workVar.working_step_setup) {
+    var->workVar.working_step_setup = false;
+    Serial.println("stepAddSubstance 1 sec");
+
+    wait_Addsubstance.reset();
+
+    if(sub == BASS)hardwareIO->relay->on(3,1000);
+    else if(sub == ACID)hardwareIO->relay->on(4,1000);
+  }
+
+
+  if (condition_nextstep) {
+    goStep(2);
+  }
+}
+
+void PHAdjustmentProcess::step4() {
+  bool condition_nextstep = var->fsw_mixtank_Down;
+
+  if (var->workVar.working_step_setup) {
+    var->workVar.working_step_setup = false;
+    Serial.println("step 4 : water out");
   }
 
   hardwareIO->relay->on(1);
-
   if (condition_nextstep) {
     hardwareIO->relay->off(1);
     nextStep();
   }
 }
 
-void PHAdjustmentProcess::step4() {
-  bool condition_nextstep = true;
 
-  if (var->workVar.working_step_setup) {
-    var->workVar.working_step_setup = false;
-    Serial.println("step 4");
-  }
-
-
-  if (condition_nextstep) {
-    nextStep();
-  }
-}

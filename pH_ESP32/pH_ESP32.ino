@@ -18,7 +18,6 @@ UserInterface *ui = new UserInterface(var,comunity);
 
 
 
-
 void setup() {
   Serial.begin(115200);
 
