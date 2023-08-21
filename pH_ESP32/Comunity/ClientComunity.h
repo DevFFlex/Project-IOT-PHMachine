@@ -19,6 +19,8 @@ typedef struct InterfaceEvent_ClientComunity{
 class ClientComunity
 {
 private:
+    Variable *var;
+
     Timer autosendTimer;
     ClientList *clientlist;
 
@@ -34,8 +36,9 @@ public:
     void onClientMessageCallback(String message);
     void onClientJoinCallback(String clientName);
 
-    ClientComunity(WiFiControll *wifiC) : autosendTimer(1000){
+    ClientComunity(Variable *var,WiFiControll *wifiC) : autosendTimer(1000){
       clientlist = new ClientList(wifiC->getServer());
+      this->var = var;
     }
 
     void setup()
@@ -91,8 +94,7 @@ void ClientComunity::onClientMessageCallback(String str_trim)
   String str_command = command;
   String str_value = value;
 
-  // if(debugDisplayDataRecv)Serial.println(str_clientname + ":" + str_command + ":" + str_value);
-  Serial.println(str_clientname + ":" + str_command + ":" + str_value);
+  if(var->datadebug.debug_client_comunity)Serial.println(str_clientname + ":" + str_command + ":" + str_value);
 
   if (condition_req(str_command,"MESSAGE"))
   {

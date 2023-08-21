@@ -135,10 +135,10 @@ class Comunity : public System
   Comunity(Variable *var){
     this->var = var;
 
-    wifi_controll = new WiFiControll();
+    wifi_controll = new WiFiControll(var);
     ardunoComunity = new ArduinoComunity(var);
-    clientComunity = new ClientComunity(wifi_controll);
-    couldComunity = new CouldComunity(wifi_controll);
+    clientComunity = new ClientComunity(var,wifi_controll);
+    couldComunity = new CouldComunity(var,wifi_controll);
 
 
     clientComunity->clientComunityCallback.onTimeUpdateAPP = std::bind(&Comunity::onTimeUpdateAPP,this);

@@ -8,12 +8,25 @@ typedef struct WorkVarStruct {
   bool working_status = false;
   bool working_status_setup = true;
   bool working_step_setup = false;
+  String outputText1 = "";
+  String outputText2 = "";
+  String outputText3 = "";
+
 } WorkVar;
+
+
+typedef struct DebugStatusStruct{
+  bool debug_wifiConnection = false;
+  bool debug_client_comunity = false;
+  bool debug_could_comunity = false;
+  bool debug_arduino_comunity = false;
+} DebugData;
 
 class Variable : public System{
 
 public:
   ScanI2C i2cScan;
+  DebugData datadebug;
   HardwareIO *hardwareIO = new HardwareIO();
   Database *db = new Database();
 

@@ -14,6 +14,7 @@
 
 class WiFiControll {
 private:
+  Variable *var;
   WiFiServer *server;
 
   String AP_SSID = "PPC";
@@ -33,8 +34,9 @@ private:
 
 public:
 
-  WiFiControll() {
+  WiFiControll(Variable *var) {
     server = new WiFiServer(80);
+    this->var = var;
   }
 
   ~WiFiControll() {

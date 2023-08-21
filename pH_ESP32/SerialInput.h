@@ -1,8 +1,8 @@
 #include "Arduino.h"
 
 
-#define DEBUG_KEY1 "debugServerData"
-#define DEBUG_KEY2 "debugServerDataRecv"
+#define DEBUG_KEY1 "debugWifiData"
+#define DEBUG_KEY2 "debugClientData"
 #define DEBUG_KEY3 "debugArduinoData"
 
 
@@ -11,6 +11,8 @@ class SerialInput : public System{
 private:
     Variable *var;
     Comunity *comunity;
+
+    String *split_buffer = new String[10];
 
     void onInputAvailable();
 
@@ -39,22 +41,69 @@ void SerialInput::onInputAvailable()
         String data = Serial.readString();
         data.trim();
 
+
+
+        // Version2
+
+        /*String inputString = data;
+        char targetChar = ' ';
+        int charCount = 0;
+
+        for (int i = 0; i < inputString.length(); i++) {
+            if (inputString.charAt(i) == targetChar) {
+            charCount++;
+            }
+        }
+
+        String args[9];
+
+        if(charCount > 10)return;
+
+        String command = split_buffer[0];
+        
+
+        if(charCount == 0){
+            args[0] = split_buffer[1];
+        }else{
+            for(int i = 1;i<charCount;i++){
+                splitString(split_buffer,data," ",2);
+                args[i] = split_buffer[i+1];
+            }
+        }
+
+        
+
+        
+
+        if(command == "restart"){
+            ESP.restart();
+        }*/
+
+
+
+
+
         if (data != "")
         {
-            if (data.indexOf("relayall active") != -1)
+            if(data.indexOf("restart") != -1){
+              ESP.restart();
+            }
+
+
+
+            if (data.indexOf("relay_active") != -1)
             {
                 var->hardwareIO->relay->active();
             }
-            else if (data.indexOf("relayall deactive") != -1)
+            else if (data.indexOf("relay_deactive") != -1)
             {
                 var->hardwareIO->relay->deactive();
             }
-            else if (data.indexOf("relay on") != -1)
+            else if (data.indexOf("relay_on") != -1)
             {
-                
                 data.replace("relay on", "");
                 var->hardwareIO->relay->on(0,data.toInt());
-                // var->hardwareIO->relay->on(data.toInt());
+
             }
             else if (data.indexOf("relay off") != -1)
             {
@@ -71,7 +120,8 @@ void SerialInput::onInputAvailable()
             if (data.indexOf("buzzer") != -1)
             {
                 data.replace("buzzer", "");
-                var->hardwareIO->buzzer->freq = data.toInt();
+                // var->hardwareIO->buzzer->freq = data.toInt();
+                var->hardwareIO->buzzer->on(data.toInt());
             }
 
         
@@ -148,15 +198,24 @@ void SerialInput::onInputAvailable()
             
 
             if (data.indexOf(DEBUG_KEY1) != -1){
-                
+                var->datadebug.debug_wifiConnection = !var->datadebug.debug_wifiConnection;
             }
 
             else if (data.indexOf(DEBUG_KEY2) != -1){
-                comunity->clientComunity->debugDisplayDataRecv = !comunity->clientComunity->debugDisplayDataRecv;
+                var->datadebug.debug_client_comunity = !var->datadebug.debug_client_comunity;
             }
 
             if(data.indexOf(DEBUG_KEY3) != -1){
-                comunity->ardunoComunity->setDisplayDataTranfer(!comunity->ardunoComunity->getDisplayDataTranfer());
+                var->datadebug.debug_arduino_comunity = !var->datadebug.debug_arduino_comunity;
+            }
+
+            if(data.indexOf("debugStatus") != -1){
+                Serial.println("-------------------------------------------");
+                Serial.println("debug wificonnect : " + String(var->datadebug.debug_wifiConnection));
+                Serial.println("debug clientComunity : " + String(var->datadebug.debug_client_comunity));
+                Serial.println("debug ArduinoComunity : " + String(var->datadebug.debug_arduino_comunity));
+                // Serial.println("debug wificonnect : " + String(var->datadebug.debug_wifiConnection));
+                Serial.println("-------------------------------------------");
             }
         
         }

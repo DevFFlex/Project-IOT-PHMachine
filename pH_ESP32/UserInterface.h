@@ -4,7 +4,8 @@ enum PageName
 {
   MAIN,
   INPUT_PH,
-  FUNCTION_SELECT
+  FUNCTION_SELECT,
+  WORKING
 };
 
 class UserInterface : public System{
@@ -22,7 +23,7 @@ private:
   String function_item[4] = {
       "Home",
       "Start Adjusting pH",
-      "_...",
+      "Working Info",
       "_..."
   };
 
@@ -102,6 +103,13 @@ public:
           }
         }
         break;
+
+      case WORKING:
+        hardwareIO->lcdOutput->printL("Step = " + String(var->workVar.step),0);
+        hardwareIO->lcdOutput->printL("pH = " + String(var->mixTank_pH),1);
+        hardwareIO->lcdOutput->printL("pH_input = " + String(var->input_ph), 2);
+        hardwareIO->lcdOutput->printL(var->workVar.outputText1, 3);
+        break;
       }
     }
   }
@@ -131,6 +139,7 @@ void UserInterface::onEnter(char key, String text_buffer)
     case FUNCTION_SELECT:
       if(function_item_cursor == 0)changePage(MAIN);
       else if(function_item_cursor == 1)changePage(INPUT_PH);
+      else if(function_item_cursor == 2)changePage(WORKING);
       break;
     case INPUT_PH:
       data_buffer.replace(String(key), "");
@@ -171,6 +180,11 @@ void UserInterface::onKeypress(char key, String text_buffer)
         return;
       }else{
         data_buffer = text_buffer;
+      }
+      break;
+    case WORKING:
+      if (key == 'B'){
+        changePage(FUNCTION_SELECT);
       }
       break;
   }

@@ -1,6 +1,8 @@
 #include <HTTPClient.h>
 
 class CouldComunity{
+    Variable *var;
+
     WiFiControll *wifiC;
     HTTPClient  httpClient;
     String hostname = "https://script.google.com/macros/s/AKfycbwa2m6GroNpSCca4XJ9Qj9R9prn5H8ucxe8opHCYRJPgziR6_ViDEQXvUPJxpnkH2ui/exec";
@@ -9,7 +11,8 @@ class CouldComunity{
     Timer timer_senddata;
     Timer timer_reconnect_wifi;
     public:
-    CouldComunity(WiFiControll *wifiC) : timer_senddata(10000),timer_reconnect_wifi(15000){
+    CouldComunity(Variable *var,WiFiControll *wifiC) : timer_senddata(10000),timer_reconnect_wifi(15000){
+        this->var = var;
         this->wifiC = wifiC;
     }
 

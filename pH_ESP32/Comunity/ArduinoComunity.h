@@ -11,7 +11,6 @@ private:
   String *item = new String[6];
   String *c_v = new String[2];
 
-  bool displayDataTranfer = false;
 
 public:
 
@@ -35,7 +34,7 @@ public:
     if (data_buffer != "")
     {
       data_buffer.trim();
-      if(displayDataTranfer)Serial.println("Data From Arduino ---> " + data_buffer ); 
+      if(var->datadebug.debug_arduino_comunity)Serial.println("Data From Arduino ---> " + data_buffer ); 
 
 
       splitString(item, data_buffer, ",", 6);
@@ -52,12 +51,3 @@ public:
   bool getDisplayDataTranfer();
 };
 
-
-
-void ArduinoComunity::setDisplayDataTranfer(bool status){
-  displayDataTranfer = status;
-}
-
-bool ArduinoComunity::getDisplayDataTranfer(){
-  return displayDataTranfer;
-}
