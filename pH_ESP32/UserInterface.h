@@ -29,6 +29,63 @@ private:
 
   String data_buffer = "";
 
+  void displayPage(){
+    String pHText = "";
+    if(var->mixTank_pH > 7)pHText = "Base";
+    else if(var->mixTank_pH > 6) pHText = "Mid";
+    else if(var->mixTank_pH > 0) pHText = "Acid";
+
+    String DTHText = "";
+    if(hardwareIO->dhtsensor->isReady())DTHText = "R";
+    else DTHText = "E";
+
+    String WIFIText = "";
+    if(comunity->wifi_controll->getSTAWifiStatusConnected())WIFIText = "R";
+    else WIFIText = "E";
+
+    String StepText = "";
+    StepText = String(var->workVar.step);
+
+    String SDCardText = "";
+    SDCardText = (var->hardwareIO->sdcard->isReady()) ? "R" : "E";
+
+
+    switch (pagename)
+    {
+    case MAIN:
+      hardwareIO->lcdOutput->printL("PH = " + String(var->mixTank_pH) + " | " + pHText, 0);
+      hardwareIO->lcdOutput->printL("FSW_U=" + String(var->fsw_mixTank_Up) + " FSW_D=" + String(var->fsw_mixtank_Down),1);
+      hardwareIO->lcdOutput->printL("DTH:" + DTHText + " WIFI:" + WIFIText + " SD:" + SDCardText, 2);
+      hardwareIO->lcdOutput->printL(hardwareIO->rtc->getTimeToString(), 3);
+      break;
+
+    case INPUT_PH:
+      hardwareIO->lcdOutput->printL("Enter ph value 0-14", 0);
+      hardwareIO->lcdOutput->printL("A = enter,C = Clear", 1);
+      hardwareIO->lcdOutput->printL("pH : " + data_buffer , 2);
+      break;
+
+    case FUNCTION_SELECT:
+      if (function_setup)
+      {
+        function_setup = false;
+        for (int i = 0; i < 4; i++)
+        {
+          if (function_item_cursor == i)hardwareIO->lcdOutput->printL(">" + function_item[i], i);
+          else hardwareIO->lcdOutput->printL(" " + function_item[i], i);
+        }
+      }
+      break;
+
+    case WORKING:
+      hardwareIO->lcdOutput->printL("Step = " + String(var->workVar.step),0);
+      hardwareIO->lcdOutput->printL("pH = " + String(var->mixTank_pH),1);
+      hardwareIO->lcdOutput->printL("pH_input = " + String(var->input_ph), 2);
+      hardwareIO->lcdOutput->printL(var->workVar.outputText1, 3);
+      break;
+    }
+  }
+
 public:
   UserInterface(Variable *varObjectIn,Comunity *comunity) : update_display(1000)
   {
@@ -44,73 +101,12 @@ public:
   {
     pagename = MAIN;
   }
-
   void loop() override
   {
 
     if (update_display.isExpired())
     {
-      String pHText = "";
-      if(var->mixTank_pH > 7)pHText = "Base";
-      else if(var->mixTank_pH > 6) pHText = "Mid";
-      else if(var->mixTank_pH > 0) pHText = "Acid";
-
-      String DTHText = "";
-      if(hardwareIO->dhtsensor->isReady())DTHText = "R";
-      else DTHText = "E";
-
-      String WIFIText = "";
-      if(comunity->wifi_controll->getSTAWifiStatusConnected())WIFIText = "R";
-      else WIFIText = "E";
-
-      String StepText = "";
-      StepText = String(var->workVar.step);
-
-      String SDCardText = "";
-      SDCardText = (var->hardwareIO->sdcard->isReady()) ? "R" : "E";
-
-
-      switch (pagename)
-      {
-      case MAIN:
-        
-        hardwareIO->lcdOutput->printL("PH = " + String(var->mixTank_pH) + " | " + pHText, 0);
-        hardwareIO->lcdOutput->printL("FSW_U=" + String(var->fsw_mixTank_Up) + " FSW_D=" + String(var->fsw_mixtank_Down),1);
-        hardwareIO->lcdOutput->printL("DTH:" + DTHText + " WIFI:" + WIFIText + " SD:" + SDCardText, 2);
-        hardwareIO->lcdOutput->printL(hardwareIO->rtc->getTimeToString(), 3);
-        break;
-
-      case INPUT_PH:
-        // Serial.println("setup INPUT Page");
-        hardwareIO->lcdOutput->printL("Enter ph value 0-14", 0);
-        hardwareIO->lcdOutput->printL("A = enter,C = Clear", 1);
-        hardwareIO->lcdOutput->printL("pH : " + data_buffer , 2);
-        break;
-
-      case FUNCTION_SELECT:
-        // Serial.println("setup FUNCTION Page");
-        if (function_setup)
-        {
-          function_setup = false;
-          for (int i = 0; i < 4; i++)
-          {
-            if (function_item_cursor == i)
-            {
-              hardwareIO->lcdOutput->printL(">" + function_item[i], i);
-            }
-            else
-              hardwareIO->lcdOutput->printL(" " + function_item[i], i);
-          }
-        }
-        break;
-
-      case WORKING:
-        hardwareIO->lcdOutput->printL("Step = " + String(var->workVar.step),0);
-        hardwareIO->lcdOutput->printL("pH = " + String(var->mixTank_pH),1);
-        hardwareIO->lcdOutput->printL("pH_input = " + String(var->input_ph), 2);
-        hardwareIO->lcdOutput->printL(var->workVar.outputText1, 3);
-        break;
-      }
+      displayPage();
     }
   }
 

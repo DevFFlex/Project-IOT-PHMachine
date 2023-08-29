@@ -63,7 +63,7 @@ class Comunity : public System
       var->workVar.working_status = true;
 
     }
-  } 
+  }
 
   void onClientSetTimeAutoWork(String data){
     String datalayer1[4];
@@ -83,7 +83,7 @@ class Comunity : public System
 
     var->db->writeTimeAutoWork(var->timerautowork);
     clientComunity->sendOutput("Server Set TimeAutoWork Success");
-  
+
   }
 
   void onClientGetTimeAutoWork(String data){
@@ -123,8 +123,18 @@ class Comunity : public System
       if(time == "-1")var->hardwareIO->relay->toggle(pin.toInt());
       else var->hardwareIO->relay->toggle(pin.toInt(),time.toInt());
     }
-    
+
   }
+
+
+  void onArduinoAvailable(String databuffer){
+    String item[4];
+    splitString(item, databuffer, ",", 6);
+    var->mixTank_pH = item[0].toFloat();
+    var->fsw_mixTank_Up = (item[3] == "1") ? true : false;
+    var->fsw_mixtank_Down = (item[4] == "1") ? true : false;
+  }
+
 
   public:
   WiFiControll *wifi_controll;
@@ -147,6 +157,8 @@ class Comunity : public System
     clientComunity->clientComunityCallback.onClientSetTimeBoard = std::bind(&Comunity::onClientSetTimeBoard,this,std::placeholders::_1);
     clientComunity->clientComunityCallback.onClientSetTimeAutoWork = std::bind(&Comunity::onClientSetTimeAutoWork,this,std::placeholders::_1);
     clientComunity->clientComunityCallback.onClientGetTimeAutoWork = std::bind(&Comunity::onClientGetTimeAutoWork,this,std::placeholders::_1);
+
+    ardunoComunity->arduinoComunityCallback.onArduinoAvailable = std::bind(&Comunity::onArduinoAvailable,this,std::placeholders::_1);
   }
 
 

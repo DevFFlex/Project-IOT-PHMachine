@@ -85,16 +85,16 @@ String Database::readTimeAutoWork(TimerAutoWork *timerAutoWork = NULL){
 
 
 
-void Database::writeWifiData(String ssid,String pass){
+void Database::writeWifiData(String ssid = "",String pass = ""){
   int indexstart_ssid_addr = 50;
   int indexstart_pass_addr = indexstart_ssid_addr + 30;
   
   if(ssid != ""){
     for(int i = 0;i<30;i++){
       if(i >= ssid.length()){
-        EEPROM.write(indexstart_ssid_addr + i,0);
+        break;
       }else{
-        EEPROM.write(indexstart_ssid_addr + i,ssid[i]);
+        EEPROM.write(indexstart_ssid_addr + i,(char)ssid[i]);
       }
       Serial.print(String((int)ssid[i]) + " ");
     }
@@ -125,9 +125,10 @@ void Database::readWifiData(String *ssidBuffer,String *passBuffer){
   
   String ssid_str = "";
   for(int i = 0;i<30;i++){
-    String key = String((char)EEPROM.read(indexstart_ssid_addr + i));
-    ssid_str += key;
-    Serial.print(key + " ");    
+    int char_int = EEPROM.read(indexstart_ssid_addr + i);
+    
+    ssid_str += String(char_int);
+    Serial.print(String(char_int) + " ");    
   }
   Serial.println("");
   // ssid_str.trim();

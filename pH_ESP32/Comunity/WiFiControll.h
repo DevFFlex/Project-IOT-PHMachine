@@ -11,7 +11,6 @@
 
 
 
-
 class WiFiControll {
 private:
   Variable *var;
@@ -94,16 +93,5 @@ void WiFiControll::APMode_Start(){
 
 
 void WiFiControll::STAMode_Start(){
-  if(STA_USER == "" || STA_USER == NULL)WiFi.begin(STA_SSID.c_str(),STA_USER.c_str(),0);
-  // else WiFi.begin(STA_SSID.c_str(),STA_USER.c_str(),STA_PASS.c_str());
-  // while(WiFi.status() != WL_CONNECTED)
-  // {
-  //       Serial.print(".");
-  //       delay(100);
-  // }
-  // IPAddress STA_IP = WiFi.localIP();
-  // Serial.print("STA IP address: ");
-  // Serial.println(STA_IP);
-  // Serial.println("------------------------------------");
-  
+  if(STA_USER == "" || STA_USER == NULL)WiFi.begin(STA_SSID.c_str(),STA_USER.c_str(),0);  
 }

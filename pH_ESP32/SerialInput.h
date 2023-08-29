@@ -1,9 +1,10 @@
 #include "Arduino.h"
 
 
-#define DEBUG_KEY1 "debugWifiData"
-#define DEBUG_KEY2 "debugClientData"
-#define DEBUG_KEY3 "debugArduinoData"
+#define DEBUG_KEY1 "debugWifiConnect"
+#define DEBUG_KEY2 "debugClientComunity"
+#define DEBUG_KEY3 "debugArduinoComunity"
+#define DEBUG_KEY4 "debugCouldComunity"
 
 
 
@@ -148,17 +149,17 @@ void SerialInput::onInputAvailable()
                 var->hardwareIO->sdcard->deleteFile(data.c_str());
             }
 
-            if (data.indexOf("saveTAW") != -1){
+            if (data.indexOf("saveTimerSet") != -1){
                 data.replace("saveTAW","");
                 var->db->writeTimeAutoWork(var->timerautowork);
             }
 
-            else if (data.indexOf("readTAW") != -1){
+            else if (data.indexOf("readTimerSet") != -1){
                 data.replace("readTAW","");
                 Serial.println(var->db->readTimeAutoWork(var->timerautowork));
             }
 
-            else if (data.indexOf("showTAW") != -1){
+            else if (data.indexOf("showTimerSet") != -1){
                 String out = "";
                 out += var->timerautowork[0].toString() + "\n";
                 out += var->timerautowork[1].toString() + "\n";
@@ -209,11 +210,17 @@ void SerialInput::onInputAvailable()
                 var->datadebug.debug_arduino_comunity = !var->datadebug.debug_arduino_comunity;
             }
 
+            if(data.indexOf(DEBUG_KEY4) != -1){
+                var->datadebug.debug_could_comunity = !var->datadebug.debug_could_comunity;
+            }
+
+
             if(data.indexOf("debugStatus") != -1){
                 Serial.println("-------------------------------------------");
-                Serial.println("debug wificonnect : " + String(var->datadebug.debug_wifiConnection));
-                Serial.println("debug clientComunity : " + String(var->datadebug.debug_client_comunity));
+                Serial.println("debug WifiConnect : " + String(var->datadebug.debug_wifiConnection));
+                Serial.println("debug ClientComunity : " + String(var->datadebug.debug_client_comunity));
                 Serial.println("debug ArduinoComunity : " + String(var->datadebug.debug_arduino_comunity));
+                Serial.println("debug CouldComunity : " + String(var->datadebug.debug_could_comunity));
                 // Serial.println("debug wificonnect : " + String(var->datadebug.debug_wifiConnection));
                 Serial.println("-------------------------------------------");
             }
