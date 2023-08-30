@@ -14,6 +14,8 @@ private:
     Comunity *comunity;
 
     String *split_buffer = new String[10];
+    String command = "";
+    String args[9] = {"","","","","","","","",""};
 
     void onInputAvailable();
 
@@ -42,189 +44,112 @@ void SerialInput::onInputAvailable()
         String data = Serial.readString();
         data.trim();
 
-
-
-        // Version2
-
-        /*String inputString = data;
+        String inputString = data;
         char targetChar = ' ';
         int charCount = 0;
 
-        for (int i = 0; i < inputString.length(); i++) {
-            if (inputString.charAt(i) == targetChar) {
-            charCount++;
-            }
-        }
-
-        String args[9];
+        for (int i = 0; i < inputString.length(); i++) if (inputString.charAt(i) == targetChar)charCount++;
 
         if(charCount > 10)return;
 
-        String command = split_buffer[0];
-        
-
-        if(charCount == 0){
-            args[0] = split_buffer[1];
-        }else{
-            for(int i = 1;i<charCount;i++){
-                splitString(split_buffer,data," ",2);
-                args[i] = split_buffer[i+1];
-            }
+        if(charCount == 0)command = data;
+        else{
+            splitString(split_buffer,data," ",charCount + 1);
+            command = split_buffer[0];
+            for(int i = 0;i<charCount ;i++)args[i] = split_buffer[i + 1];
         }
+        Serial.println("charCount = " + String(charCount));
+        Serial.println("command = " + command);
+        for(int i = 0;i<9;i++) if(args[i] != "")Serial.println("args["+String(i)+"] = " + String(args[i]));
+       
 
-        
-
-        
-
-        if(command == "restart"){
+        if(command == "system"){
+          if(args[0] == "restart"){
             ESP.restart();
-        }*/
-
-
-
-
-
-        if (data != "")
-        {
-            if(data.indexOf("restart") != -1){
-              ESP.restart();
-            }
-
-
-
-            if (data.indexOf("relay_active") != -1)
-            {
-                var->hardwareIO->relay->active();
-            }
-            else if (data.indexOf("relay_deactive") != -1)
-            {
-                var->hardwareIO->relay->deactive();
-            }
-            else if (data.indexOf("relay_on") != -1)
-            {
-                data.replace("relay on", "");
-                var->hardwareIO->relay->on(0,data.toInt());
-
-            }
-            else if (data.indexOf("relay off") != -1)
-            {
-                data.replace("relay off", "");
-                var->hardwareIO->relay->off(data.toInt());
-            }
-            else if (data.indexOf("relay toggle") != -1)
-            {
-                data.replace("relay toggle", "");
-                var->hardwareIO->relay->toggle(data.toInt());
-            }
-
-
-            if (data.indexOf("buzzer") != -1)
-            {
-                data.replace("buzzer", "");
-                // var->hardwareIO->buzzer->freq = data.toInt();
-                var->hardwareIO->buzzer->on(data.toInt());
-            }
-
-        
-            if (data.indexOf("sd rem ") != -1){
-                data.replace("sd rem ","");
-                var->hardwareIO->sdcard->removeDir(data.c_str());
-            }
-
-            else if (data.indexOf("sd dir ") != -1){
-                data.replace("sd dir ","");
-                String path = data;
-                String data2 = data.substring(data.indexOf(" "),data.length());
-                Serial.println("data2 = " + data2);
-                var->hardwareIO->sdcard->listDir(data.c_str(),0);
-            }
-
-            else if (data.indexOf("sd mkdir ") != -1){
-                data.replace("sd mkdir ","");
-                var->hardwareIO->sdcard->createDir(data.c_str());
-            }
-
-            else if (data.indexOf("sd del ") != -1){
-                data.replace("sd del ","");
-                var->hardwareIO->sdcard->deleteFile(data.c_str());
-            }
-
-            if (data.indexOf("saveTimerSet") != -1){
-                data.replace("saveTAW","");
-                var->db->writeTimeAutoWork(var->timerautowork);
-            }
-
-            else if (data.indexOf("readTimerSet") != -1){
-                data.replace("readTAW","");
-                Serial.println(var->db->readTimeAutoWork(var->timerautowork));
-            }
-
-            else if (data.indexOf("showTimerSet") != -1){
-                String out = "";
-                out += var->timerautowork[0].toString() + "\n";
-                out += var->timerautowork[1].toString() + "\n";
-                out += var->timerautowork[2].toString() + "\n";
-                out += var->timerautowork[3].toString() + "\n";
-                Serial.println(out);
-            }
-
-            if (data.indexOf("scanI2C") != -1){
-                var->i2cScan.scan();
-            }
-
-            if (data.indexOf("connectWifi") != -1){
-                comunity->wifi_controll->connectWiFi();
-            }
-
-            if (data.indexOf("writeWifiSSID ") != -1){
-                data.replace("writeWifiSSID ","");
-
-                var->db->writeWifiData(data,"");
-            }
-
-            if (data.indexOf("writeWifiPASS ") != -1){
-                data.replace("writeWifiPASS ","");
-
-                var->db->writeWifiData("",data);
-            }
-
-            if (data.indexOf("readWifi") != -1){
-                String ssid_read,pass_read;
-
-                var->db->readWifiData(&ssid_read,&pass_read);
-
-                Serial.println("ssid:" + ssid_read + "     pass:" + pass_read);
-            }
-
-            
-
-            if (data.indexOf(DEBUG_KEY1) != -1){
-                var->datadebug.debug_wifiConnection = !var->datadebug.debug_wifiConnection;
-            }
-
-            else if (data.indexOf(DEBUG_KEY2) != -1){
-                var->datadebug.debug_client_comunity = !var->datadebug.debug_client_comunity;
-            }
-
-            if(data.indexOf(DEBUG_KEY3) != -1){
-                var->datadebug.debug_arduino_comunity = !var->datadebug.debug_arduino_comunity;
-            }
-
-            if(data.indexOf(DEBUG_KEY4) != -1){
-                var->datadebug.debug_could_comunity = !var->datadebug.debug_could_comunity;
-            }
-
-
-            if(data.indexOf("debugStatus") != -1){
-                Serial.println("-------------------------------------------");
-                Serial.println("debug WifiConnect : " + String(var->datadebug.debug_wifiConnection));
-                Serial.println("debug ClientComunity : " + String(var->datadebug.debug_client_comunity));
-                Serial.println("debug ArduinoComunity : " + String(var->datadebug.debug_arduino_comunity));
-                Serial.println("debug CouldComunity : " + String(var->datadebug.debug_could_comunity));
-                // Serial.println("debug wificonnect : " + String(var->datadebug.debug_wifiConnection));
-                Serial.println("-------------------------------------------");
-            }
-        
+          }else if(args[0] == "scanI2C"){
+            var->i2cScan.scan();
+          }
+        }else if(command == "relay"){
+          if(args[0] == "active"){
+            var->hardwareIO->relay->active();
+          }else if(args[0] == "deactive"){
+            var->hardwareIO->relay->deactive();
+          }else if(args[0] == "on"){
+            var->hardwareIO->relay->on(args[1].toInt());
+          }else if(args[0] == "off"){
+            var->hardwareIO->relay->off(args[1].toInt());
+          }else if(args[0] == "toggle"){
+            var->hardwareIO->relay->toggle(args[1].toInt());
+          }
+        }else if(command == "buzzer"){
+          var->hardwareIO->buzzer->on(data.toInt());
+        }else if(command == "sdcard"){
+          if(args[0] == "rem"){
+            var->hardwareIO->sdcard->removeDir(args[1].c_str());
+          }else if(args[0] == "dir"){
+            var->hardwareIO->sdcard->listDir(args[1].c_str(),0);
+          }else if(args[0] == "mkdir"){
+            var->hardwareIO->sdcard->createDir(args[1].c_str());
+          }else if(args[0] == "del"){
+            var->hardwareIO->sdcard->deleteFile(args[1].c_str());
+          }
+        }else if(command == "db"){
+          if(args[0] == "saveTimerSet"){
+            var->db->writeTimeAutoWork(var->timerautowork);
+          }else if(args[0] == "readTimerSet"){
+            Serial.println(var->db->readTimeAutoWork(var->timerautowork));
+          }else if(args[0] == "showTimerSet_In_ESP32"){
+            Serial.println("----------------- TimerSet In ESP32 -------------------");
+            String out = var->timerautowork[0].toString() + "\n";
+            out += var->timerautowork[1].toString() + "\n";
+            out += var->timerautowork[2].toString() + "\n";
+            out += var->timerautowork[3].toString() + "\n";
+            Serial.println(out);
+            Serial.println("-------------------------------------------------------");
+          }else if(args[0] == "showTimerSet_In_ESP32ROM"){
+            Serial.println("----------------- TimerSet In ESP32ROM -------------------");
+            Serial.println(var->db->readTimeAutoWork(NULL));
+            Serial.println("----------------------------------------------------------");
+          }
+        }else if(command == "wifipublic"){
+          if(args[0] == "connect"){
+            comunity->wifi_controll->connectWiFi();
+          }else if(args[0] == "setSSID"){
+            var->db->writeWifiData(args[0],"");
+          }else if(args[0] == "setPASS"){
+            var->db->writeWifiData("",args[0]);
+          }else if(args[0] == "getData"){
+            String ssid_read,pass_read;
+            var->db->readWifiData(&ssid_read,&pass_read);
+            Serial.println("ssid:" + ssid_read + "     pass:" + pass_read);
+          }
+        }else if(command == "variable"){
+          if(args[0] == "setFSW1"){
+            var->fsw.mixTank_Up = (args[1] == "1") ? true : false;
+          }else if(args[0] == "setFSW2"){
+            var->fsw.mixTank_Down = (args[1] == "1") ? true : false;
+          }else if(args[0] == "setInputPH"){
+            var->input_ph = args[1].toFloat();
+          }else if(args[0] == "setMixtankPH"){
+            var->mixTank_pH = args[1].toFloat();
+          }else if(args[0] == "show"){
+            var->showVar();
+          }
+          var->showVar();
+        }else if(command == "debug"){
+          if(args[0] == "wificonnect"){
+            var->datadebug.debug_wifiConnection = !var->datadebug.debug_wifiConnection;
+          }else if(args[0] == "clientcm"){
+            var->datadebug.debug_client_comunity = !var->datadebug.debug_client_comunity;
+          }else if(args[0] == "arduinocm"){
+           var->datadebug.debug_arduino_comunity = !var->datadebug.debug_arduino_comunity;
+          }else if(args[0] == "cloudcm"){
+            var->datadebug.debug_could_comunity = !var->datadebug.debug_could_comunity;
+          }else if(args[0] == "show"){
+            var->showVar();
+          }
+          
         }
+
     }
 }

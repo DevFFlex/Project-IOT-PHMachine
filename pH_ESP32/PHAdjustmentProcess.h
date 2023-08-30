@@ -12,7 +12,12 @@ private:
   Variable *var;
   HardwareIO *hardwareIO;
 
+  Substance substance;
+
   Timer looptimer;
+
+  long startTime = 0;
+  long endTime = 0;
 
   void step1()
   {
@@ -20,12 +25,12 @@ private:
     {
       var->workVar.working_step_setup = false;
       Serial.println("step 1 : setup");
-      var->workVar.outputText1 = "water in";
+      var->workVar.outputText1 = "WI";
     }
 
     hardwareIO->relay->on(2);
 
-    if (var->fsw_mixTank_Up && var->workVar.step == 1)
+    if (var->fsw.mixTank_Up)
     {
       hardwareIO->relay->off(2);
       nextStep();
@@ -46,7 +51,7 @@ private:
 
     if (looptimer.isExpired())
     {
-      var->workVar.outputText1 = "wait 10sec : " + String(step2_wait.getCurrentTime());
+      var->workVar.outputText1 = String(step2_wait.getCurrentTime()) + "s";
     }
 
     hardwareIO->relay->on(0);
@@ -74,14 +79,14 @@ private:
 
     if (looptimer.isExpired())
     {
-      var->workVar.outputText1 = "wait 20sec : " + String(step3_wait.getCurrentTime());
+      var->workVar.outputText1 = String(step3_wait.getCurrentTime()) + "s";
     }
 
     if (step3_wait.isExpired() && var->workVar.step == 3)
     {
 
-      float space_rate = 0.3;
-      if (var->input_ph + space_rate >= var->mixTank_pH >= var->input_ph - space_rate)
+      
+      if (var->mixTank_pH <= var->input_ph + var->workVar.pH_space_rate && var->mixTank_pH >= var->input_ph - var->workVar.pH_space_rate)
       {
         Serial.println("nextstep 4");
         nextStep();
@@ -100,15 +105,15 @@ private:
         if (phDiff > 0)
         {
           Serial.println("Add Bass");
-          var->workVar.outputText1 = "Add Bass";
-          stepAddSubstance(BASS);
+          var->workVar.outputText1 = "AB";
+          substance = BASS;
         }
         else if (phDiff < 0)
         {
           Serial.println("Add Acid");
-          var->workVar.outputText1 = "Add Acid";
+          var->workVar.outputText1 = "AC";
 
-          stepAddSubstance(ACID);
+          substance = ACID;
         }
         Serial.println("---------------------------------------------------");
       }
@@ -118,8 +123,6 @@ private:
   }
   void step4()
   {
-    bool condition_nextstep = var->fsw_mixtank_Down;
-
     if (var->workVar.working_step_setup)
     {
       var->workVar.working_step_setup = false;
@@ -127,14 +130,14 @@ private:
     }
 
     hardwareIO->relay->on(1);
-    if (condition_nextstep && var->workVar.step == 4)
+    if (var->fsw.mixTank_Down)
     {
       hardwareIO->relay->off(1);
       nextStep();
       Serial.println("step 4 : end");
     }
   }
-  void stepAddSubstance(Substance sub)
+  void stepAddSubstance()
   {
     static Timer wait_Addsubstance(2000);
 
@@ -145,15 +148,17 @@ private:
 
       wait_Addsubstance.reset();
 
-      if (sub == BASS)
+      if (substance == BASS)
       {
         hardwareIO->relay->on(3);
-        var->workVar.outputText1 = "Add Bass";
+        var->workVar.outputText1 = "AB";
+        var->workVar.addBaseCount++;
       }
-      else if (sub == ACID)
+      else if (substance == ACID)
       {
         hardwareIO->relay->on(4);
-        var->workVar.outputText1 = "Add Acid";
+        var->workVar.outputText1 = "AC";
+        var->workVar.addAcidCount++;
       }
     }
 
@@ -163,6 +168,8 @@ private:
       hardwareIO->relay->off(4);
       goStep(2);
       Serial.println("stepAddSubstance : end");
+
+      var->workVar.T++;
     }
   }
 
@@ -186,6 +193,7 @@ public:
       {
         var->workVar.working_status_setup = false;
         hardwareIO->buzzer->on(300);
+        startTime = millis();
         nextStep();
       }
 
@@ -203,12 +211,17 @@ public:
       case 4:
         step4();
         break;
+      case 10:
+        stepAddSubstance();
+        break;
       }
     }
-    else if (!var->workVar.working_status && !var->workVar.working_status_setup)
-    {
+    else if (!var->workVar.working_status && !var->workVar.working_status_setup){
+      var->workVar.validity_status = "CANCEL";
       stop();
     }
+
+
   }
 
   void nextStep()
@@ -217,6 +230,7 @@ public:
 
     if (var->workVar.step > MAX_STEP)
     {
+      var->workVar.validity_status = "SUCCESS";
       stop();
       hardwareIO->buzzer->on(200);
       Serial.println("adjust process success,you need = " + String(var->input_ph) + "    pH now = " + String(var->mixTank_pH));
@@ -246,9 +260,7 @@ public:
   }
   void stop()
   {
-    var->workVar.step = 0;
-    var->workVar.working_status = false;
-    var->workVar.working_status_setup = true;
+    
 
     hardwareIO->relay->off(0);
     hardwareIO->relay->off(1);
@@ -258,6 +270,22 @@ public:
     hardwareIO->relay->off(5);
 
     Serial.println("stop pH AdjProcess");
+
+    
+    
+    endTime = millis();
+    var->workVar.useTime = (endTime - startTime) / 1000;
+
+
+    Serial.println("---------------------------------------");
+    Serial.println("T is : " + String(var->workVar.T));
+    Serial.println("Add Base : " + String(var->workVar.addBaseCount));
+    Serial.println("Add Acid : " + String(var->workVar.addAcidCount));
+    Serial.println("AllTime is : " + String(var->workVar.useTime) + " s");
+    Serial.println("Validity Status : " + String(var->workVar.validity_status));
+    Serial.println("---------------------------------------");
+
+    var->workVar.resetData();
   }
   bool timerAutoWork_Compare_Rtctime(int index)
   {

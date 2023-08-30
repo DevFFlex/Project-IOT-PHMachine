@@ -1,26 +1,4 @@
 #include <HTTPClient.h>
-#include <ArduinoIoTCloud.h>
-#include <Arduino_ConnectionHandler.h>
-
-const char DEVICE_LOGIN_NAME[]  = "d2d631b8-36db-455a-849f-bf955824e4fd";
-const char SSID[]               = "Star-Link";    // Network SSID (name)
-const char PASS[]               = "12345678golf";    // Network password (use for WPA, or use as key for WEP)
-const char DEVICE_KEY[]  = "NC3FGKXUJZJRSWDB26SJ";    // Secret device password
-
-
-String portocal_status;
-
-void initProperties(){
-
-  ArduinoCloud.setBoardId(DEVICE_LOGIN_NAME);
-  ArduinoCloud.setSecretDeviceKey(DEVICE_KEY);
-  ArduinoCloud.addProperty(portocal_status, READ, ON_CHANGE, NULL);
-
-}
-
-WiFiConnectionHandler ArduinoIoTPreferredConnection(SSID, PASS);
-
-
 
 
 typedef struct InterfaceEvent_CouldComunity{
@@ -58,16 +36,9 @@ class CouldComunity{
     }
 
     void setup(){
-        initProperties();
-
-        // Connect to Arduino IoT Cloud
-        ArduinoCloud.begin(ArduinoIoTPreferredConnection);
-        setDebugMessageLevel(2);
-        ArduinoCloud.printDebugInfo();
     }
 
     void loop(){
-        ArduinoCloud.update();
 
         static int count = 0;
         if(timer_senddata.isExpired()){

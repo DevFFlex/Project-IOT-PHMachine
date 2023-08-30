@@ -38,8 +38,8 @@ class Comunity : public System
     queryData += String(var->hardwareIO->rtc->getSecond()) + ",";
 
     // FloatSwitch
-    queryData += String(var->fsw_mixTank_Up) + ",";
-    queryData += String(var->fsw_mixtank_Down) + ",";
+    queryData += String(var->fsw.mixTank_Up) + ",";
+    queryData += String(var->fsw.mixTank_Down) + ",";
 
     // Wifi Connected
     queryData += String(wifi_controll->getSTAWifiStatusConnected());
@@ -128,11 +128,15 @@ class Comunity : public System
 
 
   void onArduinoAvailable(String databuffer){
-    String item[4];
+    String item[6];
     splitString(item, databuffer, ",", 6);
+
+    if(item[0].toFloat() == 0)return;
+
     var->mixTank_pH = item[0].toFloat();
-    var->fsw_mixTank_Up = (item[3] == "1") ? true : false;
-    var->fsw_mixtank_Down = (item[4] == "1") ? true : false;
+    var->fsw.mixTank_Up = (item[3] == "1") ? true : false;
+    var->fsw.mixTank_Down = (item[4] == "1") ? true : false;
+
   }
 
 
