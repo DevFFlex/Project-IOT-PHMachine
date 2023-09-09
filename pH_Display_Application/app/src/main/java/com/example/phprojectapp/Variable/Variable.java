@@ -12,6 +12,7 @@ import com.example.phprojectapp.ClassEx.Comunity;
 import com.example.phprojectapp.ClassEx.Extension;
 import com.example.phprojectapp.ClassEx.SoundEffect;
 import com.example.phprojectapp.FileFragment;
+import com.example.phprojectapp.InternetManagerFragment;
 import com.example.phprojectapp.MonitorFragmentObject.MonitorFragment;
 import com.example.phprojectapp.SettingsFragment;
 import com.example.phprojectapp.MonitorFragmentObject.*;
@@ -23,15 +24,25 @@ public class Variable{
     public SharedPreferences preferences;
 
     public float inputPH = -1;
-    public float mixtankPH = 0;
+    public int inputT = -1;
+    public float mixtankPH = 7;
     public float tempC = 0;
     public float humidity = 0;
 
     public int step = 0;
     public boolean work_status = false;
+    public float pH_space_rate = 0;
+    public float adjustCurrentPH = 0;
+    public int wait_stirringPump = 0;
+    public int wait_pHStabilize = 0;
+    public int acidUseTime = 0;
+    public int baseUseTime = 0;
+    public int limite_use_acid = 0;
+    public int limite_use_base = 0;
+    public int adjustT_Counter = 0;
     public String stepText = "";
 
-    public boolean wifi_board_connected = false;
+    public boolean internet_connected = false;
 
     public int[] fsw = new int[3];
 
@@ -49,17 +60,12 @@ public class Variable{
 
 
 //    public boolean working_ph = false;
-    public TimeObjectList timeObjectList;
+    public WorkTimerList workTimerList;
     public String outout_text = "";
     public boolean output_text_isShowing = false;
 
     public ArrayList<String[]> chat_his = new ArrayList<String[]>();
     public ArrayList<String[]> file_list = new ArrayList<>();
-
-
-
-
-
 
 
     public AnimationOption animationOption;
@@ -72,6 +78,7 @@ public class Variable{
     public AdminFragment adminFragment;
     public ChatFragment chatFragment;
     public FileFragment fileFragment;
+    public InternetManagerFragment internetManagerFragment;
 
 
     public MMain step3;
@@ -86,12 +93,13 @@ public class Variable{
         adminFragment = new AdminFragment(this);
         chatFragment = new ChatFragment(this);
         fileFragment = new FileFragment(this);
+        internetManagerFragment = new InternetManagerFragment(this);
 
 
         step3 = new MMain(this);
 
 
-        this.timeObjectList = new TimeObjectList();
+        this.workTimerList = new WorkTimerList();
 
         timeBoardObject = new TimeBoardObject();
 

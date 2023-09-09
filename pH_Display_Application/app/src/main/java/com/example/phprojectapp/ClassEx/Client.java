@@ -36,12 +36,12 @@ public class Client{
     public Client(Variable v){
         this.var = v;
 
-        TimerMillis timerReconnect = new TimerMillis(1000, new TimerMillisInterface() {
-            @Override
-            public void isExpired() {
-                if(!isConnect)reconnect();
-            }
-        });
+//        TimerMillis timerReconnect = new TimerMillis(1000, new TimerMillisInterface() {
+//            @Override
+//            public void isExpired() {
+//                if(!isConnect)reconnect();
+//            }
+//        });
     }
     public void connect(){
         new Thread(new Runnable() {
@@ -113,8 +113,8 @@ public class Client{
                                 message = "";
                             }else message += String.valueOf(c);
 
-                            Thread.sleep(10);
-                        } catch (IOException | InterruptedException e) {
+//                            Thread.sleep(1);
+                        } catch (IOException e) {
                             isConnect = false;
                             var.extension.printError("Client","recv message,fail connected");
                         }

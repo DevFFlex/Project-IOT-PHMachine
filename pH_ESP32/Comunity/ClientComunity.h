@@ -10,6 +10,7 @@ typedef struct InterfaceEvent_ClientComunity{
   std::function<void(String)> onClientGetTimeAutoWork = NULL;
   std::function<void(String)> onClientSetTimeBoard = NULL;
   std::function<void(String)> onClientRelayControll = NULL;
+  std::function<void(String)> onClientSerialAvailable = NULL;
 
 
 }ClientComunityCallback;
@@ -115,6 +116,9 @@ void ClientComunity::onClientMessageCallback(String str_trim)
 
   if(condition_req(str_command,"GET_TIME_AUTO_WORK"))
     if(clientComunityCallback.onClientGetTimeAutoWork != NULL)clientComunityCallback.onClientGetTimeAutoWork(str_value);
+  
+  if(condition_req(str_command,"SERIAL"))
+    if(clientComunityCallback.onClientSerialAvailable != NULL)clientComunityCallback.onClientSerialAvailable(str_value);
   
 
 }

@@ -1,145 +1,190 @@
 #include <EEPROM.h>
 
-#define DB_ADDR_TIMEAUTOWORK 0
+#define EEPROM_SIZE 512
+
+#define ADDR_WORKTIMER 0
+#define WORKTIMER_SIZE 19
 
 
-class Database : public System{
-public:
-  Database()
-  {
-    EEPROM.begin(512);
-  }
+#define ADDR_INTERNET_SSID 100
+#define INTERNET_SSID_SIZE 30
 
-  void setup() override{
-    
-  }
+#define ADDR_INTERNET_PASS 150
+#define INTERNET_PASS_SIZE 30
 
-  void loop() override{
+#define ADDR_PHSPACERATE 200
+#define PHSPACETATE_SIZE 9
 
-  }
+#define ADDR_LIMITEACID 210
+#define LIMITEACID_SIZE 9
 
-  void writeTimeAutoWork(TimerAutoWork *timerautowork){
-    for(int i = 0;i<4;i++){
-      int hour = timerautowork[i].getHour();
-      int minute = timerautowork[i].getMinute();
-      bool active = timerautowork[i].getStatus();
-      float pH = timerautowork[i].getPH();
-      bool empty = timerautowork[i].getDelete();
+#define ADDR_LIMITEBASE 220
+#define LIMITEBASE_SIZE 9
 
-      int _1 = (hour >= 0 && hour <= 23) ? hour : 255;
-      int _2 = (minute >= 0 && minute <= 59) ? minute : 255;
-      int _3 = (active) ? active : 0;
-      int _4 = (pH >= 0 && pH <= 14) ? pH*10 : 255;
-      int _5 = (empty) ? empty : 0;
+#define ADDR_WAITSTRPUMP 230
+#define WAITSTRPUMP_SIZE 9
 
-      Serial.println(String(_1) + "  " + String(_2) + "  " + String(_3) +  "  " + String(_4) + "  " + String(_5));
+#define ADDR_WAITPHSTABILIZE 240
+#define WAITPHSTABILIZE_SIZE 9
 
-      EEPROM.write(i * 5 + 1,_1);
-      EEPROM.write(i * 5 + 2,_2);
-      EEPROM.write(i * 5 + 3,_3);
-      EEPROM.write(i * 5 + 4,_4);
-      EEPROM.write(i * 5 + 5,_5);
-    }
+#define ADDR_WAITBASEUSETIME 250
+#define WAITBASEUSETIME_SIZE 9
 
-    EEPROM.commit();
-  }
-  String readTimeAutoWork(TimerAutoWork *timerAutoWork = NULL){
-    String data = "";
-    for(int i = 0;i<4;i++){
-      int _1 = EEPROM.read(i * 5 + 1);
-      int _2 = EEPROM.read(i * 5 + 2);
-      int _3 = EEPROM.read(i * 5 + 3);
-      int _4 = EEPROM.read(i * 5 + 4);
-      int _5 = EEPROM.read(i * 5 + 5);
-
-      if(timerAutoWork != NULL){
-        timerAutoWork[i].setHour(_1);
-        timerAutoWork[i].setMinute(_2);
-        timerAutoWork[i].setStatus(_3);
-        timerAutoWork[i].setPH(_4 / 10);
-        timerAutoWork[i].setDelete(_5);
-      }
-      
+#define ADDR_WAITACIDUSETIME 260
+#define WAITACIDUSETIME_SIZE 9
 
 
-      data += String(_1) + " ";
-      data += String(_2) + " ";
-      data += String(_3) + " ";
-      data += String(_4) + " ";
-      data += String(_5) + "\n";
-    }
 
-    return data;
-  }
-
-  void writeWifiData(String ssid = "",String pass = ""){
-    int indexstart_ssid_addr = 50;
-    int indexstart_pass_addr = indexstart_ssid_addr + 30;
-    
-    if(ssid != ""){
-      for(int i = 0;i<30;i++){
-        if(i >= ssid.length()){
-          break;
-        }else{
-          EEPROM.write(indexstart_ssid_addr + i,(char)ssid[i]);
+class Database : public System {
+private:
+  void writeFunction(String DATA,int ADDR,int SIZE){
+    if (!DATA.isEmpty()) {
+      for (int i = 0; i < SIZE; i++) {
+        if (i >= DATA.length()) {
+          EEPROM.write(ADDR + i, 0);
+          // Serial.print("e ");
+        } else {
+          EEPROM.write(ADDR + i, (int)DATA[i]);
+          // Serial.print("w ");
         }
-        Serial.print(String((int)ssid[i]) + " ");
+        // Serial.print(String((int)ssid[i]) + " ");
       }
-      Serial.println("");
+      // Serial.println("");
+
+      EEPROM.commit();
+      // Serial.println("Commit");
     }
-
-
-
-
-    if(pass != ""){
-      for(int i = 0;i<30;i++){
-        if(i >= pass.length()){
-          EEPROM.write(indexstart_pass_addr + i,0);
-        }else{
-          EEPROM.write(indexstart_pass_addr + i,pass[i]);
-        }
-        Serial.print(String((int)pass[i]) + " ");
-      }
-      Serial.println("");
-    }
-
-    EEPROM.commit();
   }
-  void readWifiData(String *ssidBuffer,String *passBuffer){
-    int indexstart_ssid_addr = 50;
-    int indexstart_pass_addr = indexstart_ssid_addr + 30;
-    
+
+  String readFunction(int ADDR,int SIZE){
     String ssid_str = "";
-    for(int i = 0;i<30;i++){
-      int char_int = EEPROM.read(indexstart_ssid_addr + i);
-      
-      ssid_str += String(char_int);
-      Serial.print(String(char_int) + " ");    
+    for (int i = 0; i < SIZE; i++) {
+      int char_int = EEPROM.read(ADDR + i);
+
+      ssid_str += String((char)char_int);
+      Serial.print(String(char_int) + " ");
     }
     Serial.println("");
-    // ssid_str.trim();
-    *ssidBuffer = ssid_str;
 
-    String pass_str = "";
-    for(int i = 0;i<30;i++){
-      String key = String((char)EEPROM.read(indexstart_pass_addr + i));
-      pass_str += key;
-      Serial.print(key + " ");
-    }
-    // pass_str.trim();
-    Serial.println("");
-    *passBuffer = pass_str;
-    
-
-    Serial.println("ssid = " + ssid_str);
-    Serial.println("pass = " + pass_str);
-
-
+    return ssid_str;
   }
 
+public:
+  Database() {
+    
+  }
+
+  void setup() override {
+    EEPROM.begin(EEPROM_SIZE);
+    Serial.println("database constructor");
+  }
+
+  void loop() override {
+  }
+
+  void clearEEPROM(){
+    for(int i = 0;i<512;i++)EEPROM.write(i,0);
+  }
+
+  void showEEPROM(){
+    const String FRONLINE_GAP = "\t | \t\t";
+    const String ITEM_HORIZONTAL_GAP = "\t";
+    const int COLUMN = 10;
+    int ROW = 0;
+
+    Serial.print(FRONLINE_GAP);
+    for (int i = 0;i<COLUMN;i++){
+      Serial.print(String(i+1)+ITEM_HORIZONTAL_GAP);
+    }
+    Serial.println("");
+    Serial.print(FRONLINE_GAP);
+    Serial.println("----------------------------------------");
+    
+    Serial.print(String(ROW) + FRONLINE_GAP);
+
+    for(int i = 0;i<EEPROM_SIZE;i++){
+      int c_read = EEPROM.read(i);
+      if(c_read == 0)Serial.print("?" + ITEM_HORIZONTAL_GAP);
+      else Serial.print(String((char)c_read) + ITEM_HORIZONTAL_GAP);
+      
+      if(i % 10 == 0){
+        Serial.println("");
+        Serial.println(FRONLINE_GAP);
+        Serial.print(String(++ROW) + FRONLINE_GAP);
+      }
+    }
+  }
+
+  
+
+  void writeWorkTimer(int index,int hour,int minute,float pH,int T,bool active_status,bool delete_status) {
+
+    String workTimerStr = String(hour) + "," + String(minute) + "," + String(pH) + "," + String(T) + "," + String(active_status) + "," + String(delete_status);
+    
+    writeFunction(workTimerStr,ADDR_WORKTIMER + (index * WORKTIMER_SIZE + 1), WORKTIMER_SIZE);
+    
+  }
+  String readWorkTimer(int index) {
+    String workTimerStrBuffer = readFunction(ADDR_WORKTIMER + (index * WORKTIMER_SIZE + 1), WORKTIMER_SIZE);
+    return workTimerStrBuffer;
+  }
+
+  
+  void writeInternetSSID(String ssid) {
+    writeFunction(ssid, ADDR_INTERNET_SSID, INTERNET_SSID_SIZE);
+  }
+  void writeInternetPASS(String pass) {
+    writeFunction(pass, ADDR_INTERNET_PASS, INTERNET_PASS_SIZE);
+  }
+  void writePSR(String pH_space_rate){
+    writeFunction(pH_space_rate,ADDR_PHSPACERATE,PHSPACETATE_SIZE);
+  }
+  void writeLimiteBase(String limite_use_base){
+    writeFunction(limite_use_base,ADDR_LIMITEBASE,LIMITEBASE_SIZE);
+  }
+  void writeLimiteAcid(String limite_use_acid){
+    writeFunction(limite_use_acid,ADDR_LIMITEACID,LIMITEACID_SIZE);
+  }
+  void writeWaitSTRPump(String wait_str_pump){
+    writeFunction(wait_str_pump,ADDR_WAITSTRPUMP,WAITSTRPUMP_SIZE);
+  }
+  void writeWaitPHStabilize(String wait_pH_stabilize){
+    writeFunction(wait_pH_stabilize, ADDR_WAITPHSTABILIZE, WAITPHSTABILIZE_SIZE);
+  }
+  void writeWaitBaseUseTime(String wait_baseUseTime){
+    writeFunction(wait_baseUseTime, ADDR_WAITBASEUSETIME, WAITBASEUSETIME_SIZE);
+  }
+  void writeWaitAcidUseTime(String wait_acidUseTime){
+    writeFunction(wait_acidUseTime, ADDR_WAITACIDUSETIME, WAITACIDUSETIME_SIZE);
+  }
+
+  
+
+  String readInternetSSID() {
+    return readFunction(ADDR_INTERNET_SSID, INTERNET_SSID_SIZE);
+  }
+  String readInternetPASS() {
+    return readFunction(ADDR_INTERNET_PASS, INTERNET_PASS_SIZE);
+  }
+  String readPSR(){
+   return readFunction(ADDR_PHSPACERATE, PHSPACETATE_SIZE);
+  }
+  String readLimiteBase(){
+    return readFunction(ADDR_LIMITEBASE, LIMITEBASE_SIZE);
+  }
+  String readLimiteAcid(){
+    return readFunction(ADDR_LIMITEACID, LIMITEACID_SIZE);
+  }
+  String readWaitSTRPump(){
+    return readFunction(ADDR_WAITSTRPUMP, WAITSTRPUMP_SIZE);
+  }
+  String readWaitPHStabilize(){
+    return readFunction(ADDR_WAITPHSTABILIZE, WAITPHSTABILIZE_SIZE);
+  }
+  String readWaitBaseUseTime(){
+    return readFunction(ADDR_WAITBASEUSETIME, WAITBASEUSETIME_SIZE);
+  }
+  String readWaitAcidUseTime(){
+    return readFunction(ADDR_WAITACIDUSETIME, WAITACIDUSETIME_SIZE);
+  }
 };
-
-
-
-
-

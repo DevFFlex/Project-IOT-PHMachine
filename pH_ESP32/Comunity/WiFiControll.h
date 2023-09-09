@@ -19,10 +19,6 @@ private:
   String AP_SSID = "PPC";
   String AP_PASS = "12345678";
 
-  String STA_SSID = "eduroam";
-  String STA_USER = "pitsanu.th";
-  String STA_PASS = "0933287751g";
-
   bool displayDataTranfer = false;
   bool wifiConnected = false;
 
@@ -64,6 +60,7 @@ public:
 
   void connectWiFi(){
     STAMode_Start();
+    
   }
 };
 
@@ -75,7 +72,7 @@ void WiFiControll::setup() {
   // STAMode_Start();
 }
 void WiFiControll::loop() {
-  wifiConnected = getSTAWifiStatusConnected();
+  var->wifipublic.connect_status = getSTAWifiStatusConnected();
 }
 
 
@@ -93,5 +90,5 @@ void WiFiControll::APMode_Start(){
 
 
 void WiFiControll::STAMode_Start(){
-  if(STA_USER == "" || STA_USER == NULL)WiFi.begin(STA_SSID.c_str(),STA_USER.c_str(),0);  
+  WiFi.begin(var->wifipublic.SSID.c_str(),var->wifipublic.PASS.c_str());  
 }

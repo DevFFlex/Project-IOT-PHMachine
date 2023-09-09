@@ -8,12 +8,12 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.example.phprojectapp.ClassEx.TimeObject;
+import com.example.phprojectapp.Variable.WorkTimer;
 import com.example.phprojectapp.R;
 
 interface ItemLayoutEvent{
-    void onDelete(TimeObject timeObject);
-    void onSwitch(TimeObject timeObject,boolean status);
+    void onDelete(WorkTimer workTimer);
+    void onSwitch(WorkTimer workTimer, boolean status);
 }
 
 class ItemLayout extends View {
@@ -29,14 +29,14 @@ class ItemLayout extends View {
     TextView textView_ph;
     Button button_delete;
 
-    TimeObject timeObject;
+    WorkTimer workTimer;
 
     private String default_status_on  = "เปิด" ;
     private String default_status_off = "ปิด" ;
 
-    public ItemLayout(Context context,TimeObject timeObject) {
+    public ItemLayout(Context context, WorkTimer workTimer) {
         super(context);
-        this.timeObject = timeObject;
+        this.workTimer = workTimer;
 
         itemView = LayoutInflater.from(context).inflate(R.layout.list_time_item, null);
 
@@ -52,34 +52,36 @@ class ItemLayout extends View {
 
         this.invalidate();
 
+
     }
 
-    private void setValue(){
+    public void setValue(){
 
-        int hour = timeObject.getHour();
-        int minute = timeObject.getMinute();
-        boolean status = timeObject.isStatus();
-        float ph = timeObject.getPh();
+        int hour = workTimer.HOUR;
+        int minute = workTimer.MINUTE;
+        float ph = workTimer.PH;
+        boolean active_status = workTimer.ACTIVE_STATUS;
 
-        if(status)switch_status.setText(default_status_on);
+
+        if(active_status)switch_status.setText(default_status_on);
         else switch_status.setText(default_status_off);
-        switch_status.setChecked(timeObject.isStatus());
 
-        textView_time.setText(String.format("%02d:%02d:00",hour,minute));
+        switch_status.setChecked(active_status);
+        textView_time.setText(String.format("%02d:%02d:**",hour,minute));
 
         textView_ph.setText(String.valueOf(ph));
     }
 
 
     private void onClickDelete(View v){
-        itemLayoutEvent.onDelete(timeObject);
+        itemLayoutEvent.onDelete(workTimer);
     }
 
     private void onClickSwitch(CompoundButton compoundButton, boolean b){
         if (b) switch_status.setText(default_status_on);
         else switch_status.setText(default_status_off);
 
-        if(itemLayoutEvent != null)itemLayoutEvent.onSwitch(timeObject,b);
+        if(itemLayoutEvent != null)itemLayoutEvent.onSwitch(workTimer,b);
     }
 
 

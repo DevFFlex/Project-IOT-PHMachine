@@ -61,7 +61,8 @@
         "thread": "cpp",
         "typeindex": "cpp",
         "valarray": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "string": "cpp"
     },
     "C_Cpp.errorSquiggles": "enabled"
 }

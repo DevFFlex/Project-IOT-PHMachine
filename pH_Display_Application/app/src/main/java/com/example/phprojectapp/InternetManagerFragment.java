@@ -8,14 +8,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.phprojectapp.Variable.Variable;
 
-public class fragment_wifimanager extends Fragment {
+
+public class InternetManagerFragment extends Fragment {
 
     View view;
+    Variable var;
 
 
-    public fragment_wifimanager() {
+    public InternetManagerFragment(Variable var) {
         // Required empty public constructor
+        this.var = var;
     }
 
 
@@ -29,7 +33,7 @@ public class fragment_wifimanager extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_wifimanager, container, false);
+        view = inflater.inflate(R.layout.fragment_internetmanager, container, false);
 
 
         return view;

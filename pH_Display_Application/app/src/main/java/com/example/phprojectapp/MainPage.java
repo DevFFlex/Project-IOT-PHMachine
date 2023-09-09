@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -29,6 +30,7 @@ public class MainPage extends AppCompatActivity {
     TextView mainpage_tvStatusConnected,main_tvOutputDisplay;
     LinearLayout mainpage_chatInputLayout,mainpage_outputDisplayLayout;
     EditText input;
+    ImageView mainpage_imageview_wifipublic;
 
 
 
@@ -57,6 +59,8 @@ public class MainPage extends AppCompatActivity {
         input = findViewById(R.id.mainpage_inputchat);
         btn_connectServer = findViewById(R.id.mainpage_btnConnect);
         btn_disonnectServer = findViewById(R.id.mainpage_btnDisonnect);
+
+        mainpage_imageview_wifipublic = findViewById(R.id.mainpage_imageview_wifipublic);
 
         //animation
         var.animationOption.startAnim(btnAdmin,R.anim.fadein_slide_right);
@@ -103,13 +107,13 @@ public class MainPage extends AppCompatActivity {
         if (!var.comunity.isConnect) {
             mainpage_tvStatusConnected.setText("ยังไม่ได้เชื่อมต่อ");
             mainpage_tvStatusConnected.setTextColor(Color.rgb(255,0,0));
-//            btn_connectServer.setVisibility(View.VISIBLE);
+            btn_connectServer.setVisibility(View.VISIBLE);
             btn_disonnectServer.setVisibility(View.GONE);
         } else {
             mainpage_tvStatusConnected.setText("เชื่อมต่อเเล้ว");
             mainpage_tvStatusConnected.setTextColor(Color.rgb(0,255,0));
             btn_connectServer.setVisibility(View.GONE);
-//            btn_disonnectServer.setVisibility(View.VISIBLE);
+            btn_disonnectServer.setVisibility(View.VISIBLE);
         }
 
 
@@ -131,6 +135,12 @@ public class MainPage extends AppCompatActivity {
             mainpage_chatInputLayout.setVisibility(View.GONE);
         }else{
             mainpage_chatInputLayout.setVisibility(View.VISIBLE);
+        }
+
+        if(var.internet_connected){
+            mainpage_imageview_wifipublic.setBackgroundResource(R.drawable.wifi_green);
+        }else{
+            mainpage_imageview_wifipublic.setBackgroundResource(R.drawable.wifi_red);
         }
 
 
@@ -187,8 +197,8 @@ public class MainPage extends AppCompatActivity {
     }
 
     public void onClickMenu_WifiManager(View v) {
-        if (getSupportFragmentManager().findFragmentByTag("file_fragment") == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, var.fileFragment, "file_fragment").commit();
+        if (getSupportFragmentManager().findFragmentByTag("internetmanager_fragment") == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, var.internetManagerFragment, "internetmanager_fragment").commit();
             YoYo.with(Techniques.FadeIn).duration(1000).playOn(findViewById(R.id.fragment_container));
 
 //            mainpage_chatInputLayout.setVisibility(View.GONE);
@@ -209,7 +219,7 @@ public class MainPage extends AppCompatActivity {
     public void onChatSend(View v){
         String text = input.getText().toString();
         if (text.equals("")) return;
-        var.comunity.sendMessageChat(var.preferences.getString("username",var.comunity.DEFAULT_USERNAME), text);
+        var.comunity.serverSendMessageChat(var.preferences.getString("username",var.comunity.DEFAULT_USERNAME), text);
         var.extension.printAlert("sending");
         input.setText("");
     }

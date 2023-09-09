@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AlertDialog;
 
-import com.example.phprojectapp.ClassEx.TimeObject;
+import com.example.phprojectapp.Variable.WorkTimer;
 import com.example.phprojectapp.Variable.Variable;
 import com.example.phprojectapp.R;
 
@@ -67,38 +67,31 @@ public class SetTimeDialog extends AlertDialog.Builder{
     }
 
     public void updateItemLayout(){
-        box.removeAllViewsInLayout();
-        for (TimeObject timeObject:variable.timeObjectList.data) {
-            TimeObject ttt = timeObject;
-            ItemLayout itemLayout = new ItemLayout(getContext(),timeObject);
+        /*box.removeAllViewsInLayout();
+        for (WorkTimer workTimer :variable.workTimerList.data) {
+            WorkTimer ttt = workTimer;
+            ItemLayout itemLayout = new ItemLayout(getContext(), workTimer);
             itemLayout.setItemLayoutEvent(new ItemLayoutEvent() {
                 @Override
-                public void onDelete(TimeObject timeObject) {
-                    variable.timeObjectList.data.remove(ttt);
+                public void onDelete(WorkTimer workTimer) {
+                    variable.workTimerList.data.remove(ttt);
                     updateItemLayout();
                 }
 
                 @Override
-                public void onSwitch(TimeObject timeObject, boolean status) {
-                    variable.timeObjectList.getTimeObject(ttt).setStatus(status);
+                public void onSwitch(WorkTimer workTimer, boolean status) {
+                    variable.workTimerList.getTimeObject(ttt).ACTIVE_STATUS = status;
 
                 }
             });
 
             box.addView(itemLayout.itemView);
-        }
+        }*/
     }
 
     private void onClickAdd(View v){
-        if (variable.timeObjectList.getSize() >= itemCountMax) return;
-        TimePickerDialog tpd = new TimePickerDialog(v.getContext());
-        tpd.setTimePickerDialogEvent(new TimePickerDialogEvent() {
-            @Override
-            public void onClickOk(TimeObject timeObject) {
-                variable.timeObjectList.data.add(timeObject);
-                updateItemLayout();
-            }
-        });
+//        if (variable.workTimerList.getSize() >= itemCountMax) return;
+
     }
 
     private void onClickCancel(View v){
@@ -109,19 +102,19 @@ public class SetTimeDialog extends AlertDialog.Builder{
         String out = "";
 
         for (int i = 0;i<4;i++) {
-            TimeObject timeObject = null;
+            WorkTimer workTimer = null;
             boolean has = false;
             try{
-                timeObject = variable.timeObjectList.data.get(i);
+//                workTimer = variable.workTimerList.slot_list[i];
                 has = true;
             }catch (Exception e){}
 
 
             if(has){
-                out += String.valueOf(timeObject.getHour()) + ",";
-                out += String.valueOf(timeObject.getMinute()) + ",";
-                out += String.valueOf(timeObject.isStatus()) + ",";
-                out += String.valueOf(timeObject.getPh()) + "";
+                out += String.valueOf(workTimer.HOUR) + ",";
+                out += String.valueOf(workTimer.MINUTE) + ",";
+                out += String.valueOf(workTimer.ACTIVE_STATUS) + ",";
+                out += String.valueOf(workTimer.PH) + "";
             }else{
                 out += String.valueOf(-1) + ",";
                 out += String.valueOf(-1) + ",";

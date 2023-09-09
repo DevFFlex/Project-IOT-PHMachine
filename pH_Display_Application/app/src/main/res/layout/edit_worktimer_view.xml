@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:background="@drawable/bg_input_time"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TimePicker
+        android:background="#76E1D1"
+        android:id="@+id/editworktimer_timerpicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:timePickerMode="clock"
+        android:format24Hour="true"/>
+
+    <LinearLayout
+        android:background="#FFFF"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="10sp">
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ค่า pH   "
+            android:textSize="30dp"
+            android:textStyle="bold"
+            android:textColor="#FFFF"/>
+
+        <EditText
+            android:id="@+id/editworktimer_etPH"
+            android:inputType="numberDecimal"
+            android:textAlignment="center"
+            android:textColor="#FFFF"
+            android:textColorHint="#A1FF09"
+            android:padding="20dp"
+            android:background="@drawable/bg_dialog_phinput"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="20dp"
+            android:hint="4 - 10"
+            android:textStyle="bold"
+
+            />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="จำนวนรอบ   "
+            android:textSize="30dp"
+            android:textStyle="bold"
+            android:textColor="#FFFF"/>
+
+        <EditText
+            android:id="@+id/editworktimer_etT"
+            android:inputType="numberDecimal"
+            android:textAlignment="center"
+            android:textColor="#FFFF"
+            android:textColorHint="#A1FF09"
+            android:padding="20dp"
+            android:background="@drawable/bg_dialog_phinput"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="20dp"
+            android:hint="ตัวเลข"
+            android:textStyle="bold"
+
+            />
+
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="สถานะการใช้งาน   "
+            android:textSize="30dp"
+            android:textStyle="bold"
+            android:textColor="#FFFF"/>
+
+        <Switch
+            android:id="@+id/editworktimer_swAS"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:background="#FFFF"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="10sp">
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_margin="30sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/editworktimer_btnDelete"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ลบ"
+            android:textColor="#FFFF"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:background="@drawable/btn_style3"/>
+
+        <Button
+            android:id="@+id/editworktimer_btnOk"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ตกลง"
+            android:textColor="#FFFF"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:background="@drawable/btn_style1"/>
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

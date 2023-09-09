@@ -19,7 +19,7 @@
             android:layout_gravity="bottom"
             android:orientation="vertical"
             android:paddingBottom="5sp"
-            android:background="#FFFFFF"
+            android:background="#000737"
             >
 
             <LinearLayout
@@ -37,7 +37,7 @@
 
 
                     <Button
-                        android:visibility="gone"
+                        android:visibility="visible"
                         android:id="@+id/mainpage_btnConnect"
                         android:background="@drawable/btn_style4"
                         android:layout_width="50dp"
@@ -57,7 +57,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="5dp"
-                        android:text="สถานะการเชื่อมต่อ :"
+                        android:text="สถานะการเชื่อมต่อเครื่อง :"
                         android:textColor="#FFFF"
                         android:textSize="15dp"
                         android:textStyle="bold" />
@@ -83,13 +83,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="สถานะการเชื่อม Wifi  "
+                        android:text="สถานะการเชื่อม Internet  "
                         android:textColor="#FFFF"/>
 
                     <ImageView
+                        android:background="@drawable/wifi_red"
+                        android:id="@+id/mainpage_imageview_wifipublic"
                         android:layout_width="30sp"
-                        android:layout_height="20sp"
-                        android:src="@drawable/wifi_red"/>
+                        android:layout_height="20sp"/>
 
                 </LinearLayout>
 

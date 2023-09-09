@@ -56,7 +56,6 @@ public class FileFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     current_path += "/" + data[1];
-                    var.comunity.getSDDir(current_path);
                 }
             });
 
@@ -80,8 +79,6 @@ public class FileFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_file, container, false);
 
         box_item_layout = view.findViewById(R.id.file_filelayout);
-
-        var.comunity.getSDDir("/");
 
         update();
 

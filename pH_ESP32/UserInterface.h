@@ -86,8 +86,8 @@ private:
     }else if(pagename == WORKING){
       hardwareIO->lcdOutput->printL("Step = " + String(var->workVar.step) + "       " + var->workVar.outputText1, 0);
       hardwareIO->lcdOutput->printL("pH_Tank = " + String(var->mixTank_pH), 1);
-      hardwareIO->lcdOutput->printL("pH_I = " + String(var->input_ph), 2);
-      if (var->input_ph >= 3 && var->input_ph <= 10)hardwareIO->lcdOutput->printL("pH_O = " + String(var->input_ph - var->workVar.pH_space_rate) + " - " + String(var->input_ph + var->workVar.pH_space_rate), 3);
+      hardwareIO->lcdOutput->printL("pH_I = " + String(var->workVar.adjustCurrentpH), 2);
+      if (var->workVar.adjustCurrentpH >= 3 && var->workVar.adjustCurrentpH)hardwareIO->lcdOutput->printL("pH_O = " + String(var->workVar.adjustCurrentpH - var->workVar.pH_space_rate) + " - " + String(var->workVar.adjustCurrentpH + var->workVar.pH_space_rate), 3);
       else hardwareIO->lcdOutput->printL("pH_O = NoCal", 3);
     }
   }
@@ -137,8 +137,7 @@ public:
       else if (function_item_cursor == 1)changePage(WORKING);
     }else if(pagename == INPUT_PH){
       data_buffer.replace(String(key), "");
-      var->input_ph = data_buffer.toFloat();
-      var->workVar.working_status = true;
+      var->workVar.startAdjustPH(data_buffer.toFloat(),1);
       changePage(WORKING);
     }else if(pagename == WORKING){
       
@@ -150,8 +149,7 @@ public:
     pageUpdate = true;
     if (key == '#')
     {
-      var->workVar.step = 0;
-      var->workVar.working_status = false;
+      var->workVar.stopAdjustPH();
     }
 
     switch (pagename)

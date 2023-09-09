@@ -11,8 +11,8 @@
 #include "PHAdjustmentProcess.h"
 
 Variable *var = new Variable();
-PHAdjustmentProcess *phap = new PHAdjustmentProcess(var);
 Comunity *comunity = new Comunity(var);
+PHAdjustmentProcess *phap = new PHAdjustmentProcess(var,comunity);
 SerialInput *sInput = new SerialInput(var,comunity);
 UserInterface *ui = new UserInterface(var,comunity);
 
@@ -22,18 +22,16 @@ void setup() {
   Serial.begin(115200);
 
   var->setup();
-  phap->setup();
   comunity->setup();
+  phap->setup();
   sInput->setup();
   ui->setup();
 }
 
 void loop() {
   var->loop();
-  phap->loop();
   comunity->loop();
+  phap->loop();
   sInput->loop();
   ui->loop();
-  
-
 }

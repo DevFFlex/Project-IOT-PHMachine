@@ -4,6 +4,7 @@ private:
     int hour;
     int minute;
     float ph;
+    int T;
     bool status;
     bool delete_;
 
@@ -14,6 +15,7 @@ public:
         minute = -1;
         status = false;
         ph = -1;
+        T = -1;
         delete_ = true;
     }
 

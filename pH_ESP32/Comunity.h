@@ -11,7 +11,7 @@ class Comunity : public System
   Variable *var;
   String *item_parameter = new String[6];
 
-  String encodeTimeAutoWork();
+  String encodeWorkTimer();
   String encodeTimeBoard();
   String encodeFileDir(String path);
 
@@ -20,9 +20,7 @@ class Comunity : public System
     queryData += String(var->mixTank_pH) + ",";
     queryData += String(var->tempC) + ",";
     queryData += String(var->humidity) + ",";
-    // WorkVal
-    queryData += String(var->workVar.step) + ",";
-    queryData += String(var->workVar.working_status) + ",";
+    
 
     // relay-status
     queryData += String(var->hardwareIO->relay->status[0]) + ",";
@@ -42,7 +40,25 @@ class Comunity : public System
     queryData += String(var->fsw.mixTank_Down) + ",";
 
     // Wifi Connected
-    queryData += String(wifi_controll->getSTAWifiStatusConnected());
+    queryData += String(var->wifipublic.connect_status) + ",";
+
+    // WorkTimer
+    queryData += encodeWorkTimer() + ",";
+    
+    // WorkVal
+    queryData += String(var->workVar.step) + ",";
+    queryData += String(var->workVar.working_status) + ",";
+    queryData += String(var->workVar.pH_space_rate) + ",";
+    queryData += String(var->workVar.adjustCurrentpH) + ",";
+    queryData += String(var->workVar.wait_stirring_pump) + ",";
+    queryData += String(var->workVar.wait_pH_stabilize) + ",";
+    queryData += String(var->workVar.wait_acidUseTime) + ",";
+    queryData += String(var->workVar.wait_baseUseTime) + ",";
+    queryData += String(var->workVar.limite_use_base) + ",";
+    queryData += String(var->workVar.limite_use_acid) + ",";
+    queryData += String(var->workVar.adjustT_Counter) + ",";
+
+  
 
     clientComunity->sendUpdateApp(queryData);
   }
@@ -51,43 +67,36 @@ class Comunity : public System
 
 
   void onClientAdjPH(String data){
-    if (data.indexOf("stop") != -1)
+    String datalist[2];
+    splitString(datalist, data, ",", 2);
+    if (datalist[0].indexOf("stop") != -1)
     {
-      Serial.println("หยุดปรับ");
-      var->workVar.working_status = false;
+      var->workVar.stopAdjustPH();
     }
     else
     {
-      Serial.println("เริ่มปรับ");
-      var->input_ph = data.toFloat();
-      var->workVar.working_status = true;
-
+      var->workVar.startAdjustPH(datalist[0].toFloat(),datalist[1].toInt());
     }
   }
 
   void onClientSetTimeAutoWork(String data){
-    String datalayer1[4];
-    splitString(datalayer1, data, "|", 4);
+    /*String datalayer1[4];
+    splitString(datalayer1, datalayer1[i], ",", 6);
 
-    for (int i = 0; i < 4; i++)
-    {
-      String datalayer2[4];
-      splitString(datalayer2, datalayer1[i], ",", 4);
+    var->workTimer[i].HOUR = datalayer2[0].toInt();
+    var->workTimer[i].MINUTE = datalayer2[1].toInt();
+    var->workTimer[i].PH = datalayer2[2].toFloat();
+    var->workTimer[i].T = datalayer2[3].toInt();
+    var->workTimer[i].ACTIVE_STATUS = (datalayer2[4] == "true") ? true : false;
+    var->workTimer[i].DELETE_STATUS = (datalayer2[5] == "true") ? true : false;
 
-      var->timerautowork[i].setHour(datalayer2[0].toInt());
-      var->timerautowork[i].setMinute(datalayer2[1].toInt());
-      var->timerautowork[i].setStatus((datalayer2[2] == "true") ? true : false);
-      var->timerautowork[i].setPH(datalayer2[3].toFloat());
-      var->timerautowork[i].setDelete((datalayer2[0].toInt() == -1) ? true : false);
-    }
-
-    var->db->writeTimeAutoWork(var->timerautowork);
-    clientComunity->sendOutput("Server Set TimeAutoWork Success");
+    var->db->writeWorkTimer(var->workTimer);
+    clientComunity->sendOutput("Server Set TimeAutoWork Success");*/
 
   }
 
   void onClientGetTimeAutoWork(String data){
-    clientComunity->sendTimeAutoWork(encodeTimeAutoWork());
+    clientComunity->sendTimeAutoWork(encodeWorkTimer());
   }
 
   void onClientSetTimeBoard(String data){
@@ -126,6 +135,11 @@ class Comunity : public System
 
   }
 
+  void onClientSerialAvailable(String data){
+    Serial.println(data);
+    var->serial_buffer = data;
+    
+  }
 
   void onArduinoAvailable(String databuffer){
     String item[6];
@@ -161,7 +175,7 @@ class Comunity : public System
     clientComunity->clientComunityCallback.onClientSetTimeBoard = std::bind(&Comunity::onClientSetTimeBoard,this,std::placeholders::_1);
     clientComunity->clientComunityCallback.onClientSetTimeAutoWork = std::bind(&Comunity::onClientSetTimeAutoWork,this,std::placeholders::_1);
     clientComunity->clientComunityCallback.onClientGetTimeAutoWork = std::bind(&Comunity::onClientGetTimeAutoWork,this,std::placeholders::_1);
-
+    clientComunity->clientComunityCallback.onClientSerialAvailable = std::bind(&Comunity::onClientSerialAvailable,this,std::placeholders::_1);
     ardunoComunity->arduinoComunityCallback.onArduinoAvailable = std::bind(&Comunity::onArduinoAvailable,this,std::placeholders::_1);
   }
 
@@ -192,18 +206,19 @@ class Comunity : public System
 
 
 
-String Comunity::encodeTimeAutoWork()
+String Comunity::encodeWorkTimer()
 {
   String format = "";
   for (int i = 0; i < 4; i++)
   {
-    format += String(var->timerautowork[i].getHour()) + ",";
-    format += String(var->timerautowork[i].getMinute()) + ",";
-    format += (var->timerautowork[i].getStatus()) ? "true," : "false,";
-    format += String(var->timerautowork[i].getPH()) + ",";
-    format += (var->timerautowork[i].getDelete()) ? "true" : "false";
+    format += String(var->workTimer[i].HOUR) + "SP";
+    format += String(var->workTimer[i].MINUTE) + "SP";
+    format += String(var->workTimer[i].PH) + "SP";
+    format += String(var->workTimer[i].T) + "SP";
+    format += (var->workTimer[i].ACTIVE_STATUS) ? "trueSP" : "falseSP";
+    format += (var->workTimer[i].DELETE_STATUS) ? "true" : "false";
     if (i != 3)
-      format += "#";
+      format += "|";
   }
   return format;
 }

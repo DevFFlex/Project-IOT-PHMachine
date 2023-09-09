@@ -5,7 +5,7 @@ import android.os.Handler;
 
 import com.example.phprojectapp.Variable.TimeBoardObject;
 import com.example.phprojectapp.Variable.Variable;
-
+import com.example.phprojectapp.Variable.WorkTimer;
 
 
 public class Comunity extends Client{
@@ -25,44 +25,69 @@ public class Comunity extends Client{
         this.setListener(this::onMessangeEvent);
 
     }
-
-    private void send(String command,String value){
-        String string = String.format("%s%s%s%s%s",DEFAULT_USERNAME,":",command,"=",value);
+    public void serverSendSerial(String value){
+        String string = String.format("%s%s%s%s%s",DEFAULT_USERNAME,":","SERIAL","=",value);
         sendToServer(string);
-//        var.extension.printDebug("Comunity",string);
+        var.extension.printDebug("Comunity",value);
     }
-
-    public void setInputPH(float value){
-        send("ADJ_PH",String.valueOf(value));
-    }
-
-    public void setInputPH_STOP(){
-        send("ADJ_PH","stop");
-    }
-
-    public void setTimeAutoWork(String value){
-        send("SET_TIME_AUTO_WORK",String.valueOf(value));
-    }
-
-    public void setTimeBoard(String value){
-        send("TIME_BOARD",String.valueOf(value));
-    }
-
-    public void setRelay(String header,int index,double time){
-        if (index < 0 || index > 6)return;
-        send("RELAY",String.format("%s,%d,%.1f",header,index,time));
-    }
-
-    public void getTimeAutoWork(){
-        send("GET_TIME_AUTO_WORK","NULL");
-    }
-
-    public void getSDDir(String path){
-        sendToServer("GET:FILE_DIR=" + path);
-    }
-
-    public void sendMessageChat(String name,String data){
+    public void serverSendMessageChat(String name,String data){
         sendToServer("MESSAGE:" + name + "=" + data);
+    }
+
+
+
+
+
+    public void serverStopAdjustPH(){
+        serverSendSerial("system stopAdjust");
+    }
+
+    public void serverStartAdjustPH(float pH,int T){
+        serverSendSerial(String.format("system startAdjust %.2f %d",pH,T));
+    }
+
+    public void serverSetRelay(String header,int index,double time){
+        if (index < 0 || index > 6)return;
+        serverSendSerial(String.format("relay toggle %d",index));
+    }
+
+    public void serverSetWorkTimer(int index,int hour,int minute,float pH,int T,boolean active_status,boolean delete_status){
+        serverSendSerial(String.format("var setWorkTime %d %d %d %.2f %d %d %d",index,hour,minute,pH,T,(active_status) ? 1 : 0,(delete_status) ? 1 : 0));
+    }
+
+    public void serverSetTimeOfBoard(String value){
+
+    }
+
+    public void serverSetInternetSSID(String ssid){
+        serverSendSerial("internet setSSID " + ssid);
+    }
+    public void serverSetInternetPASS(String pass){
+        serverSendSerial("internet setPASS " + pass);
+    }
+
+    public void serverSetVarWaitSTRPump(String value){
+        serverSendSerial("var setWAIT_STR_PUMP " + value);
+    }
+
+    public void serverSetVarWaitPHStabilize(String value){
+        serverSendSerial("var setWAIT_PH_STABILIZE " + value);
+    }
+
+    public void serverSetVarWaitBaseUseTime(String value){
+        serverSendSerial("var setWAIT_BASEUSETIME " + value);
+    }
+
+    public void serverSetVarWaitAcidUseTime(String value){
+        serverSendSerial("var setWAIT_ACIDUSETIME " + value);
+    }
+
+    public void serverSetVarLimiteUseBase(String value){
+        serverSendSerial("var setLIMITE_USE_BASE " + value);
+    }
+
+    public void serverSetVarLimiteUseAcid(String value){
+        serverSendSerial("var setLIMITE_USE_ACID " + value);
     }
 
     public String timeBoardObjectToQueryString(TimeBoardObject timeBoardObject){
@@ -94,24 +119,44 @@ public class Comunity extends Client{
             if(!d1[1].equals("nan"))var.tempC = Float.valueOf(d1[1]);
             if(!d1[2].equals("nan"))var.humidity = Float.valueOf(d1[2]);
 
-            var.step = Integer.valueOf(d1[3]);
-            var.work_status = (d1[4].equals("0")) ? false : true;
+            var.relay_status[0] = (d1[3].equals("0")) ? false : true;
+            var.relay_status[1] = (d1[4].equals("0")) ? false : true;
+            var.relay_status[2] = (d1[5].equals("0")) ? false : true;
+            var.relay_status[3] = (d1[6].equals("0")) ? false : true;
+            var.relay_status[4] = (d1[7].equals("0")) ? false : true;
+            var.relay_status[5] = (d1[8].equals("0")) ? false : true;
 
-            var.relay_status[0] = (d1[5].equals("0")) ? false : true;
-            var.relay_status[1] = (d1[6].equals("0")) ? false : true;
-            var.relay_status[2] = (d1[7].equals("0")) ? false : true;
-            var.relay_status[3] = (d1[8].equals("0")) ? false : true;
-            var.relay_status[4] = (d1[9].equals("0")) ? false : true;
-            var.relay_status[5] = (d1[10].equals("0")) ? false : true;
+            var.timeBoardObject.hour = Integer.parseInt(d1[9]);
+            var.timeBoardObject.minute = Integer.parseInt(d1[10]);
+            var.timeBoardObject.second = Integer.parseInt(d1[11]);
 
-            var.timeBoardObject.hour = Integer.parseInt(d1[11]);
-            var.timeBoardObject.minute = Integer.parseInt(d1[12]);
-            var.timeBoardObject.second = Integer.parseInt(d1[13]);
+            var.fsw[0] = Integer.parseInt(d1[12]);
+            var.fsw[1] = Integer.parseInt(d1[13]);
 
-            var.fsw[0] = Integer.parseInt(d1[14]);
-            var.fsw[1] = Integer.parseInt(d1[15]);
+            var.internet_connected = (d1[14].equals("0")) ? false : true;
 
-            var.wifi_board_connected = (d1[16].equals("0")) ? false : true;
+            String[] timer_layer0 = d1[15].split("\\|");
+            for(int i = 0;i<4;i++){
+                String[] item = timer_layer0[i].split("SP");
+                var.workTimerList.workTimers_item.get(i).HOUR = Integer.parseInt(item[0]);
+                var.workTimerList.workTimers_item.get(i).MINUTE = Integer.parseInt(item[1]);
+                var.workTimerList.workTimers_item.get(i).PH = Float.parseFloat(item[2]);
+                var.workTimerList.workTimers_item.get(i).T = Integer.parseInt(item[3]);
+                var.workTimerList.workTimers_item.get(i).ACTIVE_STATUS = Boolean.parseBoolean(item[4]);
+                var.workTimerList.workTimers_item.get(i).DELETE_STATUS = Boolean.parseBoolean(item[5]);
+            }
+
+            var.step = Integer.valueOf(d1[16]);
+            var.work_status = (d1[17].equals("0")) ? false : true;
+            var.pH_space_rate = Float.valueOf(d1[18]);
+            var.adjustCurrentPH = Float.valueOf(d1[19]);
+            var.wait_stirringPump = Integer.valueOf(d1[20]);
+            var.wait_pHStabilize = Integer.valueOf(d1[21]);
+            var.acidUseTime = Integer.valueOf(d1[22]);
+            var.baseUseTime = Integer.valueOf(d1[23]);
+            var.limite_use_base = Integer.valueOf(d1[24]);
+            var.limite_use_acid = Integer.valueOf(d1[25]);
+            var.adjustT_Counter = Integer.valueOf(d1[26]);
 
         }
 
@@ -128,24 +173,20 @@ public class Comunity extends Client{
     private void dataResponse(String header,String command,String value){
 
         if(command.equals("GET_TIME_AUTO_WORK_RES")){
-            var.extension.printDebug("Comunity","Recv TAW");
+            var.extension.printDebug("Comunity",value);
 
-            String[] data1 = value.split("#");
+            String[] data1 = value.split("\\|");
 
-            var.timeObjectList.clearAllItem();
             for(int i = 0;i<4;i++){
                 String[] data2 = data1[i].split(",");
+                int hour = Integer.parseInt(data2[0]);
+                int minute = Integer.parseInt(data2[1]);
+                float ph = Float.parseFloat(data2[2]);
+                int t = Integer.parseInt(data2[3]);
+                boolean active_status = (data2[4] == "1") ? true:false;
+                boolean delete_status = (data2[5] == "1") ? true:false;
+                var.workTimerList.AddItem(hour,minute,ph,t,active_status,delete_status);
 
-                if(data2[4].equals("false")){
-
-                    var.timeObjectList.addItem(Integer.parseInt(data2[0]),Integer.parseInt(data2[1]),(data2[2].equals("false")) ? false : true,Float.parseFloat(data2[3]));
-//                    var.timeObjectList.data.get(i).setHour();
-//                    var.timeObjectList.data.get(i).setMinute();
-//                    var.timeObjectList.data.get(i).setStatus( );
-//                    var.timeObjectList.data.get(i).setPh();
-
-                }
-                System.out.println(data1[i]);
 
             }
         }

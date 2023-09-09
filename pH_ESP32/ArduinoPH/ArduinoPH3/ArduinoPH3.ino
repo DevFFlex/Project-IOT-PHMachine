@@ -21,7 +21,7 @@ void setup() {
 
 void loop() {
   static unsigned long timepoint = millis();
-  if (millis() - timepoint > 1000U) {
+  if (millis() - timepoint > 2000U) {
     timepoint = millis();
     //temperature = readTemperature();
     voltage = analogRead(PH_PIN) / 1024.0 * 5000;

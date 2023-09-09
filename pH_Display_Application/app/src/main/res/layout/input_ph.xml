@@ -10,7 +10,7 @@
         android:gravity="center"
         android:id="@+id/layout_inputpH"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/bg_dialog_phinput"
         android:orientation="vertical">
 
@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="ใส่ค่า pH ที่ต้องการ"
+            android:text="-"
             android:textAlignment="center"
             android:textColor="#FFFF"
             android:textSize="30dp"
@@ -37,15 +37,16 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:gravity="center_horizontal"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <EditText
                 android:visibility="visible"
                 android:id="@+id/inputPH_et1"
                 android:layout_width="150dp"
                 android:layout_height="match_parent"
+                android:paddingVertical="10sp"
                 android:background="@drawable/et_style1"
-                android:hint="ใส่ค่า 4 - 10"
+                android:hint="ใส่ค่า pH 4 - 10"
                 android:inputType="numberDecimal"
                 android:text=""
                 android:textColor="#FFFF"
@@ -53,14 +54,50 @@
                 android:textStyle="bold"
                 android:textAlignment="center"
                 android:textColorHint="#E89608"/>
+            <TextView
+                android:visibility="invisible"
+                android:id="@+id/inputPH_tvWarning"
+                android:gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Warning"
+                android:textStyle="bold"/>
+
+            <EditText
+                android:visibility="visible"
+                android:id="@+id/inputT_et1"
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
+                android:paddingVertical="10sp"
+                android:background="@drawable/et_style1"
+                android:hint="ใส่จำนวนรอบ"
+                android:layout_marginHorizontal="100sp"
+                android:inputType="numberDecimal"
+                android:layout_marginTop="20sp"
+                android:text=""
+                android:textColor="#FFFF"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:textColorHint="#E89608"/>
+            <TextView
+                android:visibility="invisible"
+                android:id="@+id/inputT_tvWarning"
+                android:gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Warning"
+                android:textStyle="bold"/>
+
+
 
 
             <Button
                 android:id="@+id/inputPH_btnOk"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:background="@drawable/btn_style2"
+                android:layout_marginVertical="15sp"
+                android:background="@drawable/bg_layout5"
                 android:text="ตกลง"
                 android:textColor="@color/white"
                 android:textSize="20dp"
@@ -68,14 +105,6 @@
 
         </LinearLayout>
 
-        <TextView
-            android:visibility="invisible"
-            android:id="@+id/inputPH_tvWarning"
-            android:gravity="center_horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Warning"
-            android:textStyle="bold"/>
 
 
     </LinearLayout>

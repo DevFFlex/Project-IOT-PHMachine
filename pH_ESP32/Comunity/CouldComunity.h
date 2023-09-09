@@ -12,7 +12,7 @@ class CouldComunity{
 
     WiFiControll *wifiC;
     HTTPClient  httpClient;
-    String gsheet_hostname = "https://script.google.com/macros/s/AKfycbwa2m6GroNpSCca4XJ9Qj9R9prn5H8ucxe8opHCYRJPgziR6_ViDEQXvUPJxpnkH2ui/exec";
+    String gsheet_hostname = "https://script.google.com/macros/s/AKfycbw3nnrGL_atUT3M80KyVXajTiDQbgJd2CY9JQu-g6H2cFefiAVmI2thYtT3MS-qjZD4/exec?";
 
 
     Timer timer_senddata;
@@ -30,7 +30,7 @@ class CouldComunity{
     }
 
     public:
-    CouldComunity(Variable *var,WiFiControll *wifiC) : timer_senddata(10000),timer_reconnect_wifi(15000){
+    CouldComunity(Variable *var,WiFiControll *wifiC) : timer_senddata(10000),timer_reconnect_wifi(10000){
         this->var = var;
         this->wifiC = wifiC;
     }
@@ -52,13 +52,14 @@ class CouldComunity{
         autoReconnect();
     }
 
-    void sendPH_All(String pHNeed,String pHBaseUsing,String pHAcidUsing,String pHSensorTime,String timeAdjustAll,String temp = "-1"){
+    void sendPH_All(String pHNeed,String pHMixtankFirstLast,String pHBaseUsing,String amountBase,String pHAcidUsing,String amountAcid,String pHSensorTime,String timeAdjustAll,String temp,String validity_status){
 
         if(wifiC->getSTAWifiStatusConnected()){
-             String serverPath = gsheet_hostname + "?&header=\"pHAll\"&p1=" + pHNeed + "&p2=" + pHBaseUsing + "&p3=" + pHAcidUsing + "&p4=" + pHSensorTime + "&p5=" + timeAdjustAll + "&p6=" + temp;
+             String serverPath = gsheet_hostname + "header=pHAll&p1=" + pHNeed + "&p2=" + pHMixtankFirstLast + "&p3=" + pHBaseUsing + "&p4=" + amountBase + "&p5=" + pHAcidUsing + "&p6=" + amountAcid + "&p7=" + pHSensorTime + "&p8=" + timeAdjustAll + "&p9=" + temp + "&p10=" + validity_status;
             httpClient.begin(serverPath);
             httpClient.setTimeout(5000);
             httpClient.GET();
+            Serial.println("sending to cloud");
         }
     }
 
