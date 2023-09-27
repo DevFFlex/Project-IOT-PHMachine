@@ -57,6 +57,8 @@ class Comunity : public System
     queryData += String(var->workVar.limite_use_base) + ",";
     queryData += String(var->workVar.limite_use_acid) + ",";
     queryData += String(var->workVar.adjustT_Counter) + ",";
+    queryData += String(var->workVar.addBaseCount) + ",";
+    queryData += String(var->workVar.addAcidCount);
 
   
 
@@ -153,6 +155,10 @@ class Comunity : public System
 
   }
 
+  void onClientJoin(){
+    var->hardwareIO->buzzer->on(500);
+  }
+
 
   public:
   WiFiControll *wifi_controll;
@@ -177,6 +183,7 @@ class Comunity : public System
     clientComunity->clientComunityCallback.onClientGetTimeAutoWork = std::bind(&Comunity::onClientGetTimeAutoWork,this,std::placeholders::_1);
     clientComunity->clientComunityCallback.onClientSerialAvailable = std::bind(&Comunity::onClientSerialAvailable,this,std::placeholders::_1);
     ardunoComunity->arduinoComunityCallback.onArduinoAvailable = std::bind(&Comunity::onArduinoAvailable,this,std::placeholders::_1);
+    clientComunity->clientComunityCallback.onClientJoin = std::bind(&Comunity::onClientJoin,this);
   }
 
 

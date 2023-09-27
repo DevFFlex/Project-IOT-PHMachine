@@ -106,7 +106,10 @@ public class AdminFragment extends Fragment {
         spn_commandlist.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                et_serialinput.setText(commandlists[i]);
+
+                String text = commandlists[i].substring(0,commandlists[i].indexOf('<')) + " ";
+
+                et_serialinput.setText(text);
             }
 
             @Override

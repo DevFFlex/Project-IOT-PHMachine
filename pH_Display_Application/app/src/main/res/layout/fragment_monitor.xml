@@ -23,6 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <LinearLayout
+                    android:visibility="gone"
                     android:id="@+id/monitor_ll_temp"
                     android:background="#030125"
                     android:layout_width="wrap_content"
@@ -69,6 +70,7 @@
 
                 </LinearLayout>
                 <LinearLayout
+                    android:visibility="gone"
                     android:id="@+id/monitor_ll_EC"
                     android:background="#030125"
                     android:layout_width="wrap_content"
@@ -111,14 +113,6 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
-                <RadioButton
-                    android:enabled="false"
-                    android:id="@+id/monitor_radioManualMode"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="ByStep"
-                    android:textSize="20sp"/>
 
                 <RadioButton
                     android:checked="true"
@@ -315,42 +309,6 @@
 
 
                     </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_weight="1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:autoSizeTextType="uniform"
-                            android:text="pH ของนํ้าที่จะได้รับ"
-                            android:textSize="15sp"
-                            android:textStyle="bold"
-                            android:textColor="#FFFF"
-                            android:textAlignment="textEnd"/>
-
-                        <TextView
-                            android:layout_weight="1.6"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
-
-                        <TextView
-                            android:id="@+id/monitor_tvPHNeededOutput"
-                            android:layout_weight="1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:autoSizeTextType="uniform"
-                            android:text="_"
-                            android:textColor="#0AA6CD"
-                            android:textSize="30sp"
-                            android:textStyle="bold"
-                            android:textAlignment="textStart"/>
-
-
-                    </LinearLayout>
 
                     <Button
                         android:id="@+id/monitor_btnStartWork"
@@ -358,6 +316,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="เริ่มการทำงาน"
+                        android:layout_marginTop="20sp"
                         android:background="@drawable/btn_style4"
                         android:textColor="#FFFF"
                         android:textSize="20sp"
@@ -378,6 +337,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
+                        android:paddingVertical="10sp"
                         android:orientation="horizontal">
 
                         <TextView
@@ -404,7 +364,7 @@
                             android:autoSizeTextType="uniform"
                             android:text="_"
                             android:textColor="#0AA6CD"
-                            android:textSize="30sp"
+                            android:textSize="15sp"
                             android:textStyle="bold"
                             android:textAlignment="textStart"/>
 
@@ -413,6 +373,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:paddingVertical="10sp"
                         android:gravity="center_horizontal"
                         android:orientation="horizontal">
 
@@ -440,7 +401,81 @@
                             android:autoSizeTextType="uniform"
                             android:text="_"
                             android:textColor="#0AA6CD"
-                            android:textSize="30sp"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:textAlignment="textStart"/>
+
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingVertical="10sp"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:autoSizeTextType="uniform"
+                            android:text="ใช่สารเบสไปเเล้ว"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:textColor="#FFFF"
+                            android:textAlignment="textEnd"/>
+
+                        <TextView
+                            android:layout_weight="1.6"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:layout_weight="1"
+                            android:id="@+id/monitor_addbasecount_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:autoSizeTextType="uniform"
+                            android:text="_"
+                            android:textColor="#0AA6CD"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:textAlignment="textStart"/>
+
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingVertical="10sp"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:autoSizeTextType="uniform"
+                            android:text="ใช่สารกรดไปเเล้ว"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:textColor="#FFFF"
+                            android:textAlignment="textEnd"/>
+
+                        <TextView
+                            android:layout_weight="1.6"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:layout_weight="1"
+                            android:id="@+id/monitor_addacidcount_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:autoSizeTextType="uniform"
+                            android:text="_"
+                            android:textColor="#0AA6CD"
+                            android:textSize="15sp"
                             android:textStyle="bold"
                             android:textAlignment="textStart"/>
 
@@ -455,6 +490,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/btn_style3"
                         android:shadowColor="@color/white"
+                        android:layout_marginTop="20sp"
                         android:shadowRadius="55"
                         android:text="หยุดการทำงาน"
                         android:textColor="#FFFF"
@@ -465,30 +501,6 @@
 
                 </LinearLayout>
 
-                <!--    Button   -->
-                <LinearLayout
-                    android:background="@color/bg"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
-
-
-                    <Button
-                        android:visibility="gone"
-                        android:layout_marginTop="20dp"
-                        android:id="@+id/monitor_btnSetTime"
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/btn_style1"
-                        android:shadowColor="@color/white"
-                        android:shadowRadius="55"
-                        android:text=" ตั้งเวลา"
-                        android:textColor="#FFFF"
-                        android:textSize="20dp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
 
             </LinearLayout>
 

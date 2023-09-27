@@ -21,14 +21,17 @@ typedef struct WorkVarStruct {
   int wait_acidUseTime = 2000; //เวลาในการปล่อยสารกรด
   int wait_baseUseTime = 2000; //เวลาในการปล่อยสารเบส
 
-
-  int T = 0;
+  //--------------------- no static variable -----------------------
+  int addBaseAcidCount = 0;
   int addBaseCount = 0;
   int addAcidCount = 0;
-  float amountBase = 0;
-  float amountAcid = 0;
+  float addBase_mL = 0;
+  float addAcid_mL = 0;
   float useTime = 0;
   String validity_status = "";
+
+
+
 
   void resetData(){
     step = 0;
@@ -37,11 +40,11 @@ typedef struct WorkVarStruct {
     working_step_setup = true;
 
     pH_mixtankFirst = -1;
-    T = 0;
+    addBaseAcidCount = 0;
     addBaseCount = 0;
     addAcidCount = 0;
-    amountBase = 0;
-    amountAcid = 0;
+    addBase_mL = 0;
+    addAcid_mL = 0;
     useTime = 0;
     validity_status = "";
   }
@@ -80,11 +83,11 @@ typedef struct WorkVarStruct {
     Serial.println("wait_pH_stabilize = " + String(wait_pH_stabilize));
     Serial.println("wait_acidUseTime = " + String(wait_acidUseTime));
     Serial.println("wait_baseUseTime = " + String(wait_baseUseTime));
-    Serial.println("T = " + String(T));
+    Serial.println("addBaseAcidCount = " + String(addBaseAcidCount));
     Serial.println("addBaseCount = " + String(addBaseCount));
     Serial.println("addAcidCount = " + String(addAcidCount));
-    Serial.println("amountBase = " + String(amountBase));
-    Serial.println("amountAcid = " + String(amountAcid));
+    Serial.println("amountBase = " + String(addBase_mL));
+    Serial.println("amountAcid = " + String(addAcid_mL));
     Serial.println("useTime = " + String(useTime));
     Serial.println("validity_status = " + String(validity_status)); 
   }

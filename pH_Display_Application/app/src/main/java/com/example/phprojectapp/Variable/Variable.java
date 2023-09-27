@@ -40,6 +40,8 @@ public class Variable{
     public int limite_use_acid = 0;
     public int limite_use_base = 0;
     public int adjustT_Counter = 0;
+    public int addBaseCount = 0;
+    public int addAcidCount = 0;
     public String stepText = "";
 
     public boolean internet_connected = false;

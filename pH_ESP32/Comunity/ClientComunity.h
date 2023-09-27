@@ -12,6 +12,8 @@ typedef struct InterfaceEvent_ClientComunity{
   std::function<void(String)> onClientRelayControll = NULL;
   std::function<void(String)> onClientSerialAvailable = NULL;
 
+  std::function<void(void)> onClientJoin = NULL;
+
 
 }ClientComunityCallback;
 
@@ -125,6 +127,7 @@ void ClientComunity::onClientMessageCallback(String str_trim)
 
 void ClientComunity::onClientJoinCallback(String clientName){
   Serial.println("Client '"+ clientName +"' ---------------- Join");
+  if(clientComunityCallback.onClientJoin != NULL)clientComunityCallback.onClientJoin();
 }
 
 

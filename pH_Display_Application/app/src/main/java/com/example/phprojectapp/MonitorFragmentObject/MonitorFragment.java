@@ -27,30 +27,20 @@ import com.example.phprojectapp.Variable.WorkTimer;
 import java.util.ArrayList;
 
 public class MonitorFragment extends Fragment {
-    private TextView monitor_tvPHNeeded,monitor_tvPHNeededOutput,monitor_tvPHNeededOutputWorking,monitor_stepText,monitor_tvTimeBoard,tv_tempC,tv_ec;
-    private Button monitor_btnChangePH,monitor_btnStopChangePH,monitor_btnStartWork, monitor_btnSetTime,monitor_btnaddworktimer;
+    private TextView monitor_tvPHNeeded,monitor_tvPHNeededOutputWorking,monitor_tvStepText,monitor_tvTimeBoard,tv_tempC,monitor_tvAddBaseCount,monitor_tvAddAcidCount;
+    private Button monitor_btnChangePH,monitor_btnStopChangePH,monitor_btnStartWork,monitor_btnaddworktimer;
     private LinearLayout nonWorkLayout,workingLayout;
 
-
-    private EditText manualETTime;
-    private Button btn_relay[] = new Button[6];
-
     private RadioGroup radioGroupMode;
-    private RadioButton radioManualMode,radioAutoMode,radioTimerMode;
 
-    private LinearLayout layoutManualMode,layoutAutoMode,layoutTimerMode;
+    private LinearLayout layoutAutoMode,layoutTimerMode;
 
-
-
-    View monitorFragmentView;
-    int current_step = 0;
-
+    private View monitorFragmentView;
 
     private Variable var;
 
     public MonitorFragment(Variable var) {
         this.var = var;;
-        current_step = var.step;
     }
 
     @Override
@@ -61,20 +51,15 @@ public class MonitorFragment extends Fragment {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                FragmentManager fragmentManager = getFragmentManager(); // หรือ getParentFragmentManager() ถ้าคุณใช้ FragmentContainerView
-
+                FragmentManager fragmentManager = getFragmentManager();
                 if (fragmentManager != null) {
-                    Fragment currentFragment = fragmentManager.findFragmentById(R.id.fragment_container); // เปลี่ยน R.id.fragment_container เป็น ID ของ Container ของ Fragment ของคุณ
+                    Fragment currentFragment = fragmentManager.findFragmentById(R.id.fragment_container);
 
                     if (currentFragment != null) {
                       updateUI();
                       handler.postDelayed(this, 1000);
                     }
                 }
-//                updateUI();
-
-
-
             }
         });
 
@@ -84,31 +69,33 @@ public class MonitorFragment extends Fragment {
     private void updateUI(){
         if (var != null){
             monitor_tvPHNeeded.setText((var.inputPH == -1) ? "_" : String.valueOf(var.inputPH));
-            monitor_tvPHNeededOutput.setText((var.inputPH == -1) ? "_" : String.format("%.1f - %.1f",var.inputPH - 0.5,var.inputPH + 0.5));
-            monitor_tvPHNeededOutputWorking.setText((var.inputPH == -1) ? "_" : String.format("%.1f - %.1f",var.inputPH - 0.5,var.inputPH + 0.5));
-            monitor_stepText.setText(var.stepText);
+            monitor_tvPHNeededOutputWorking.setText((var.adjustCurrentPH == -1) ? "_" : String.format("%.1f - %.1f",var.adjustCurrentPH - var.pH_space_rate,var.adjustCurrentPH + var.pH_space_rate));
+            monitor_tvAddBaseCount.setText(String.valueOf(var.addBaseCount));
+            monitor_tvAddAcidCount.setText(String.valueOf(var.addAcidCount));
+
+
+            String stepIndexText[] = {
+                    "...",
+                    "กำลังปั้มนํ้าเข้าถังผสม...",
+                    String.format("กำลังปั้มนํ้าไปยัง pH Sensor (เป็นเวลา %d วินาที)",(var.wait_stirringPump / 1000)),
+                    String.format("รอ pH Sensor นิ่ง (เป็นเวลา %d วินาที)",(var.wait_pHStabilize / 1000)),
+                    "กำลังเติมสาร...",
+                    "กำลังปั้มนํ้าออกจากถังผสม...",
+            };
+            monitor_tvStepText.setText(stepIndexText[var.step]);
+
             monitor_tvTimeBoard.setText(String.format("%01d:%01d:%01d",var.timeBoardObject.hour,var.timeBoardObject.minute,var.timeBoardObject.second));
 
-            for(int i = 0;i<6;i++){
-                if(!var.relay_status[i])btn_relay[i].setBackgroundResource(R.drawable.btn_style4);
-                else btn_relay[i].setBackgroundResource(R.drawable.btn_style3);
-            }
-
-            if ((var.inputPH == -1 || var.inputPH < 4 || var.inputPH > 10)) {
-                monitor_btnStartWork.setVisibility(View.INVISIBLE);
-            } else {
-                monitor_btnStartWork.setVisibility(View.VISIBLE);
-            }
+            if ((var.inputPH == -1 || var.inputPH < 4 || var.inputPH > 10))monitor_btnStartWork.setVisibility(View.INVISIBLE);
+            else monitor_btnStartWork.setVisibility(View.VISIBLE);
         }
 
         if(var.work_status){
             nonWorkLayout.setVisibility(View.GONE);
             workingLayout.setVisibility(View.VISIBLE);
-            radioManualMode.setVisibility(View.INVISIBLE);
         }else{
             nonWorkLayout.setVisibility(View.VISIBLE);
             workingLayout.setVisibility(View.GONE);
-            radioManualMode.setVisibility(View.VISIBLE);
         }
 
         tv_tempC.setText(String.format("%.1f C",var.tempC));
@@ -144,38 +131,25 @@ public class MonitorFragment extends Fragment {
 
         monitor_btnChangePH = monitorFragmentView.findViewById(R.id.monitor_btnChangePH);
         monitor_btnStopChangePH = monitorFragmentView.findViewById(R.id.monitor_btnStopChangePH);
-        monitor_btnSetTime = monitorFragmentView.findViewById(R.id.monitor_btnSetTime);
         monitor_btnStartWork = monitorFragmentView.findViewById(R.id.monitor_btnStartWork);
 
         monitor_tvPHNeeded = monitorFragmentView.findViewById(R.id.monitor_tvPHNeeded);
-        monitor_tvPHNeededOutput = monitorFragmentView.findViewById(R.id.monitor_tvPHNeededOutput);
         monitor_tvTimeBoard = monitorFragmentView.findViewById(R.id.monitor_tvTimeBoard);
         tv_tempC = monitorFragmentView.findViewById(R.id.monitor_tvTemp);
-        tv_ec = monitorFragmentView.findViewById(R.id.monitor_tvEC);
         monitor_tvPHNeededOutputWorking = monitorFragmentView.findViewById(R.id.monitor_tvPHNeededOutputWorking);
-        monitor_stepText = monitorFragmentView.findViewById(R.id.monitor_step_text);
+        monitor_tvStepText = monitorFragmentView.findViewById(R.id.monitor_step_text);
+        monitor_tvAddBaseCount = monitorFragmentView.findViewById(R.id.monitor_addbasecount_text);
+        monitor_tvAddAcidCount = monitorFragmentView.findViewById(R.id.monitor_addacidcount_text);
 
 
         nonWorkLayout = monitorFragmentView.findViewById(R.id.monitor_layout_noneWork);
         workingLayout = monitorFragmentView.findViewById(R.id.monitor_layout_Working);
 
-        layoutManualMode = monitorFragmentView.findViewById(R.id.monitor_layout_FunctionManual);
         layoutAutoMode = monitorFragmentView.findViewById(R.id.monitor_layout_FunctionAuto);
         layoutTimerMode = monitorFragmentView.findViewById(R.id.monitor_layout_FunctionTimer);
 
         monitor_btnaddworktimer = monitorFragmentView.findViewById(R.id.monitor_btnAddWorkTimer);
 
-        radioManualMode = monitorFragmentView.findViewById(R.id.monitor_radioManualMode);
-        radioAutoMode = monitorFragmentView.findViewById(R.id.monitor_radioAutoMode);
-
-
-        manualETTime = monitorFragmentView.findViewById(R.id.monitor_manualEtTime);
-        btn_relay[0] = monitorFragmentView.findViewById(R.id.monitor_manualBtnR1);
-        btn_relay[1] = monitorFragmentView.findViewById(R.id.monitor_manualBtnR2);
-        btn_relay[2] = monitorFragmentView.findViewById(R.id.monitor_manualBtnR3);
-        btn_relay[3] = monitorFragmentView.findViewById(R.id.monitor_manualBtnR4);
-        btn_relay[4] = monitorFragmentView.findViewById(R.id.monitor_manualBtnR5);
-        btn_relay[5] = monitorFragmentView.findViewById(R.id.monitor_manualBtnR6);
 
         radioGroupMode = monitorFragmentView.findViewById(R.id.monitor_radioGroupMode);
         radioGroupMode.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -183,16 +157,10 @@ public class MonitorFragment extends Fragment {
             public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
                 RadioButton radioButton = monitorFragmentView.findViewById(checkedId);
 
-                if(radioButton.getText().toString().equals("ByStep")){
-                    layoutManualMode.setVisibility(View.VISIBLE);
-                    layoutAutoMode.setVisibility(View.GONE);
-                    layoutTimerMode.setVisibility(View.GONE);
-                }else if(radioButton.getText().toString().equals("Trigger")){
-                    layoutManualMode.setVisibility(View.GONE);
+                if(radioButton.getText().toString().equals("Trigger")){
                     layoutAutoMode.setVisibility(View.VISIBLE);
                     layoutTimerMode.setVisibility(View.GONE);
                 }else if(radioButton.getText().toString().equals("Timer")){
-                    layoutManualMode.setVisibility(View.GONE);
                     layoutAutoMode.setVisibility(View.GONE);
                     layoutTimerMode.setVisibility(View.VISIBLE);
                 }
@@ -203,15 +171,7 @@ public class MonitorFragment extends Fragment {
         monitor_btnChangePH.setOnClickListener(this::onClickSetPH);
         monitor_btnStopChangePH.setOnClickListener(this::onClickStopPHWork);
         monitor_btnStartWork.setOnClickListener(this::onClickStartPHWork);
-        monitor_btnSetTime.setOnClickListener(this::onClickSetTime);
         monitor_tvTimeBoard.setOnClickListener(this::onClickTimeBoard);
-
-        btn_relay[0].setOnClickListener(this::onOnRelay1);
-        btn_relay[1].setOnClickListener(this::onOnRelay2);
-        btn_relay[2].setOnClickListener(this::onOnRelay3);
-        btn_relay[3].setOnClickListener(this::onOnRelay4);
-        btn_relay[4].setOnClickListener(this::onOnRelay5);
-        btn_relay[5].setOnClickListener(this::onOnRelay6);
 
 
         monitor_btnaddworktimer.setOnClickListener(new View.OnClickListener() {
@@ -242,13 +202,11 @@ public class MonitorFragment extends Fragment {
     }
 
     private void onClickStartPHWork(View v){
-//        var.comunity.setInputPH(var.inputPH);
         var.comunity.serverStartAdjustPH(var.inputPH,var.inputT);
     }
 
     private void onClickStopPHWork(View v){
         var.comunity.serverStopAdjustPH();
-
     }
 
     private void onClickSetPH(View v){
@@ -264,28 +222,6 @@ public class MonitorFragment extends Fragment {
         });
     }
 
-    private void onClickSetTime(View v){
-        var.soundEffect.play_glitch();
-        var.animationOption.startAnim(monitor_btnSetTime,R.anim.btnclick_animation);
-
-        monitor_btnSetTime.setEnabled(false);
-
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-               SetTimeDialog std = new SetTimeDialog(getContext(),var);
-               std.setSetTimeDialogEvent(new SetTimeDialogEvent() {
-                   @Override
-                   public void onClickSave(String output) {
-//                       var.comunity.serverSetWorkTimer(output);
-                   }
-               });
-               monitor_btnSetTime.setEnabled(true);
-            }
-        },100);
-    }
-
     private void onClickTimeBoard(View v){
         SetTimeBoard setTimeBoard = new SetTimeBoard(v.getContext());
         setTimeBoard.setSetTimeBoardEvent(new SetTimeBoardEvent() {
@@ -299,37 +235,6 @@ public class MonitorFragment extends Fragment {
     }
 
 
-
-
-    private void onRelay(int index){
-        String time_str = manualETTime.getText().toString();
-        manualETTime.setText("");
-        if(time_str.equals("")){
-
-        }else{
-            double time = Double.parseDouble(time_str);
-            var.comunity.serverSetRelay("on",index,time);
-        }
-    }
-
-    public void onOnRelay1(View v){
-        onRelay(0);
-    }
-    public void onOnRelay2(View v){
-        onRelay(1);
-    }
-    public void onOnRelay3(View v){
-        onRelay(2);
-    }
-    public void onOnRelay4(View v){
-        onRelay(3);
-    }
-    public void onOnRelay5(View v){
-        onRelay(4);
-    }
-    public void onOnRelay6(View v){
-        onRelay(5);
-    }
 
 
 

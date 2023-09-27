@@ -25,7 +25,7 @@ private:
 
 public:
 
-  int status[6] = {false,false,false,false,false,false};
+  int status[6] = {false,false,true,false,false,false};
 
   Relay6CH() : RELAY(ADDR_RELAY) , t_active(3000){
 
@@ -58,6 +58,7 @@ public:
 
 void Relay6CH::setup() {
   for (int i = 0;i<8;i++)off(relayPinList[i]);
+  on(relayPinList[2]);
 }
 
 void Relay6CH::loop() {

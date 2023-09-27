@@ -1,11 +1,8 @@
 package com.example.phprojectapp.ClassEx;
 
 
-import android.os.Handler;
-
 import com.example.phprojectapp.Variable.TimeBoardObject;
 import com.example.phprojectapp.Variable.Variable;
-import com.example.phprojectapp.Variable.WorkTimer;
 
 
 public class Comunity extends Client{
@@ -16,7 +13,6 @@ public class Comunity extends Client{
     }
 
     private Variable var;
-    private Handler handler;
 
     public Comunity(Variable var){
         super(var);
@@ -36,14 +32,12 @@ public class Comunity extends Client{
 
 
 
-
+    public void serverStartAdjustPH(float pH,int T){
+        serverSendSerial(String.format("system startAdjust %.2f %d",pH,T));
+    }
 
     public void serverStopAdjustPH(){
         serverSendSerial("system stopAdjust");
-    }
-
-    public void serverStartAdjustPH(float pH,int T){
-        serverSendSerial(String.format("system startAdjust %.2f %d",pH,T));
     }
 
     public void serverSetRelay(String header,int index,double time){
@@ -62,6 +56,7 @@ public class Comunity extends Client{
     public void serverSetInternetSSID(String ssid){
         serverSendSerial("internet setSSID " + ssid);
     }
+
     public void serverSetInternetPASS(String pass){
         serverSendSerial("internet setPASS " + pass);
     }
@@ -107,8 +102,6 @@ public class Comunity extends Client{
     private void onMessangeEvent(String header,String command,String value){
         //------------------------------------ Client Auto Recv -----------------
         dataAuto(header,command,value);
-        //------------------------------------ Client Response Recv -----------------
-        dataResponse(header,command,value);
     }
 
     private void dataAuto(String header,String command,String value){
@@ -157,6 +150,8 @@ public class Comunity extends Client{
             var.limite_use_base = Integer.valueOf(d1[24]);
             var.limite_use_acid = Integer.valueOf(d1[25]);
             var.adjustT_Counter = Integer.valueOf(d1[26]);
+            var.addBaseCount = Integer.valueOf(d1[27]);
+            var.addAcidCount = Integer.valueOf(d1[28]);
 
         }
 
@@ -170,32 +165,6 @@ public class Comunity extends Client{
         }
     }
 
-    private void dataResponse(String header,String command,String value){
-
-        if(command.equals("GET_TIME_AUTO_WORK_RES")){
-            var.extension.printDebug("Comunity",value);
-
-            String[] data1 = value.split("\\|");
-
-            for(int i = 0;i<4;i++){
-                String[] data2 = data1[i].split(",");
-                int hour = Integer.parseInt(data2[0]);
-                int minute = Integer.parseInt(data2[1]);
-                float ph = Float.parseFloat(data2[2]);
-                int t = Integer.parseInt(data2[3]);
-                boolean active_status = (data2[4] == "1") ? true:false;
-                boolean delete_status = (data2[5] == "1") ? true:false;
-                var.workTimerList.AddItem(hour,minute,ph,t,active_status,delete_status);
-
-
-            }
-        }
-
-        if(command.equals("INPUT_RES")){
-            var.inputPH = Float.parseFloat(value);
-        }
-
-    }
 
 
 
