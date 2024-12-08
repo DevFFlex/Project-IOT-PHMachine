@@ -157,7 +157,6 @@ typedef struct DebugStatusStruct{
 } DebugData;
 
 
-#include "VarObject/TimerAutoWork.h"
 #include "HardwareIO.h"
 #include "Database.h"
 
@@ -170,8 +169,6 @@ public:
   Database *db = new Database();
 
   float mixTank_pH = 7;
-  float tempC = 0;
-  float humidity = 0;
 
   FloatSwitchVal fsw;
   WorkVar workVar;
@@ -243,8 +240,6 @@ public:
   void showVar(){
     Serial.println("---------------------------------------");
     Serial.println("mixTank_pH = " + String(mixTank_pH));
-    Serial.println("tempC = " + String(tempC));
-    Serial.println("humidity = " + String(humidity));
     fsw.show();
     datadebug.show();
     wifipublic.show();

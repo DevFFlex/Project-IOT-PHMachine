@@ -10,7 +10,7 @@ class PHAdjustmentProcess : public System
 {
 private:
   Variable *var;
-  Comunity *comunity;
+  Community *community;
   HardwareIO *hardwareIO;
 
   Timer looptimer;
@@ -211,10 +211,10 @@ private:
   
 
 public:
-  PHAdjustmentProcess(Variable *var,Comunity *comunity)
+  PHAdjustmentProcess(Variable *var,Community *community)
   {
     this->var = var;
-    this->comunity = comunity;
+    this->community = community;
     hardwareIO = var->hardwareIO;
     looptimer.setInterval(1000);
   }
@@ -322,7 +322,7 @@ public:
     Serial.println("Validity Status : " + String(var->workVar.validity_status));
     Serial.println("---------------------------------------");
 
-    comunity->couldComunity->sendPH_All(String(var->workVar.adjustCurrentpH),String(var->workVar.pH_mixtankFirst) + "," + String(var->mixTank_pH),String(var->workVar.addBaseCount),String(var->workVar.addBase_mL),String(var->workVar.addAcidCount),String(var->workVar.addAcid_mL),String(var->workVar.addBaseAcidCount),String(var->workVar.useTime),String("-1"),var->workVar.validity_status);
+    community->couldComunity->sendPH_All(String(var->workVar.adjustCurrentpH),String(var->workVar.pH_mixtankFirst) + "," + String(var->mixTank_pH),String(var->workVar.addBaseCount),String(var->workVar.addBase_mL),String(var->workVar.addAcidCount),String(var->workVar.addAcid_mL),String(var->workVar.addBaseAcidCount),String(var->workVar.useTime),String("-1"),var->workVar.validity_status);
 
     var->workVar.work_with_timer_status = false;
 

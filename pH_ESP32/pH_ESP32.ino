@@ -5,33 +5,34 @@
 #include "OtherClass/I2CScanner.h"
 
 #include "Variable.h"
-#include "Comunity.h"
+#include "Community.h"
 #include "SerialInput.h"
-#include "UserInterface.h"
+#include "LCDMonitor.h"
 #include "PHAdjustmentProcess.h"
 
 Variable *var = new Variable();
-Comunity *comunity = new Comunity(var);
-PHAdjustmentProcess *phap = new PHAdjustmentProcess(var,comunity);
-SerialInput *sInput = new SerialInput(var,comunity);
-UserInterface *ui = new UserInterface(var,comunity);
-
+Community *community = new Community(var);
+PHAdjustmentProcess *phap = new PHAdjustmentProcess(var,community);
+SerialInput *sInput = new SerialInput(var,community);
+LCDMonitor *ui = new LCDMonitor(var,community);
 
 
 void setup() {
   Serial.begin(115200);
-
+  
   var->setup();
-  comunity->setup();
+  community->setup();
   phap->setup();
   sInput->setup();
   ui->setup();
 }
 
 void loop() {
+
   var->loop();
-  comunity->loop();
+  community->loop();
   phap->loop();
   sInput->loop();
   ui->loop();
+
 }

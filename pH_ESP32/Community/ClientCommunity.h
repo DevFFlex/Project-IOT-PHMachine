@@ -1,22 +1,10 @@
 #include "Server/ClientList.h"
 
-
-
 typedef struct InterfaceEvent_ClientComunity{
   std::function<void(void)> onTimeUpdateAPP = NULL;
-  std::function<void(String)> onClientMessageText = NULL;
-  std::function<void(String)> onClientAdjPHStart = NULL;
-  std::function<void(String)> onClientSetTimeAutoWork = NULL;
-  std::function<void(String)> onClientGetTimeAutoWork = NULL;
-  std::function<void(String)> onClientSetTimeBoard = NULL;
-  std::function<void(String)> onClientRelayControll = NULL;
   std::function<void(String)> onClientSerialAvailable = NULL;
-
   std::function<void(void)> onClientJoin = NULL;
-
-
 }ClientComunityCallback;
-
 
 
 class ClientComunity
@@ -29,7 +17,9 @@ private:
 
   
 
-    bool condition_req(String clientDataReq,String target);
+    bool condition_req(String clientDataReq,String target){
+      return (clientDataReq.indexOf(target) != -1);
+    }
 
 public:
     ClientComunityCallback clientComunityCallback;
@@ -53,7 +43,7 @@ public:
     void loop()
     {
       clientlist->loop();
-      clientlist->checkAvailable();
+      //clientlist->checkAvailable();
       if (autosendTimer.isExpired())
       {
           if(clientComunityCallback.onTimeUpdateAPP != NULL)clientComunityCallback.onTimeUpdateAPP();
@@ -62,11 +52,9 @@ public:
 
     //------------ send to client function ------------------
 
-    void sendFileDir(String path);
     void sendOutput(String output_str);
     void sendStepText(String stepText);
     void sendUpdateApp(String queryString);
-    void sendTimeAutoWork(String queryString);
 
     void H_MessageProcess(String command_arg, String value);
 
@@ -76,9 +64,7 @@ public:
 };
 
 
-bool ClientComunity::condition_req(String clientDataReq,String target){
-  return (clientDataReq.indexOf(target) != -1);
-}
+
 
 
 void ClientComunity::onClientMessageCallback(String str_trim)
@@ -97,30 +83,11 @@ void ClientComunity::onClientMessageCallback(String str_trim)
   String str_command = command;
   String str_value = value;
 
-  if(var->datadebug.debug_client_comunity)Serial.println(str_clientname + ":" + str_command + ":" + str_value);
+  if(var->datadebug.debug_client_comunity)
+    Serial.println(str_clientname + ":" + str_command + ":" + str_value);
 
-  if (condition_req(str_command,"MESSAGE"))
-  {
-    if(clientComunityCallback.onClientMessageText != NULL)clientComunityCallback.onClientMessageText(str_value);
-  }
-
-  if (condition_req(str_command,"RELAY"))
-    if(clientComunityCallback.onClientRelayControll != NULL)clientComunityCallback.onClientRelayControll(str_value);
-
-  if(condition_req(str_command,"ADJ_PH"))
-    if(clientComunityCallback.onClientAdjPHStart != NULL)clientComunityCallback.onClientAdjPHStart(str_value);
-
-  if(condition_req(str_command,"TIME_BOARD"))
-    if(clientComunityCallback.onClientSetTimeBoard != NULL)clientComunityCallback.onClientSetTimeBoard(str_value);
-
-  if(condition_req(str_command,"SET_TIME_AUTO_WORK"))
-    if(clientComunityCallback.onClientSetTimeBoard != NULL)clientComunityCallback.onClientSetTimeAutoWork(str_value);
-
-  if(condition_req(str_command,"GET_TIME_AUTO_WORK"))
-    if(clientComunityCallback.onClientGetTimeAutoWork != NULL)clientComunityCallback.onClientGetTimeAutoWork(str_value);
-  
-  if(condition_req(str_command,"SERIAL"))
-    if(clientComunityCallback.onClientSerialAvailable != NULL)clientComunityCallback.onClientSerialAvailable(str_value);
+  if((str_command,"SERIAL") && clientComunityCallback.onClientSerialAvailable != NULL)
+    clientComunityCallback.onClientSerialAvailable(str_value);
   
 
 }
@@ -130,26 +97,10 @@ void ClientComunity::onClientJoinCallback(String clientName){
   if(clientComunityCallback.onClientJoin != NULL)clientComunityCallback.onClientJoin();
 }
 
-
 void ClientComunity::sendUpdateApp(String queryString){
   clientlist->send("SERVER:UPDATE=" + queryString);
 }
-
-void ClientComunity::sendFileDir(String encode_path)
-{
-  clientlist->send("SET:FILE_DIR=" + encode_path);
-}
-
 void ClientComunity::sendOutput(String output_text)
 {
   clientlist->send("SERVER:OUTPUT=" + output_text);
 }
-
-void ClientComunity::sendStepText(String step_text){
-  clientlist->send("SERVER:SETSTEPTEXT=" + step_text);
-}
-
-void ClientComunity::sendTimeAutoWork(String queryString){
-  clientlist->send("SERVER:GET_TIME_AUTO_WORK_RES=" + queryString);
-}
-

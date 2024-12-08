@@ -30,39 +30,32 @@ public:
     server = serverIn;
   }
 
-  void loop();
-
-  String getClientString();
-  void add(WiFiClient *client, String IPAddress);
-  void send(String send_str);
-  void checkAvailable();
-  void checkConnected();
-
-  void setOnMessageListener(std::function<void(String)> callback);
-  void setOnClientJoinListener(std::function<void(String)> callback);
-};
-
-
-void ClientList::setOnMessageListener(std::function<void(String)> callback) {
-    onMessageCallback = callback;
-}
-
-void ClientList::setOnClientJoinListener(std::function<void(String)> callback){
-    onClientJoinCallback = callback;
-}
-
-void ClientList::loop()
-{
-  client = server->available();
-  if (client)
-  {
-    add(&client, client.localIP().toString());
+  void loop(){
+    client = server->available();
+    if (client)
+    {
+      add(&client, client.localIP().toString());
+    }
+    checkConnected();
   }
-  checkConnected();
-}
 
-void ClientList::add(WiFiClient *client, String IPAddress){
-  for (int cursor = 0; cursor < client_limite; cursor++)
+  String getClientString(){
+    int count = 0;
+    String namelist = "";
+    for (int i = 0; i < CLIENT_LIMITE; i++)
+    {
+      if (clients[i].client)
+      {
+        count++;
+        namelist += clients[i].name + ",";
+      }
+    }
+    String out = "" + String(count) + "|" + namelist;
+    out = out.substring(0, out.lastIndexOf(","));
+    return out;
+  }
+  void add(WiFiClient *client, String IPAddress){
+    for (int cursor = 0; cursor < client_limite; cursor++)
     {
       if (!clients[cursor].client)
       {
@@ -108,10 +101,9 @@ void ClientList::add(WiFiClient *client, String IPAddress){
         break;
       }
     }
-}
-
-void ClientList::send(String send_str){
-  for (int i = 0; i < client_limite; i++)
+  }
+  void send(String send_str){
+    for (int i = 0; i < client_limite; i++)
     {
       if (clients[i].client)
       {
@@ -129,10 +121,9 @@ void ClientList::send(String send_str){
         }
       }
     }
-}
-
-void ClientList::checkAvailable(){
-  for (int i = 0; i < client_limite; i++)
+  }
+  void checkAvailable(){
+    for (int i = 0; i < client_limite; i++)
     {
       if (clients[i].client.available() && clients[i].client)
       {
@@ -160,10 +151,9 @@ void ClientList::checkAvailable(){
         }
       }
     }
-}
-
-void ClientList::checkConnected(){
-  if (timer2.isExpired())
+  }
+  void checkConnected(){
+    if (timer2.isExpired())
     {
       for (int i = 0; i < client_limite; i++)
       {
@@ -179,21 +169,17 @@ void ClientList::checkConnected(){
         }
       }
     }
-}
+  }
 
-String ClientList::getClientString(){
-  int count = 0;
-    String namelist = "";
-    for (int i = 0; i < CLIENT_LIMITE; i++)
-    {
-      if (clients[i].client)
-      {
-        count++;
-        namelist += clients[i].name + ",";
-      }
-    }
-    String out = "" + String(count) + "|" + namelist;
-    out = out.substring(0, out.lastIndexOf(","));
-    return out;
-}
+  void setOnMessageListener(std::function<void(String)> callback){
+    onMessageCallback = callback;
+  }
+  void setOnClientJoinListener(std::function<void(String)> callback){
+    onClientJoinCallback = callback;
+  }
+};
+
+
+
+
 

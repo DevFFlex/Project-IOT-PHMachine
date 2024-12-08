@@ -1,17 +1,9 @@
 #include "Arduino.h"
 
-
-#define DEBUG_KEY1 "debugWifiConnect"
-#define DEBUG_KEY2 "debugClientComunity"
-#define DEBUG_KEY3 "debugArduinoComunity"
-#define DEBUG_KEY4 "debugCouldComunity"
-
-
-
 class SerialInput : public System{
 private:
     Variable *var;
-    Comunity *comunity;
+    Community *community;
 
     String *split_buffer = new String[10];
     String command = "";
@@ -20,10 +12,10 @@ private:
     void onInputAvailable();
 
 public:
-    SerialInput(Variable *varIn,Comunity *comIn)
+    SerialInput(Variable *varIn,Community *comIn)
     {
         var = varIn;
-        comunity = comIn;
+        community = comIn;
     }
 
     void setup() override {
@@ -68,10 +60,7 @@ void SerialInput::onInputAvailable()
             command = split_buffer[0];
             for(int i = 0;i<charCount ;i++)args[i] = split_buffer[i + 1];
         }
-        // Serial.println("charCount = " + String(charCount));
-        // Serial.println("command = " + command);
-        // for(int i = 0;i<9;i++) if(args[i] != "")Serial.println("args["+String(i)+"] = " + String(args[i]));
-       
+
 
         if(command == "system"){
           if(args[0] == "restart"){
@@ -120,7 +109,7 @@ void SerialInput::onInputAvailable()
           }
         }else if(command == "internet"){
           if(args[0] == "connect"){
-            comunity->wifi_controll->connectWiFi();
+            community->wifi_controll->connectWiFi();
             Serial.println("connect public wifi....");
           }else if(args[0] == "setInternetSSID"){
             var->wifipublic.SSID = args[1];
@@ -197,10 +186,7 @@ void SerialInput::onInputAvailable()
           var->showVar();
         }else if(command == "cloud"){
           if(args[0] == "testSend"){
-            //https://script.google.com/macros/s/AKfycbw3nnrGL_atUT3M80KyVXajTiDQbgJd2CY9JQu-g6H2cFefiAVmI2thYtT3MS-qjZD4/exec?header=pHAll&p1=-1&p2=-1&p3=-1&p4=-1&p5=-1&p6=-1&p7=-1&p8=-1&p9=-1&p10=TEST
-            https://script.google.com/macros/s/AKfycbwuIkUzj5qahBBlUJ96eSqGnCx4pTXWiRcttWDo2Xs/dev?header=pHAll&p1=-1&p2=-1&p3=-1&p4=-1&p5=-1&p6=-1&p7=-1&p8=-1&p9=-1&p10=TEST
-            // header="pHAll"&p1="1"&p2="2"&p3="3"&p4="4"&p5="5"&p6="6"
-            comunity->couldComunity->sendPH_All("-1","-1,-1","-1","-1","-1","-1","-1","-1","-1","TEST");
+            community->couldComunity->sendPH_All("-1","-1,-1","-1","-1","-1","-1","-1","-1","-1","TEST");
           }
         }else if(command == "debug"){
           if(args[0] == "wificonnect"){

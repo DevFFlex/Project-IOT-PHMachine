@@ -30,8 +30,6 @@ public class Comunity extends Client{
         sendToServer("MESSAGE:" + name + "=" + data);
     }
 
-
-
     public void serverStartAdjustPH(float pH,int T){
         serverSendSerial(String.format("system startAdjust %.2f %d",pH,T));
     }
@@ -109,26 +107,24 @@ public class Comunity extends Client{
             String d1[] = value.split(",");
 
             var.mixtankPH = Float.valueOf(d1[0]);
-            if(!d1[1].equals("nan"))var.tempC = Float.valueOf(d1[1]);
-            if(!d1[2].equals("nan"))var.humidity = Float.valueOf(d1[2]);
 
-            var.relay_status[0] = (d1[3].equals("0")) ? false : true;
-            var.relay_status[1] = (d1[4].equals("0")) ? false : true;
-            var.relay_status[2] = (d1[5].equals("0")) ? false : true;
-            var.relay_status[3] = (d1[6].equals("0")) ? false : true;
-            var.relay_status[4] = (d1[7].equals("0")) ? false : true;
-            var.relay_status[5] = (d1[8].equals("0")) ? false : true;
+            var.relay_status[0] = (d1[1].equals("0")) ? false : true;
+            var.relay_status[1] = (d1[2].equals("0")) ? false : true;
+            var.relay_status[2] = (d1[3].equals("0")) ? false : true;
+            var.relay_status[3] = (d1[4].equals("0")) ? false : true;
+            var.relay_status[4] = (d1[5].equals("0")) ? false : true;
+            var.relay_status[5] = (d1[6].equals("0")) ? false : true;
 
-            var.timeBoardObject.hour = Integer.parseInt(d1[9]);
-            var.timeBoardObject.minute = Integer.parseInt(d1[10]);
-            var.timeBoardObject.second = Integer.parseInt(d1[11]);
+            var.timeBoardObject.hour = Integer.parseInt(d1[7]);
+            var.timeBoardObject.minute = Integer.parseInt(d1[8]);
+            var.timeBoardObject.second = Integer.parseInt(d1[9]);
 
-            var.fsw[0] = Integer.parseInt(d1[12]);
-            var.fsw[1] = Integer.parseInt(d1[13]);
+            var.fsw[0] = Integer.parseInt(d1[10]);
+            var.fsw[1] = Integer.parseInt(d1[11]);
 
-            var.internet_connected = (d1[14].equals("0")) ? false : true;
+            var.internet_connected = (d1[12].equals("0")) ? false : true;
 
-            String[] timer_layer0 = d1[15].split("\\|");
+            String[] timer_layer0 = d1[13].split("\\|");
             for(int i = 0;i<4;i++){
                 String[] item = timer_layer0[i].split("SP");
                 var.workTimerList.workTimers_item.get(i).HOUR = Integer.parseInt(item[0]);
@@ -139,19 +135,19 @@ public class Comunity extends Client{
                 var.workTimerList.workTimers_item.get(i).DELETE_STATUS = Boolean.parseBoolean(item[5]);
             }
 
-            var.step = Integer.valueOf(d1[16]);
-            var.work_status = (d1[17].equals("0")) ? false : true;
-            var.pH_space_rate = Float.valueOf(d1[18]);
-            var.adjustCurrentPH = Float.valueOf(d1[19]);
-            var.wait_stirringPump = Integer.valueOf(d1[20]);
-            var.wait_pHStabilize = Integer.valueOf(d1[21]);
-            var.acidUseTime = Integer.valueOf(d1[22]);
-            var.baseUseTime = Integer.valueOf(d1[23]);
-            var.limite_use_base = Integer.valueOf(d1[24]);
-            var.limite_use_acid = Integer.valueOf(d1[25]);
-            var.adjustT_Counter = Integer.valueOf(d1[26]);
-            var.addBaseCount = Integer.valueOf(d1[27]);
-            var.addAcidCount = Integer.valueOf(d1[28]);
+            var.step = Integer.valueOf(d1[14]);
+            var.work_status = (d1[15].equals("0")) ? false : true;
+            var.pH_space_rate = Float.valueOf(d1[16]);
+            var.adjustCurrentPH = Float.valueOf(d1[17]);
+            var.wait_stirringPump = Integer.valueOf(d1[18]);
+            var.wait_pHStabilize = Integer.valueOf(d1[19]);
+            var.acidUseTime = Integer.valueOf(d1[20]);
+            var.baseUseTime = Integer.valueOf(d1[21]);
+            var.limite_use_base = Integer.valueOf(d1[22]);
+            var.limite_use_acid = Integer.valueOf(d1[23]);
+            var.adjustT_Counter = Integer.valueOf(d1[24]);
+            var.addBaseCount = Integer.valueOf(d1[25]);
+            var.addAcidCount = Integer.valueOf(d1[26]);
 
         }
 

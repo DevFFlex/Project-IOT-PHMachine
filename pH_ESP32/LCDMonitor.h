@@ -9,12 +9,12 @@ enum PageName
   ADMIN
 };
 
-class UserInterface : public System
+class LCDMonitor : public System
 {
 private:
   Variable *var;
   HardwareIO *hardwareIO;
-  Comunity *comunity;
+  Community *community;
 
   Timer update_display;
 
@@ -41,14 +41,8 @@ private:
     else if (var->mixTank_pH > 0)
       pHText = "Acid";
 
-    String DHTText = "";
-    if (hardwareIO->dhtsensor->isReady())
-      DHTText = "R";
-    else
-      DHTText = "E";
-
     String WIFIText = "";
-    if (comunity->wifi_controll->getSTAWifiStatusConnected())
+    if (community->wifi_controll->getSTAWifiStatusConnected())
       WIFIText = "R";
     else
       WIFIText = "E";
@@ -63,7 +57,7 @@ private:
     if(pagename == MAIN){
       hardwareIO->lcdOutput->printL("pH = " + String(var->mixTank_pH) + " | " + pHText, 0);
       hardwareIO->lcdOutput->printL("--------------------", 1);
-      hardwareIO->lcdOutput->printL("DHT:" + DHTText + " WIFI:" + WIFIText + " SD:" + SDCardText, 2);
+      hardwareIO->lcdOutput->printL("WIFI:" + WIFIText + " SD:" + SDCardText, 2);
       hardwareIO->lcdOutput->printL(hardwareIO->rtc->getTimeToString(), 3);
     }else if(pagename == INPUT_PH){
       if(pageUpdate){
@@ -93,14 +87,14 @@ private:
   }
 
 public:
-  UserInterface(Variable *varObjectIn, Comunity *comunity) : update_display(100)
+  LCDMonitor(Variable *varObjectIn, Community *community) : update_display(100)
   {
     var = varObjectIn;
     hardwareIO = var->hardwareIO;
-    this->comunity = comunity;
+    this->community = community;
 
-    hardwareIO->keypadInput->setOnKeypressListener(std::bind(&UserInterface::onKeypress, this, std::placeholders::_1, std::placeholders::_2));
-    hardwareIO->keypadInput->setOnKeyEnterListener(std::bind(&UserInterface::onEnter, this, std::placeholders::_1, std::placeholders::_2));
+    hardwareIO->keypadInput->setOnKeypressListener(std::bind(&LCDMonitor::onKeypress, this, std::placeholders::_1, std::placeholders::_2));
+    hardwareIO->keypadInput->setOnKeyEnterListener(std::bind(&LCDMonitor::onEnter, this, std::placeholders::_1, std::placeholders::_2));
   }
 
   void setup() override

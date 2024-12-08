@@ -4,10 +4,6 @@
 #include "WiFiServer.h"
 #include <WiFi.h>
 #include <functional>
-#include <SD.h>
-#include <AsyncTCP.h>
-#include <ESPAsyncWebServer.h>
-#include <ESPAsyncHTTPClient.h>
 
 
 
@@ -16,8 +12,8 @@ private:
   Variable *var;
   WiFiServer *server;
 
-  String AP_SSID = "PPC";
-  String AP_PASS = "12345678";
+  String AP_SSID = "Star-Link_";
+  String AP_PASS = "12345678star";
 
   bool displayDataTranfer = false;
   bool wifiConnected = false;

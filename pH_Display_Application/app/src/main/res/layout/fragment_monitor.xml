@@ -104,8 +104,7 @@
             <FrameLayout
                 android:id="@+id/monitor_workingSpace"
                 android:layout_width="match_parent"
-                android:layout_height="500sp"
-                />
+                android:layout_height="500sp" />
 
             <RadioGroup
                 android:id="@+id/monitor_radioGroupMode"
